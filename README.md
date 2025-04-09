@@ -3,11 +3,68 @@
 ### *Jesús González Cuenca*
 
 ### TO-DOs
+
 -[ ] TODO escribir un README de verdad
+
 -[x] TODO modelos
+
 -[ ] TODO repositorios
+
 -[ ] TODO servicios
+
 -[ ] TODO controladores
+
+---
+
+### Posibles acciones para mejorar el modelo:
+
+- [ ] **Seguridad en passwords**:
+```java
+// Para Usuario.java
+@Column(name = "contrasenia", nullable = false)
+private String contrasenia;
+// Considerar añadir: @JsonIgnore para no serializar la contraseña
+```
+- [ ] **Control de cascada en relaciones**:
+```java
+// En relaciones *-a-muchos, específicar el fetchType
+@ManyToMany(mappedBy = "generos", fetch = FetchType.LAZY)
+```
+- [ ] **Auditoría de entidades**:
+```java
+// Considerar añadir campos comunes de auditoría
+@Column(name = "created_at")
+private LocalDateTime createdAt;
+
+@Column(name = "updated_at")
+private LocalDateTime updatedAt;
+
+@PrePersist
+protected void onCreate() {
+    createdAt = LocalDateTime.now();
+    // etc
+}
+
+@PreUpdate
+protected void onUpdate() {
+    updatedAt = LocalDateTime.now();
+}
+```
+- [ ] **Optimización para N+1 queries**:
+```java
+// Considerar usar @BatchSize en colecciones
+@BatchSize(size = 20)
+@OneToMany(mappedBy = "usuario")
+private Set<Comentario> comentarios;
+```
+- [ ] **URL de imágenes**:
+- Podría añadir un campo para URL de imágenes a Media (portadas/pósters)
+- Podría añadir un campo para URL de avatar a Usuario (nprioridad muy baja)
+#### Correcciones menores
+- [ ] **Corregir inconsistencia en algunas relaciones ManyToMany**:
+	Asegurar de que todos los HashSet estén inicializados con `@Builder.Default`
+- [ ] **Observación sobre FetchType**:
+	 Si bien LAZY es adecuado para relaciones OneToMany/ManyToMany, asegurarme de manejar correctamente la inicialización lazy para evitar LazyInitializationException.
 
 ### Diagrama Entidad-Relacion
 dbdiagram.io:
