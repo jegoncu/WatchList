@@ -4,5 +4,5 @@
 
 ### TO-DOs
 
-<!-- TODO Investigar Thymeleaf + HTMX (libreria js para inyectar dinamicamente fragmentos de html dentro de las vistas generadas por el servidor) -->
+TODO Investigar Thymeleaf + HTMX (libreria js para inyectar dinamicamente fragmentos de html dentro de las vistas generadas por el servidor)
 
