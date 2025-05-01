@@ -16,12 +16,12 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-    
+
     @GetMapping("/registro")
     public String mostrarRegistro() {
         return "registro";
     }
-    
+
     @PostMapping("/registro")
     public String procesarRegistro(
             @RequestParam String email,
@@ -29,39 +29,40 @@ public class UsuarioController {
             @RequestParam String contrasenia,
             @RequestParam(defaultValue = "true") boolean esPublico,
             RedirectAttributes redirectAttributes) {
-        
+
         try {
             usuarioService.registrar(email, nombre, contrasenia, esPublico);
             redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Ahora puedes iniciar sesión.");
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
+            // Si hay error, devolvemos los datos para no tener que reescribirlos
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("email", email);
             redirectAttributes.addFlashAttribute("nombre", nombre);
             return "redirect:/registro";
         }
     }
-    
+
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
     }
-    
+
     @PostMapping("/login")
     public String procesarLogin(
             @RequestParam String email,
             @RequestParam String contrasenia,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
-        
+
         try {
             Usuario usuario = usuarioService.login(email, contrasenia);
-            
-            // Guardar info de usuario en sesión
+
+            // Guardamos datos del usuario en sesión
             session.setAttribute("usuarioId", usuario.getId());
             session.setAttribute("usuarioNombre", usuario.getNombre());
             session.setAttribute("usuarioEsAdmin", usuario.getEsAdmin());
-            
+
             return "redirect:/inicio";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -69,24 +70,31 @@ public class UsuarioController {
             return "redirect:/login";
         }
     }
-    
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
     }
-    
+
     @GetMapping("/inicio")
     public String inicio(HttpSession session, Model model) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
-        
+
+        // Verificamos si hay usuario en sesión
         if (usuarioId == null) {
             return "redirect:/login";
         }
-        
+
         Usuario usuario = usuarioService.findById(usuarioId);
+
+        // Verificamos si el usuario existe en base de datos
+        if (usuario == null) {
+            session.invalidate();
+            return "redirect:/login";
+        }
+
         model.addAttribute("usuario", usuario);
-        
         return "inicio";
     }
 }

@@ -1,0 +1,88 @@
+:root {
+  /* Paleta de colores */
+  --color-grey-1: #12151e;
+  --color-grey-2: #1d2027;
+  --color-grey-3: #71768a;
+  --color-grey-4: #ababab;
+  --color-grey-5: #f5f5f5;
+  --color-yellow-1: #ffa722;
+  --color-blue-1: #51b1f6;
+  --color-red-1: #df6251;
+  --color-green-1: #66b094;
+}
+
+/* ----------------------------------------------- */
+/* Estilos generales */
+
+* {
+  color: var(--color-grey-5);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* viewport height */
+}
+
+/* ----------------------------------------------- */
+/* Estilos para el header */
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--color-grey-2);
+  height: 60px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ----------------------------------------------- */
+/* Estilos para el main */
+
+main {
+  flex: 1;
+  background-color: var(--color-grey-1);
+  overflow-y: auto;
+}
+
+/* ----------------------------------------------- */
+/* Estilos para el footer */
+
+.footer-container-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: var(--color-grey-2);
+  height: 60px;
+}
+
+.footer-container-2 {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}

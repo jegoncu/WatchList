@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title>Registro - WatchList</title>
+    <th:block th:fragment="pageCss">
+      <style></style>
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <div>
+        <h2>Crear Cuenta</h2>
+        <div th:if="${error}" th:text="${error}"></div>
+        <form th:action="@{/registro}" method="post">
+          <div>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="nombre@ejemplo.com"
+              required
+              th:value="${email}" />
+          </div>
+          <div>
+            <label for="nombre">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Nombre"
+              required
+              th:value="${nombre}" />
+          </div>
+          <div>
+            <label for="contrasenia">Contraseña</label>
+            <input
+              type="password"
+              id="contrasenia"
+              name="contrasenia"
+              placeholder="Contraseña"
+              required />
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="esPublico"
+              name="esPublico"
+              value="true"
+              checked />
+            <label for="esPublico">Perfil público</label>
+          </div>
+          <div>
+            <button type="submit">Registrarse</button>
+          </div>
+          <div>
+            <a th:href="@{/login}">¿Ya tienes cuenta?</a>
+          </div>
+        </form>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"> </th:block>
+  </body>
+</html>

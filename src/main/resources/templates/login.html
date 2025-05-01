@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title>Iniciar Sesión - WatchList</title>
+    <th:block th:fragment="pageCss">
+      <style></style>
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <div>
+        <h2>Iniciar Sesión</h2>
+        <div th:if="${error}" th:text="${error}"></div>
+        <div th:if="${mensaje}" th:text="${mensaje}"></div>
+        <form th:action="@{/login}" method="post">
+          <div>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="nombre@ejemplo.com"
+              required
+              th:value="${email}" />
+          </div>
+          <div>
+            <label for="contrasenia">Contraseña</label>
+            <input
+              type="password"
+              id="contrasenia"
+              name="contrasenia"
+              placeholder="Contraseña"
+              required />
+          </div>
+          <div>
+            <button type="submit">Iniciar Sesión</button>
+          </div>
+          <div>
+            <a th:href="@{/registro}">¿No tienes cuenta?</a>
+          </div>
+        </form>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"> </th:block>
+  </body>
+</html>

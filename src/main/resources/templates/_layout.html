@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:fragment="html(title, section, pageCss, pageScript)">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/js/htmx.min.js" defer></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title th:replace="${title}">WatchList</title>
+    <th:block th:replace="${pageCss}" />
+  </head>
+  <body>
+    <header th:replace="fragments/_header"></header>
+    <main>
+      <th:block th:replace="${section}" />
+    </main>
+    <footer th:replace="fragments/_footer"></footer>
+    <th:block th:replace="${pageScript}" />
+  </body>
+</html>
