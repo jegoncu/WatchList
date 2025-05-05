@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title>Películas - WatchList</title>
+    <th:block th:fragment="pageCss">
+      
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <h1>Películas</h1>
+      <p>Listado de películas aparecerá aquí.</p>
+      
+    </section>
+    <th:block th:fragment="pageScript">
+    
+    </th:block>
+  </body>
+</html>
