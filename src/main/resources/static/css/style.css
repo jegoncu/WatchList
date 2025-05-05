@@ -71,6 +71,47 @@ body {
 }
 
 /* ----------------------------------------------- */
+/* Estilos para el dropdown de usuario */
+
+.usuario-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+  padding: 5px;
+  &:hover {
+    color: var(--color-yellow-1);
+}
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: var(--color-grey-2);
+  z-index: 1;
+  right: -2rem;
+  min-width: 160px;
+  padding: 5px 0
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu li a{
+  color: var(--color-grey-5);
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+  white-space: nowrap;
+  &:hover {
+    color: var(--color-yellow-1);
+}
+}
+
+/* ----------------------------------------------- */
 /* Estilos para el main */
 
 main {
