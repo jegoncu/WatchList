@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 public class SeriesController {
     @GetMapping("/series")
     public String mostrarSeries(Model model) {
-        
+        model.addAttribute("currentPage", "series");
         return "series"; 
     }
 }

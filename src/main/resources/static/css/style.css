@@ -58,6 +58,12 @@ body {
   align-items: center;
   gap: 1.5rem;
 }
+
+.nav-list a.active {
+  color: var(--color-yellow-1);
+  font-weight: bold; 
+}
+
 .header-container h1 {
   color: var(--color-yellow-1);
   font-size: 1.5rem;

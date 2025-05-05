@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 public class ListasController {
     @GetMapping("/listas")
     public String mostrarListas(Model model) {
-        
+        model.addAttribute("currentPage", "listas");
         return "listas"; 
     }
 }

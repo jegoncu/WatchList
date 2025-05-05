@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 public class GenteController {
     @GetMapping("/gente")
     public String mostrarGente(Model model) {
-        
+        model.addAttribute("currentPage", "gente");
         return "gente"; 
     }
 }

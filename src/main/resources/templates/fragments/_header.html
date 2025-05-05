@@ -8,10 +8,11 @@
         </a>
         <nav class="header-nav">
           <ul class="nav-list">
-            <li><a th:href="@{/peliculas}">Películas</a></li>
-            <li><a th:href="@{/series}">Series</a></li>
-            <li><a th:href="@{/gente}">Gente</a></li>
-            <li><a th:href="@{/listas}">Listas</a></li>
+            <li><a th:href="@{/peliculas}" th:classappend="${currentPage == 'peliculas' ? 'active' : ''}">Películas</a></li>
+            <li><a th:href="@{/series}" th:classappend="${currentPage == 'series' ? 'active' : ''}">Series</a></li>
+            <li><a th:href="@{/gente}" th:classappend="${currentPage == 'gente' ? 'active' : ''}">Gente</a></li>
+            <li><a th:href="@{/listas}" th:classappend="${currentPage == 'listas' ? 'active' : ''}">Listas</a></li>
+            <li><a th:href="@{/admin}" th:classappend="${currentPage == 'admin' ? 'active' : ''}">Admin</a></li>
           </ul>
           <form th:action="@{/buscar}" method="get">
             <input

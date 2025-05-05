@@ -8,7 +8,8 @@ import org.springframework.ui.Model;
 public class AdminController {
 
     @GetMapping("/admin")
-    public String mostrarAdminPanel(Model model) {  
+    public String mostrarAdminPanel(Model model) {
+        model.addAttribute("currentPage", "admin");
         return "admin"; 
     }
 }
