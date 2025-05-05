@@ -37,13 +37,13 @@
               >
             </li>
           </ul>
-          <form th:action="@{/buscar}" method="get">
+          <form th:action="@{/buscar}" method="get" class="header-buscar-form">
             <input
               type="search"
               placeholder="Buscar"
               aria-label="Buscar"
               name="q" />
-            <button type="submit">Buscar</button>
+            <button type="submit" class="header-buscar-button">Buscar</button>
           </form>
           <div th:if="${session.usuarioId == null}">
             <a th:href="@{/registro}">Regístrate</a>

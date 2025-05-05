@@ -21,6 +21,7 @@
   padding: 0;
   text-decoration: none;
   list-style: none;
+  font-family: 'Montserrat', sans-serif;
 }
 
 html,
@@ -68,6 +69,34 @@ body {
   color: var(--color-yellow-1);
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.header-buscar-form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.header-container input[type = "search"] {
+  border: none;
+  padding: 4px 10px;;
+  border: 1px solid var(--color-grey-4);
+  border-radius: 4px;
+  width: 100%;
+  background-color: var(--color-grey-2);
+  color: var(--color-grey-5);
+}
+.header-buscar-button {
+  background-color: var(--color-yellow-1);
+  color: var(--color-grey-1);
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--color-yellow-1);
+    color: var(--color-grey-5);
+  }
 }
 
 /* ----------------------------------------------- */
