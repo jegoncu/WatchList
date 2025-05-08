@@ -1,0 +1,34 @@
+:root {
+  /* Paleta de colores */
+
+  /* Grises */
+  --color-grey-1: #12151e; 
+  --color-grey-2: #1d2027;
+  --color-grey-3: #71768a;
+  --color-grey-4: #ababab;
+  --color-grey-5: #f5f5f5; 
+
+  /* Amarillos */
+  --color-yellow-1: #e69500;   
+  --color-yellow-2: #ffa722;   
+  --color-yellow-3: #ffbe57;   
+  --color-yellow-4: #ffd58b;   
+
+  /* Azules */
+  --color-blue-1: #3098e0;   
+  --color-blue-2: #51b1f6;   
+  --color-blue-3: #89c9f9;   
+  --color-blue-4: #b3dcfb;   
+
+  /* Rojos */
+  --color-red-1: #c84330;   
+  --color-red-2: #df6251;   
+  --color-red-3: #ee8f82;   
+  --color-red-4: #f5b8b0;   
+
+  /* Verdes */
+  --color-green-1: #4d8e74;   
+  --color-green-2: #66b094;   
+  --color-green-3: #89c8b0;   
+  --color-green-3: #b0dfcb;   
+}

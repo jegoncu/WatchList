@@ -7,53 +7,20 @@
     <title th:text="${pageTitle ?: 'Gestionar Películas'}">
       Gestionar Películas - WatchList
     </title>
-    <th:block th:fragment="pageCss">
-      <style>
-        .table-container {
-          margin-top: 20px;
-        }
-        .table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        .table th,
-        .table td {
-          border: 1px solid var(--color-grey-3);
-          padding: 8px 12px;
-          text-align: left;
-        }
-        .table th {
-          background-color: var(--color-grey-2);
-          color: var(--color-yellow-1);
-        }
-        .table td a,
-        .table td button {
-          margin-right: 5px;
-          padding: 5px 10px;
-          text-decoration: none;
-          border-radius: 3px;
-        }
-        .table td .edit-btn {
-          background-color: var(--color-blue-1);
-          color: var(--color-grey-1);
-        }
-        .table td .delete-btn {
-          background-color: var(--color-red-1);
-          color: var(--color-grey-1);
-          border: none;
-          cursor: pointer;
-        }
-        .action-bar {
-          margin-bottom: 20px;
-        }
-      </style>
-    </th:block>
+    <th:block th:fragment="pageCss"> </th:block>
   </head>
   <body>
     <section>
-      <h2 th:text="${pageTitle ?: 'Gestionar Películas'}">
-        Gestionar Películas
-      </h2>
+      <div>
+        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}">
+          Gestionar Películas
+        </h2>
+        <div>
+          <a th:href="@{/admin/peliculas/nuevo}" class="btn btn-small btn-yellow"
+            >Añadir Nueva Película</a
+          >
+        </div>
+      </div>
 
       <div
         th:if="${successMessage}"
@@ -64,14 +31,8 @@
         class="alert alert-danger"
         th:text="${errorMessage}"></div>
 
-      <div class="action-bar">
-        <a th:href="@{/admin/peliculas/nuevo}" class="form-button"
-          >Añadir Nueva Película</a
-        >
-      </div>
-
-      <div class="table-container" th:if="${not #lists.isEmpty(peliculas)}">
-        <table class="table">
+      <div th:if="${not #lists.isEmpty(peliculas)}">
+        <table>
           <thead>
             <tr>
               <th>ID</th>
@@ -90,15 +51,14 @@
               <td>
                 <a
                   th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}"
-                  class="edit-btn"
+                  class="btn btn-small btn-blue"
                   >Editar</a
                 >
                 <form
                   th:action="@{/admin/peliculas/eliminar/{id}(id=${pelicula.id})}"
                   method="post"
-                  style="display: inline"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta película?');">
-                  <button type="submit" class="delete-btn">Eliminar</button>
+                  <button type="submit" class="btn btn-small btn-red">Eliminar</button>
                 </form>
               </td>
             </tr>

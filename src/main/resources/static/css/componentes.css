@@ -1,0 +1,202 @@
+/* ----------------------------------------------- */
+/* Estilos para el dropdown de usuario */
+
+.usuario-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+  padding: 5px;
+}
+.dropdown-trigger:hover {
+  color: var(--color-yellow-2);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: var(--color-grey-2);
+  z-index: 1;
+  right: -2rem;
+  top: 2rem;
+  min-width: 160px;
+  padding: 5px 0;
+  border-radius: 4px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu li a {
+  color: var(--color-grey-5);
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dropdown-menu li a:hover {
+  color: var(--color-yellow); /* Use base yellow */
+  background-color: var(--color-grey-1);
+}
+
+/* ----------------------------------------------- */
+/* Estilos generales para formularios */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="url"],
+textarea,
+select {
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-grey-2);
+  color: var(--color-grey-5);
+}
+
+.header-container input[type="search"] {
+  padding: 4px 10px;
+  border: 1px solid var(--color-grey-4);
+  margin: 0; 
+}
+
+/* Desactivar el estilo por defecto de los navegadores para el deautofill */
+input:-webkit-autofill {
+  appearance: none !important;
+  background-color: var(--color-grey-1) !important;
+  color: var(--color-grey-5) !important;
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+  transition-delay: 9999s;
+}
+
+/* ----------------------------------------------- */
+/* Estilos para los botones */
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  margin: 4px 2px; 
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Tamaños de Botón */
+.btn-big {
+  padding: 10px 20px; 
+  font-size: 1rem;
+}
+
+.btn-small {
+  padding: 5px 10px; 
+  font-size: 0.875rem;
+}
+
+/* Variantes de Color de Botón */
+
+/* Botón Amarillo */
+.btn-yellow {
+  background-color: var(--color-yellow-2);
+  color: var(--color-grey-1);
+}
+.btn-yellow:hover {
+  background-color: var(--color-yellow-1); 
+  color: var(--color-grey-1);
+}
+
+/* Botón Azul */
+.btn-blue {
+  background-color: var(--color-blue-2);
+  color: var(--color-grey-1);
+}
+.btn-blue:hover {
+  background-color: var(--color-blue-1);
+  color: var(--color-grey-1); 
+}
+
+/* Botón Rojo */
+.btn-red {
+  background-color: var(--color-red-2);
+  color: var(--color-grey-1);
+}
+.btn-red:hover {
+  background-color: var(--color-red-1); 
+  color: var(--color-grey-1);
+}
+
+/* Botón Verde */
+.btn-green {
+  background-color: var(--color-green-2);
+  color: var(--color-grey-1);
+}
+.btn-green:hover {
+  background-color: var(--color-green-1); 
+  color: var(--color-grey-1); 
+}
+
+/* Botón Gris */
+.btn-grey {
+  background-color: var(--color-grey-4);
+  color: var(--color-grey-1);
+}
+.btn-grey:hover {
+  background-color: var(--color-grey-3); 
+  color: var(--color-grey-1);
+}
+
+/* ----------------------------------------------- */
+/* Estilos para Alertas */
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert-success {
+  color: var(--color-green-2);
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+.alert-danger {
+  color: var(--color-red-2);
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* ----------------------------------------------- */
+/* Estilos para el Scrollbar */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-grey-3);
+  border-radius: 5px;
+  border: 2px solid var(--color-grey-2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-yellow-2);
+}

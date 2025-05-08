@@ -6,15 +6,6 @@
   </head>
   <body>
     <div th:fragment="sidebar" class="sidebar">
-      <!-- Contenidos para inicio -->
-      <div th:if="${currentPage == 'inicio'}">
-        <h4>Inicio Sidebar</h4>
-        <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Inicio ' + ${i}"></li>
-        </ul>
-      </div>
 
       <!-- Contenidos para peliculas -->
       <div th:if="${currentPage == 'peliculas'}">
@@ -59,45 +50,12 @@
       <!-- Contenidos para admin -->
       <div th:if="${currentPage == 'admin'}">
         <h4>Panel de Administración</h4>
-
-        <div class="admin-menu-section">
-          <h5><a th:href="@{/admin/peliculas}">Películas</a></h5>
-        </div>
-
-        <div class="admin-menu-section">
-          <h5><a th:href="@{/admin/series}">Series</a></h5>
-        </div>
-
-        <div class="admin-menu-section">
-          <h5><a th:href="@{/admin/gente}">Gente</a></h5>
-        </div>
-
-        <div class="admin-menu-section">
-          <h5><a th:href="@{/admin/listas}">Listas</a></h5>
-        </div>
-
-        <div class="admin-menu-section">
-          <h5><a th:href="@{/admin/usuarios}">Usuarios</a></h5>
-        </div>
-      </div>
-
-      <!-- Contenidos para login -->
-      <div th:if="${currentPage == 'login'}">
-        <h4>Login Sidebar</h4>
         <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Login ' + ${i}"></li>
-        </ul>
-      </div>
-
-      <!-- Contenidos para registro -->
-      <div th:if="${currentPage == 'registro'}">
-        <h4>Registro Sidebar</h4>
-        <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Registro ' + ${i}"></li>
+          <li><a th:href="@{/admin/peliculas}">Películas</a></li>
+          <li><a th:href="@{/admin/series}">Series</a></li>
+          <li><a th:href="@{/admin/gente}">Gente</a></li>
+          <li><a th:href="@{/admin/listas}">Listas</a></li>
+          <li><a th:href="@{/admin/usuarios}">Usuarios</a></li>
         </ul>
       </div>
 
@@ -118,19 +76,6 @@
           <li
             th:each="i : ${#numbers.sequence(1, 10)}"
             th:text="'Mis Listas ' + ${i}"></li>
-        </ul>
-      </div>
-
-      <!-- Contenidos para landing page -->
-      <div th:if="${currentPage == 'landing'}">
-        <h4>Bienvenido/a</h4>
-        <ul>
-          <li><a th:href="@{/peliculas}">Explorar Películas</a></li>
-          <li><a th:href="@{/series}">Explorar Series</a></li>
-          <li><a th:href="@{/listas}">Ver Listas Públicas</a></li>
-          <hr style="margin: 10px 0; border-color: var(--color-grey-3)" />
-          <li><a th:href="@{/login}">Iniciar Sesión</a></li>
-          <li><a th:href="@{/registro}">Crear Cuenta</a></li>
         </ul>
       </div>
     </div>

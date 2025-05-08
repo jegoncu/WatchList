@@ -11,7 +11,6 @@
   </head>
   <body>
     <section>
-      <div>
         <h2>Crear Cuenta</h2>
         <div th:if="${error}" th:text="${error}"></div>
         <form th:action="@{/registro}" method="post">
@@ -54,13 +53,12 @@
             <label for="esPublico">Perfil público</label>
           </div>
           <div>
-            <button type="submit" class="form-button">Registrarse</button>
+            <button type="submit" class="btn btn-small btn-yellow">Registrarse</button>
           </div>
           <div>
             <a th:href="@{/login}">¿Ya tienes cuenta?</a>
           </div>
         </form>
-      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
   </body>
