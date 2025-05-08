@@ -12,16 +12,16 @@
     <th:block th:replace="${pageCss}" />
   </head>
   <body>
-    <header th:replace="fragments/_header"></header>
+    <header th:replace="~{fragments/_header}"></header>
     <main class="main-container">
       <aside class="sidebar-container">
-        <th:block th:replace="fragments/_sidebar"></th:block>
+        <th:block th:replace="~{fragments/_sidebar}"></th:block>
       </aside>
       <section class="content-container">
         <th:block th:replace="${section}" />
       </section>
     </main>
-    <footer th:replace="fragments/_footer"></footer>
+    <footer th:replace="~{fragments/_footer}"></footer>
     <th:block th:replace="${pageScript}" />
     <!-- Include your custom dropdown script -->
     <script th:src="@{/js/dropdown.js}"></script>

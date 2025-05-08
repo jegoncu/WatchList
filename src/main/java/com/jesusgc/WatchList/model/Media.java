@@ -45,6 +45,12 @@ public abstract class Media {
     @Max(value = 10, message = "La puntuación máxima es 10")
     @Column(name = "puntuacion")
     private Float puntuacion;
+
+    @Column(name = "url_trailer") 
+    private String urlTrailer;
+
+    @Column(name = "url_imagen")  
+    private String urlImagen;
     
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comentario> comentarios = new HashSet<>();

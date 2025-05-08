@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+<head>
+    <title th:text="${pageTitle ?: 'Gestionar Películas'}">Gestionar Películas - WatchList</title>
+    <th:block th:fragment="pageCss">
+        <style>
+            .table-container { margin-top: 20px; }
+            .table { width: 100%; border-collapse: collapse; }
+            .table th, .table td { border: 1px solid var(--color-grey-3); padding: 8px 12px; text-align: left; }
+            .table th { background-color: var(--color-grey-2); color: var(--color-yellow-1); }
+            .table td a, .table td button { margin-right: 5px; padding: 5px 10px; text-decoration: none; border-radius: 3px;}
+            .table td .edit-btn { background-color: var(--color-blue-1); color: var(--color-grey-1); }
+            .table td .delete-btn { background-color: var(--color-red-1); color: var(--color-grey-1); border: none; cursor: pointer; }
+            .action-bar { margin-bottom: 20px; }
+        </style>
+    </th:block>
+</head>
+<body>
+<section>
+    <h2 th:text="${pageTitle ?: 'Gestionar Películas'}">Gestionar Películas</h2>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="action-bar">
+        <a th:href="@{/admin/peliculas/nuevo}" class="form-button">Añadir Nueva Película</a>
+    </div>
+
+    <div class="table-container" th:if="${not #lists.isEmpty(peliculas)}">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Año</th>
+                    <th>Duración (min)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pelicula : ${peliculas}">
+                    <td th:text="${pelicula.id}"></td>
+                    <td th:text="${pelicula.titulo}"></td>
+                    <td th:text="${pelicula.anioEstreno}"></td>
+                    <td th:text="${pelicula.duracionMin}"></td>
+                    <td>
+                        <a th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}" class="edit-btn">Editar</a>
+                        <form th:action="@{/admin/peliculas/eliminar/{id}(id=${pelicula.id})}" method="post" style="display: inline;"
+                              onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta película?');">
+                            <button type="submit" class="delete-btn">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(peliculas)}">
+        <p>No hay películas para mostrar.</p>
+    </div>
+</section>
+<th:block th:fragment="pageScript"></th:block>
+</body>
+</html>
