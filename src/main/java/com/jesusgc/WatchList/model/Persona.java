@@ -21,34 +21,34 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"medias"})
+@ToString(exclude = { "medias" })
 public class Persona {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_persona")
     private Long id;
-    
+
     @NotBlank(message = "El nombre no puede estar vacío")
     @Column(name = "nombre", nullable = false)
     private String nombre;
-    
+
     @Past(message = "La fecha de nacimiento debe ser en el pasado")
     @Column(name = "fecha_nac")
     private LocalDate fechaNac;
-    
+
     @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
-    
+
     @ManyToMany(mappedBy = "personas")
     @Builder.Default
     private Set<Media> medias = new HashSet<>();
-    
+
     public void addMedia(Media media) {
         medias.add(media);
         media.getPersonas().add(this);
     }
-    
+
     public void removeMedia(Media media) {
         medias.remove(media);
         media.getPersonas().remove(this);

@@ -13,7 +13,7 @@ public class HomeController {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
 
         if (usuarioId != null) {
-            return "redirect:/inicio"; // Redirects to the path handled by UsuarioController
+            return "redirect:/inicio";
         }
         model.addAttribute("currentPage", "landing");
         return "landing";

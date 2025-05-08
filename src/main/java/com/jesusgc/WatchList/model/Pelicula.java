@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Pelicula extends Media {
-    
+
     @Min(value = 1, message = "La duración debe ser mayor a 0 minutos")
     @Column(name = "duracion_min")
     private Integer duracionMin;

@@ -58,11 +58,10 @@ public class PeliculaService {
         peliculaExistente.setTitulo(peliculaForm.getTitulo());
         peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
         peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
-        peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion()); 
-        peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());   
-        peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());     
-        
-        
+        peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
+        peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
+        peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
+
         peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
 
         updateRelations(peliculaExistente, generoIds, plataformaIds, personaIds);

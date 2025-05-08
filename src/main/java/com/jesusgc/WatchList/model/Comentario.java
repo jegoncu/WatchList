@@ -13,40 +13,40 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import java.time.LocalDateTime;
 
-@Entity 
-@Table(name = "comentario") 
+@Entity
+@Table(name = "comentario")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor 
-@Builder 
+@AllArgsConstructor
+@Builder
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"usuario", "media"})
+@ToString(exclude = { "usuario", "media" })
 public class Comentario {
 
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(name = "id_comentario") 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_comentario")
     private Long id;
 
-    @NotNull(message = "El usuario no puede ser nulo") 
-    @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "id_usuario", nullable = false) 
+    @NotNull(message = "El usuario no puede ser nulo")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
     @NotNull(message = "El media no puede ser nulo")
-    @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "id_media", nullable = false) 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_media", nullable = false)
     private Media media;
 
     @Column(name = "fecha")
     private LocalDateTime fecha;
 
-    @NotBlank(message = "El texto no puede estar vacío") 
-    @Column(name = "texto", columnDefinition = "TEXT") 
+    @NotBlank(message = "El texto no puede estar vacío")
+    @Column(name = "texto", columnDefinition = "TEXT")
     private String texto;
 
-    @Min(value = 1, message = "La puntuación mínima es 1") 
-    @Max(value = 5, message = "La puntuación máxima es 5") 
+    @Min(value = 1, message = "La puntuación mínima es 1")
+    @Max(value = 5, message = "La puntuación máxima es 5")
     @Column(name = "puntuacion")
     private Integer puntuacion;
 

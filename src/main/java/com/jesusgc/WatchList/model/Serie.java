@@ -18,18 +18,18 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Serie extends Media {
-    
+
     @Column(name = "anio_fin")
     private Integer anioFin;
-    
+
     @Min(value = 1, message = "El número de temporadas debe ser al menos 1")
     @Column(name = "n_temporadas")
     private Integer nTemporadas;
-    
+
     public boolean haTerminado() {
         return anioFin != null;
     }
-    
+
     public boolean estaEnEmision() {
         return anioFin == null;
     }

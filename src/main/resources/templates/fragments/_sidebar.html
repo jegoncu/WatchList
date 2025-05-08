@@ -6,12 +6,13 @@
   </head>
   <body>
     <div th:fragment="sidebar" class="sidebar">
-
       <!-- Contenidos para inicio -->
       <div th:if="${currentPage == 'inicio'}">
         <h4>Inicio Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Inicio ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Inicio ' + ${i}"></li>
         </ul>
       </div>
 
@@ -19,7 +20,9 @@
       <div th:if="${currentPage == 'peliculas'}">
         <h4>Películas Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Películas ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Películas ' + ${i}"></li>
         </ul>
       </div>
 
@@ -27,7 +30,9 @@
       <div th:if="${currentPage == 'series'}">
         <h4>Series Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Series ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Series ' + ${i}"></li>
         </ul>
       </div>
 
@@ -35,7 +40,9 @@
       <div th:if="${currentPage == 'gente'}">
         <h4>Gente Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Gente ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Gente ' + ${i}"></li>
         </ul>
       </div>
 
@@ -43,7 +50,9 @@
       <div th:if="${currentPage == 'listas'}">
         <h4>Listas Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Listas ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Listas ' + ${i}"></li>
         </ul>
       </div>
 
@@ -52,48 +61,23 @@
         <h4>Panel de Administración</h4>
 
         <div class="admin-menu-section">
-          <h5 class="admin-menu-trigger">Películas</h5>
-          <ul class="admin-submenu">
-            <li><a th:href="@{/admin/peliculas/nuevo}">Añadir Película</a></li>
-            <li><a th:href="@{/admin/peliculas/editar}">Editar Película</a></li>
-            <li><a th:href="@{/admin/peliculas/eliminar}">Eliminar Película</a></li>
-          </ul>
+          <h5><a th:href="@{/admin/peliculas}">Películas</a></h5>
         </div>
 
         <div class="admin-menu-section">
-          <h5 class="admin-menu-trigger">Series</h5>
-          <ul class="admin-submenu">
-            <li><a th:href="@{/admin/series/nuevo}">Añadir Serie</a></li>
-            <li><a th:href="@{/admin/series/editar}">Editar Serie</a></li>
-            <li><a th:href="@{/admin/series/eliminar}">Eliminar Serie</a></li>
-          </ul>
+          <h5><a th:href="@{/admin/series}">Series</a></h5>
         </div>
 
         <div class="admin-menu-section">
-          <h5 class="admin-menu-trigger">Gente</h5>
-          <ul class="admin-submenu">
-            <li><a th:href="@{/admin/gente/nuevo}">Añadir Persona</a></li>
-            <li><a th:href="@{/admin/gente/editar}">Editar Persona</a></li>
-            <li><a th:href="@{/admin/gente/eliminar}">Eliminar Persona</a></li>
-          </ul>
+          <h5><a th:href="@{/admin/gente}">Gente</a></h5>
         </div>
 
         <div class="admin-menu-section">
-          <h5 class="admin-menu-trigger">Listas</h5>
-          <ul class="admin-submenu">
-            <li><a th:href="@{/admin/listas/nuevo}">Añadir Lista</a></li>
-            <li><a th:href="@{/admin/listas/editar}">Editar Lista</a></li>
-            <li><a th:href="@{/admin/listas/eliminar}">Eliminar Lista</a></li>
-          </ul>
+          <h5><a th:href="@{/admin/listas}">Listas</a></h5>
         </div>
 
         <div class="admin-menu-section">
-          <h5 class="admin-menu-trigger">Usuarios</h5>
-          <ul class="admin-submenu">
-            <li><a th:href="@{/admin/usuarios/nuevo}">Añadir Usuario</a></li>
-            <li><a th:href="@{/admin/usuarios/editar}">Editar Usuario</a></li>
-            <li><a th:href="@{/admin/usuarios/eliminar}">Eliminar Usuario</a></li>
-          </ul>
+          <h5><a th:href="@{/admin/usuarios}">Usuarios</a></h5>
         </div>
       </div>
 
@@ -101,7 +85,9 @@
       <div th:if="${currentPage == 'login'}">
         <h4>Login Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Login ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Login ' + ${i}"></li>
         </ul>
       </div>
 
@@ -109,24 +95,30 @@
       <div th:if="${currentPage == 'registro'}">
         <h4>Registro Sidebar</h4>
         <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Registro ' + ${i}"></li>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Registro ' + ${i}"></li>
         </ul>
       </div>
-      
+
       <!-- Contenidos para perfil -->
       <div th:if="${currentPage == 'perfil'}">
-          <h4>Perfil Sidebar</h4>
-          <ul>
-              <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Perfil ' + ${i}"></li>
-          </ul>
+        <h4>Perfil Sidebar</h4>
+        <ul>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Perfil ' + ${i}"></li>
+        </ul>
       </div>
 
       <!-- Contenidos para mis listas -->
       <div th:if="${currentPage == 'mis-listas'}">
-          <h4>Mis Listas Sidebar</h4>
-          <ul>
-              <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Mis Listas ' + ${i}"></li>
-          </ul>
+        <h4>Mis Listas Sidebar</h4>
+        <ul>
+          <li
+            th:each="i : ${#numbers.sequence(1, 10)}"
+            th:text="'Mis Listas ' + ${i}"></li>
+        </ul>
       </div>
 
       <!-- Contenidos para landing page -->
@@ -136,18 +128,11 @@
           <li><a th:href="@{/peliculas}">Explorar Películas</a></li>
           <li><a th:href="@{/series}">Explorar Series</a></li>
           <li><a th:href="@{/listas}">Ver Listas Públicas</a></li>
-          <hr style="margin: 10px 0; border-color: var(--color-grey-3);">
+          <hr style="margin: 10px 0; border-color: var(--color-grey-3)" />
           <li><a th:href="@{/login}">Iniciar Sesión</a></li>
           <li><a th:href="@{/registro}">Crear Cuenta</a></li>
         </ul>
       </div>
-
-      <!--
-      <div th:if="${currentPage == null or !T(java.util.Arrays).asList('inicio', 'peliculas', 'series', 'gente', 'listas', 'admin', 'login', 'registro', 'perfil', 'mis-listas', 'landing').contains(currentPage)}">
-          <h4>Default Sidebar</h4>
-          <p>General sidebar content.</p>
-      </div>
-      -->
     </div>
   </body>
 </html>

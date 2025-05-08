@@ -5,21 +5,22 @@
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
   <head>
     <title>Mis Listas - WatchList</title>
-    <th:block th:fragment="pageCss">
-    </th:block>
+    <th:block th:fragment="pageCss"> </th:block>
   </head>
   <body>
     <section>
       <h1>Mis Listas</h1>
       <div th:if="${usuario}">
-        <p>Aquí se mostrarán las listas creadas por <span th:text="${usuario.nombre}"></span>.</p>
+        <p>
+          Aquí se mostrarán las listas creadas por
+          <span th:text="${usuario.nombre}"></span>.
+        </p>
         <!-- TODO mostras listas del usuario logado -->
       </div>
       <div th:unless="${usuario}">
         <p>Debes iniciar sesión para ver tus listas.</p>
       </div>
     </section>
-    <th:block th:fragment="pageScript">
-    </th:block>
+    <th:block th:fragment="pageScript"> </th:block>
   </body>
 </html>

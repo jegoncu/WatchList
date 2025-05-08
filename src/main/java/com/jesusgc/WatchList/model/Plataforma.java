@@ -19,30 +19,30 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"medias"})
+@ToString(exclude = { "medias" })
 public class Plataforma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_plataforma")
     private Long id;
-    
+
     @NotBlank(message = "El nombre no puede estar vacío")
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
-    
+
     @Column(name = "logo")
     private String logo;
-    
+
     @ManyToMany(mappedBy = "plataformas")
     @Builder.Default
     private Set<Media> medias = new HashSet<>();
-    
+
     public void addMedia(Media media) {
         medias.add(media);
         media.getPlataformas().add(this);
     }
-    
+
     public void removeMedia(Media media) {
         medias.remove(media);
         media.getPlataformas().remove(this);

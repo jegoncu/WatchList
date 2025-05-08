@@ -33,7 +33,7 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* viewport height */
+  min-height: 100vh;
 }
 
 /* ----------------------------------------------- */
@@ -169,7 +169,6 @@ main {
 }
 
 .sidebar {
-  
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -200,41 +199,21 @@ main {
   color: var(--color-yellow-1);
   margin-bottom: 0.5rem;
   padding-bottom: 0.25rem;
-  cursor: pointer; 
 }
 
-.admin-menu-section h5:hover {
-  color: var(--color-grey-5); 
-}
-
-.admin-submenu {
-  list-style-type: none;
-  padding-left: 1rem; 
-  margin-top: 0.25rem;
-  display: none; 
-  max-height: 0; 
-  overflow: hidden; 
-  transition: max-height 0.3s ease-out; 
-}
-
-.admin-submenu.show {
-  display: block; 
-  max-height: 500px; 
-}
-
-.admin-menu-section ul li a {
-  color: var(--color-grey-5);
-  text-decoration: none;
-  display: block; 
-  padding: 4px 8px;
-  border-radius: 3px;
-}
-
-.admin-menu-section ul li a:hover {
+.admin-menu-section h5 a {
   color: var(--color-yellow-1);
-  background-color: var(--color-grey-2);
+  text-decoration: none;
+  display: block;
 }
 
+.admin-menu-section h5 a:hover {
+  color: var(--color-grey-5);
+}
+
+.admin-menu-section ul li {
+  margin-bottom: 0.5rem;
+}
 
 /* ----------------------------------------------- */
 /* Estilos para el contenido principal */
@@ -279,44 +258,42 @@ input[type="password"] {
 /* desactivar el estilo de autocompletado por defecto */
 input:-webkit-autofill {
   appearance: none !important;
-  background-color: white !important; 
+  background-color: white !important;
   color: black !important;
   transition: background-color 9999s ease-out, color 9999s ease-out;
   transition-delay: 9999s;
 }
-
 
 /* ----------------------------------------------- */
 /* Estilos para el Scrollbar */
 
 /* Para navegadores basados en chromium  */
 ::-webkit-scrollbar {
-  width: 10px; 
-  height: 10px; 
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-grey-2); 
+  background: var(--color-grey-2);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-grey-3); 
+  background-color: var(--color-grey-3);
   border-radius: 5px;
-  border: 2px solid var(--color-grey-2); 
+  border: 2px solid var(--color-grey-2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-yellow-1); 
+  background-color: var(--color-yellow-1);
 }
 
-/* For Firefox */
+/* Para Firefox */
 
 * {
-  scrollbar-width: thin; 
-  scrollbar-color: var(--color-grey-3) var(--color-grey-2); 
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-grey-3) var(--color-grey-2);
 }
-
 
 /* ----------------------------------------------- */
 /* Estilos para el footer */

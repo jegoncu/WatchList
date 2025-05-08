@@ -53,11 +53,14 @@
             </ul>
           </div>
           <div class="usuario-dropdown" th:if="${session.usuarioId != null}">
-            <span class="dropdown-trigger" th:text="${session.usuarioNombre}">Usuario</span>
+            <span class="dropdown-trigger" th:text="${session.usuarioNombre}"
+              >Usuario</span
+            >
             <ul class="dropdown-menu">
               <li><a th:href="@{/perfil}">Mi Perfil</a></li>
               <li><a th:href="@{/mis-listas}">Mis Listas</a></li>
-              <li th:if="${session.usuarioEsAdmin != null && session.usuarioEsAdmin == true}">
+              <li
+                th:if="${session.usuarioEsAdmin != null && session.usuarioEsAdmin == true}">
                 <a th:href="@{/admin}">Admin</a>
               </li>
               <li><a th:href="@{/logout}">Cerrar Sesión</a></li>

@@ -7,7 +7,6 @@ import com.jesusgc.WatchList.service.PlataformaService;
 import com.jesusgc.WatchList.service.UsuarioService;
 import com.jesusgc.WatchList.service.PersonaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,32 +24,29 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UsuarioService usuarioService;
     private final PeliculaService peliculaService;
     private final GeneroService generoService;
     private final PlataformaService plataformaService;
     private final PersonaService personaService;
 
-    @Autowired
     public AdminController(UsuarioService usuarioService,
             PeliculaService peliculaService,
             GeneroService generoService,
             PlataformaService plataformaService,
             PersonaService personaService) {
-        this.usuarioService = usuarioService;
         this.peliculaService = peliculaService;
         this.generoService = generoService;
         this.plataformaService = plataformaService;
         this.personaService = personaService;
     }
 
-    // Manejador de la página principal del panel de administración 
+    // Manejador de la página principal del panel de administración
     @GetMapping
     public String mostrarAdminPanel(Model model) {
-        
+
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Panel de Administración");
-        return "admin"; 
+        return "admin";
     }
 
     // --- Películas CRUD ---
@@ -91,7 +87,7 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // Mostrar lista de peliculas
+    // Listar todas las películas
     @GetMapping("/peliculas")
     public String listarPeliculasAdmin(Model model) {
         model.addAttribute("peliculas", peliculaService.findAll());
@@ -100,7 +96,7 @@ public class AdminController {
         return "admin/peliculas/lista-peliculas";
     }
 
-    // Mostrar formulario para editar pelicula
+    // Mostrar formulario de edición de película
     @GetMapping("/peliculas/editar/{id}")
     public String mostrarFormularioEditarPelicula(@PathVariable("id") Long id, Model model,
             RedirectAttributes redirectAttributes) {
@@ -147,15 +143,55 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // Proceso de eliminación de película
+    // Eliminar película
     @PostMapping("/peliculas/eliminar/{id}")
     public String eliminarPelicula(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             peliculaService.deleteById(id);
             redirectAttributes.addFlashAttribute("successMessage", "Película eliminada correctamente.");
-        } catch (Exception e) {
+        } catch (Exception e) { // Catch more specific exceptions if needed
             redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la película.");
         }
         return "redirect:/admin/peliculas";
+    }
+
+    // --- Series CRUD (Placeholders) ---
+    @GetMapping("/series")
+    public String listarSeriesAdmin(Model model) {
+        // TODO: Implementar lógica de listado de películas
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Gestionar Series");
+        model.addAttribute("message", "Página de gestión de Series en construcción.");
+        return "admin/placeholder-list";
+    }
+
+    // --- Gente CRUD (Placeholders) ---
+    @GetMapping("/gente")
+    public String listarGenteAdmin(Model model) {
+        // TODO: Implementar lógica de listado de personas
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Gestionar Gente");
+        model.addAttribute("message", "Página de gestión de Gente en construcción.");
+        return "admin/placeholder-list";
+    }
+
+    // --- Listas CRUD (Placeholders) ---
+    @GetMapping("/listas")
+    public String listarListasAdmin(Model model) {
+        // TODO: Implementar lógica de listado de listas
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Gestionar Listas");
+        model.addAttribute("message", "Página de gestión de Listas en construcción.");
+        return "admin/placeholder-list";
+    }
+
+    // --- Usuarios CRUD (Placeholders) ---
+    @GetMapping("/usuarios")
+    public String listarUsuariosAdmin(Model model) {
+        // TODO: Implementar lógica de listado de usuarios
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Gestionar Usuarios");
+        model.addAttribute("message", "Página de gestión de Usuarios en construcción.");
+        return "admin/placeholder-list";
     }
 }

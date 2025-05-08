@@ -20,40 +20,36 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"usuario", "medias"})
+@ToString(exclude = { "usuario", "medias" })
 public class Lista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_lista")
     private Long id;
-    
+
     @NotNull(message = "El usuario no puede ser nulo")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
-    
+
     @NotBlank(message = "El título no puede estar vacío")
     @Column(name = "titulo", nullable = false)
     private String titulo;
-    
+
     @Column(name = "es_publica")
     private Boolean esPublica;
-    
+
     @ManyToMany
     @Builder.Default
-    @JoinTable(
-        name = "lista_media",
-        joinColumns = @JoinColumn(name = "id_lista"),
-        inverseJoinColumns = @JoinColumn(name = "id_media")
-    )
+    @JoinTable(name = "lista_media", joinColumns = @JoinColumn(name = "id_lista"), inverseJoinColumns = @JoinColumn(name = "id_media"))
     private Set<Media> medias = new HashSet<>();
-    
+
     public void addMedia(Media media) {
         medias.add(media);
         media.getListas().add(this);
     }
-    
+
     public void removeMedia(Media media) {
         medias.remove(media);
         media.getListas().remove(this);

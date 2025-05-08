@@ -10,6 +10,6 @@ public class PeliculasController {
     @GetMapping("/peliculas")
     public String mostrarPeliculas(Model model) {
         model.addAttribute("currentPage", "peliculas");
-        return "peliculas"; 
+        return "peliculas";
     }
 }
