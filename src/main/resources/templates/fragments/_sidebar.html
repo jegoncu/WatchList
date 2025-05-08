@@ -49,10 +49,52 @@
 
       <!-- Contenidos para admin -->
       <div th:if="${currentPage == 'admin'}">
-        <h4>Admin Sidebar</h4>
-        <ul>
-          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Admin ' + ${i}"></li>
-        </ul>
+        <h4>Panel de Administración</h4>
+
+        <div class="admin-menu-section">
+          <h5 class="admin-menu-trigger">Películas</h5>
+          <ul class="admin-submenu">
+            <li><a th:href="@{/admin/peliculas/nuevo}">Añadir Película</a></li>
+            <li><a th:href="@{/admin/peliculas/editar}">Editar Película</a></li>
+            <li><a th:href="@{/admin/peliculas/eliminar}">Eliminar Película</a></li>
+          </ul>
+        </div>
+
+        <div class="admin-menu-section">
+          <h5 class="admin-menu-trigger">Series</h5>
+          <ul class="admin-submenu">
+            <li><a th:href="@{/admin/series/nuevo}">Añadir Serie</a></li>
+            <li><a th:href="@{/admin/series/editar}">Editar Serie</a></li>
+            <li><a th:href="@{/admin/series/eliminar}">Eliminar Serie</a></li>
+          </ul>
+        </div>
+
+        <div class="admin-menu-section">
+          <h5 class="admin-menu-trigger">Gente</h5>
+          <ul class="admin-submenu">
+            <li><a th:href="@{/admin/gente/nuevo}">Añadir Persona</a></li>
+            <li><a th:href="@{/admin/gente/editar}">Editar Persona</a></li>
+            <li><a th:href="@{/admin/gente/eliminar}">Eliminar Persona</a></li>
+          </ul>
+        </div>
+
+        <div class="admin-menu-section">
+          <h5 class="admin-menu-trigger">Listas</h5>
+          <ul class="admin-submenu">
+            <li><a th:href="@{/admin/listas/nuevo}">Añadir Lista</a></li>
+            <li><a th:href="@{/admin/listas/editar}">Editar Lista</a></li>
+            <li><a th:href="@{/admin/listas/eliminar}">Eliminar Lista</a></li>
+          </ul>
+        </div>
+
+        <div class="admin-menu-section">
+          <h5 class="admin-menu-trigger">Usuarios</h5>
+          <ul class="admin-submenu">
+            <li><a th:href="@{/admin/usuarios/nuevo}">Añadir Usuario</a></li>
+            <li><a th:href="@{/admin/usuarios/editar}">Editar Usuario</a></li>
+            <li><a th:href="@{/admin/usuarios/eliminar}">Eliminar Usuario</a></li>
+          </ul>
+        </div>
       </div>
 
       <!-- Contenidos para login -->
