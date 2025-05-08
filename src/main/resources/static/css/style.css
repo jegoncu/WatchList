@@ -21,7 +21,7 @@
   padding: 0;
   text-decoration: none;
   list-style: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 html,
@@ -77,9 +77,9 @@ body {
   gap: 1rem;
   width: 100%;
 }
-.header-container input[type = "search"] {
+.header-container input[type="search"] {
   border: none;
-  padding: 4px 10px;;
+  padding: 4px 10px;
   border: 1px solid var(--color-grey-4);
   border-radius: 4px;
   width: 100%;
@@ -121,6 +121,7 @@ body {
   background-color: var(--color-grey-2);
   z-index: 1;
   right: -2rem;
+  top: 2rem;
   min-width: 160px;
   padding: 5px 0;
 }
@@ -257,20 +258,29 @@ input[type="password"] {
   background-color: var(--color-grey-2);
   color: var(--color-grey-5);
 }
-.form-button{
+.form-button {
   padding: 10px 20px;
   margin: 8px 0;
   border: none;
   border-radius: 4px;
   background-color: var(--color-yellow-1);
   color: var(--color-grey-1);
-  
+
   cursor: pointer;
   &:hover {
     background-color: var(--color-yellow-1);
     color: var(--color-grey-5);
   }
 }
+/* desactivar el estilo de autocompletado por defecto */
+input:-webkit-autofill {
+  appearance: none !important;
+  background-color: white !important; 
+  color: black !important;
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+  transition-delay: 9999s;
+}
+
 
 /* ----------------------------------------------- */
 /* Responsive design */

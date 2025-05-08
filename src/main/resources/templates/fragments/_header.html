@@ -45,9 +45,12 @@
               name="q" />
             <button type="submit" class="header-buscar-button">Buscar</button>
           </form>
-          <div th:if="${session.usuarioId == null}">
-            <a th:href="@{/registro}">Regístrate</a>
-            <a th:href="@{/login}">Inicia Sesión</a>
+          <div class="usuario-dropdown" th:if="${session.usuarioId == null}">
+            <span class="dropdown-trigger">Usuario</span>
+            <ul class="dropdown-menu">
+              <li><a th:href="@{/registro}">Regístrate</a></li>
+              <li><a th:href="@{/login}">Inicia Sesión</a></li>
+            </ul>
           </div>
           <div class="usuario-dropdown" th:if="${session.usuarioId != null}">
             <span class="dropdown-trigger" th:text="${session.usuarioNombre}">Usuario</span>
