@@ -2,25 +2,110 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Sidebar Fragment</title>
+    <title>Fragmento Sidebar</title>
   </head>
   <body>
-    <!-- Sidebar Fragment -->
     <div th:fragment="sidebar" class="sidebar">
-      <h4>Filtrar</h4>
-      <ul>
-        <li>Filtro 1</li>
-        <li>Filtro 2</li>
-        <li>Filtro 3</li>
-        <li>Filtro 4</li>
-        <li>Filtro 5</li>
-      </ul>
-      <h4>Ordenar</h4>
-      <ul>
-        <li>Ordenar por Nombre</li>
-        <li>Ordenar por Fecha</li>
-        <li>Ordenar por Calificación</li>
-      </ul>
+
+      <!-- Contenidos para inicio -->
+      <div th:if="${currentPage == 'inicio'}">
+        <h4>Inicio Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Inicio ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para peliculas -->
+      <div th:if="${currentPage == 'peliculas'}">
+        <h4>Películas Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Películas ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para series -->
+      <div th:if="${currentPage == 'series'}">
+        <h4>Series Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Series ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para gente -->
+      <div th:if="${currentPage == 'gente'}">
+        <h4>Gente Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Gente ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para listas -->
+      <div th:if="${currentPage == 'listas'}">
+        <h4>Listas Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Listas ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para admin -->
+      <div th:if="${currentPage == 'admin'}">
+        <h4>Admin Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Admin ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para login -->
+      <div th:if="${currentPage == 'login'}">
+        <h4>Login Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Login ' + ${i}"></li>
+        </ul>
+      </div>
+
+      <!-- Contenidos para registro -->
+      <div th:if="${currentPage == 'registro'}">
+        <h4>Registro Sidebar</h4>
+        <ul>
+          <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Registro ' + ${i}"></li>
+        </ul>
+      </div>
+      
+      <!-- Contenidos para perfil -->
+      <div th:if="${currentPage == 'perfil'}">
+          <h4>Perfil Sidebar</h4>
+          <ul>
+              <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Perfil ' + ${i}"></li>
+          </ul>
+      </div>
+
+      <!-- Contenidos para mis listas -->
+      <div th:if="${currentPage == 'mis-listas'}">
+          <h4>Mis Listas Sidebar</h4>
+          <ul>
+              <li th:each="i : ${#numbers.sequence(1, 10)}" th:text="'Mis Listas ' + ${i}"></li>
+          </ul>
+      </div>
+
+      <!-- Contenidos para landing page -->
+      <div th:if="${currentPage == 'landing'}">
+        <h4>Bienvenido/a</h4>
+        <ul>
+          <li><a th:href="@{/peliculas}">Explorar Películas</a></li>
+          <li><a th:href="@{/series}">Explorar Series</a></li>
+          <li><a th:href="@{/listas}">Ver Listas Públicas</a></li>
+          <hr style="margin: 10px 0; border-color: var(--color-grey-3);">
+          <li><a th:href="@{/login}">Iniciar Sesión</a></li>
+          <li><a th:href="@{/registro}">Crear Cuenta</a></li>
+        </ul>
+      </div>
+
+      <!--
+      <div th:if="${currentPage == null or !T(java.util.Arrays).asList('inicio', 'peliculas', 'series', 'gente', 'listas', 'admin', 'login', 'registro', 'perfil', 'mis-listas', 'landing').contains(currentPage)}">
+          <h4>Default Sidebar</h4>
+          <p>General sidebar content.</p>
+      </div>
+      -->
     </div>
   </body>
 </html>

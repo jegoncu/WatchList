@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title>Bienvenido a WatchList</title>
+    <th:block th:fragment="pageCss">
+      <style>
+        .landing-hero {
+          text-align: center;
+          padding: 40px 20px;
+        }
+        .landing-hero h1 {
+          font-size: 2.5rem;
+          color: var(--color-yellow-1);
+          margin-bottom: 20px;
+        }
+        .landing-hero p {
+          font-size: 1.2rem;
+          margin-bottom: 30px;
+        }
+        .landing-actions a {
+          margin: 0 10px;
+          padding: 10px 20px;
+          border-radius: 4px;
+          text-decoration: none;
+        }
+        .btn-primary {
+          background-color: var(--color-yellow-1);
+          color: var(--color-grey-1);
+        }
+        .btn-primary:hover {
+          background-color: var(--color-yellow-1);
+          color: var(--color-grey-5);
+        }
+        .btn-secondary {
+          background-color: var(--color-grey-2);
+          color: var(--color-grey-5);
+          border: 1px solid var(--color-yellow-1);
+        }
+        .btn-secondary:hover {
+          background-color: var(--color-grey-3);
+          color: var(--color-yellow-1);
+        }
+      </style>
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <div class="landing-hero">
+        <h1>Descubre Tu Próxima Película o Serie Favorita</h1>
+        <p>
+          Explora un vasto catálogo de películas y series. Crea tus listas personalizadas,
+          comparte tus opiniones y mucho más.
+        </p>
+        <div class="landing-actions">
+          <a th:href="@{/peliculas}" class="btn-primary">Explorar Catálogo</a>
+          <a th:href="@{/registro}" class="btn-secondary">Regístrate Gratis</a>
+        </div>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript">
+    </th:block>
+  </body>
+</html>

@@ -95,6 +95,40 @@ public class UsuarioController {
         }
 
         model.addAttribute("usuario", usuario);
+        model.addAttribute("currentPage", "inicio");
         return "inicio";
+    }
+
+    @GetMapping("/perfil")
+    public String mostrarPerfil(HttpSession session, Model model) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+        Usuario usuario = usuarioService.findById(usuarioId);
+        if (usuario == null) {
+            session.invalidate();
+            return "redirect:/login";
+        }
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("currentPage", "perfil");
+        return "perfil";
+    }
+
+    @GetMapping("/mis-listas")
+    public String mostrarMisListas(HttpSession session, Model model) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+        Usuario usuario = usuarioService.findById(usuarioId);
+        if (usuario == null) {
+            session.invalidate();
+            return "redirect:/login";
+        }
+        model.addAttribute("usuario", usuario);
+        // TODO: fetchear y añadir al modelo las listas del usuario
+        model.addAttribute("currentPage", "mis-listas");
+        return "mis-listas";
     }
 }

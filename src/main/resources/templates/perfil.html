@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title>Mi Perfil - WatchList</title>
+    <th:block th:fragment="pageCss">
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <h1>Mi Perfil</h1>
+      <div th:if="${usuario}" class="profile-details">
+        <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre del Usuario</span></p>
+        <p><strong>Email:</strong> <span th:text="${usuario.email}">email@example.com</span></p>
+        <p><strong>Perfil Público:</strong> <span th:text="${usuario.esPublico ? 'Sí' : 'No'}">Sí/No</span></p>
+      </div>
+      <div th:unless="${usuario}">
+        <p>No se pudo cargar la información del perfil.</p>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript">
+    </th:block>
+  </body>
+</html>

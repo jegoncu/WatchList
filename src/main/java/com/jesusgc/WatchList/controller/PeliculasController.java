@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 
 @Controller
-public class PeliculaController {
+public class PeliculasController {
 
     @GetMapping("/peliculas")
     public String mostrarPeliculas(Model model) {
