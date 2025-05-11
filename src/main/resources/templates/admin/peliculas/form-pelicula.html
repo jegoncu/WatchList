@@ -91,28 +91,39 @@
           </div>
           
           <div>
-            <label for="generoIds">Géneros:</label>
-            <select
-              multiple="multiple"
-              id="generoIds"
-              name="generoIds">
-              <option
-                th:each="genero : ${allGeneros}"
-                th:value="${genero.id}"
-                th:text="${genero.nombre}"
-                th:selected="${pelicula.generos != null && pelicula.generos.contains(genero)}"></option>
-            </select>
+            <label>Géneros:</label>
+            <div class="checkbox-list genero-tag-list"> 
+              <th:block th:each="genero : ${allGeneros}">
+                <div class="genero-tag-item">
+                  <input type="checkbox"
+                         th:id="'genero-' + ${genero.id}"
+                         name="generoIds"
+                         th:value="${genero.id}"
+                         th:checked="${pelicula.generos != null && #lists.contains(pelicula.generos.![id], genero.id)}"
+                         class="visually-hidden-checkbox"/> 
+                  <label th:for="'genero-' + ${genero.id}" 
+                         class="genero-tag-label"
+                         th:text="${genero.nombre}"></label>
+                </div>
+              </th:block>
+            </div>
           </div>
 
           <div>
-            <label for="plataformaIds">Plataformas:</label>
-            <select multiple="multiple" id="plataformaIds" name="plataformaIds">
-              <option
-                th:each="plataforma : ${allPlataformas}"
-                th:value="${plataforma.id}"
-                th:text="${plataforma.nombre}"
-                th:selected="${pelicula.plataformas != null && pelicula.plataformas.contains(plataforma)}"></option>
-            </select>
+            <label>Plataformas:</label>
+            <div class="checkbox-list"> 
+              <th:block th:each="plataforma : ${allPlataformas}">
+                <div class="checkbox-item">
+                  <input type="checkbox"
+                         th:id="'plataforma-' + ${plataforma.id}"
+                         name="plataformaIds"
+                         th:value="${plataforma.id}"
+                         th:checked="${pelicula.plataformas != null && #lists.contains(pelicula.plataformas.![id], plataforma.id)}"
+                         class="form-check-input"/>
+                  <label th:for="'plataforma-' + ${plataforma.id}" th:text="${plataforma.nombre}" class="form-check-label"></label>
+                </div>
+              </th:block>
+            </div>
           </div>
 
           <div>

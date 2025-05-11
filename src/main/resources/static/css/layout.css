@@ -43,15 +43,12 @@
 /* ----------------------------------------------- */
 /* Estilos para el main */
 
-main {
-  flex: 1;
+main { 
+  flex: 1; 
   overflow-y: auto;
-}
-
-.main-container {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 120px);
+  display: flex; 
+  flex-direction: row; 
+  min-height: 0; 
 }
 
 /* ----------------------------------------------- */
@@ -61,9 +58,10 @@ main {
   width: 25%;
   min-width: 250px;
   max-width: 350px;
-  background-color: var(--color-grey-1);
+  background-color: var(--color-grey-1); 
   padding: 1rem;
-  overflow-y: auto;
+  overflow-y: auto; 
+  height: 100%;
 }
 
 .sidebar {
@@ -90,9 +88,10 @@ main {
 /* Estilos para el contenido principal */
 
 .content-container {
-  flex: 1;
+  flex: 1; 
   padding: 1.5rem;
-  overflow-y: auto;
+  overflow-y: auto; 
+  height: 100%; 
 }
 
 /* ----------------------------------------------- */

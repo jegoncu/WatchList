@@ -12,10 +12,8 @@
   scrollbar-color: var(--color-grey-3) var(--color-grey-2);
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
+html {
+  height: 100%; 
 }
 
 body {
