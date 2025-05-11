@@ -126,10 +126,6 @@ input:-webkit-autofill {
   background-color: var(--color-yellow-2);
   color: var(--color-grey-1);
 }
-.genero-tag-list .visually-hidden-checkbox:focus + .genero-tag-label {
-  outline: 2px solid var(--color-blue-2); 
-  outline-offset: 2px;
-}
 
 .plataforma-logo-list {
   gap: 10px;
@@ -166,11 +162,6 @@ input:-webkit-autofill {
 .plataforma-logo-list .visually-hidden-checkbox:checked + .plataforma-logo-label {
   border-color: var(--color-yellow-2); 
   background-color: var(--color-grey-2); 
-}
-
-.plataforma-logo-list .visually-hidden-checkbox:focus + .plataforma-logo-label {
-  outline: 2px solid var(--color-blue-2); 
-  outline-offset: 2px;
 }
 
 /* ----------------------------------------------- */
