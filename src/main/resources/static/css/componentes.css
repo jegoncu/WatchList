@@ -77,7 +77,7 @@ input:-webkit-autofill {
   transition: background-color 9999s ease-out, color 9999s ease-out;
   transition-delay: 9999s;
 }
-/* Estilo para selector multiple de checkboxes */
+/* Estilo para selector multiple de checkboxes (genero y plataforma */
 
 .checkbox-list {
   display: flex;
@@ -125,6 +125,52 @@ input:-webkit-autofill {
 .genero-tag-list .visually-hidden-checkbox:checked + .genero-tag-label {
   background-color: var(--color-yellow-2);
   color: var(--color-grey-1);
+}
+.genero-tag-list .visually-hidden-checkbox:focus + .genero-tag-label {
+  outline: 2px solid var(--color-blue-2); 
+  outline-offset: 2px;
+}
+
+.plataforma-logo-list {
+  gap: 10px;
+}
+
+.plataforma-logo-label {
+  display: inline-block;
+  padding: 5px; 
+  border: 2px solid transparent; 
+  border-radius: 8px; 
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  line-height: 0; 
+}
+
+.plataforma-logo-img {
+  display: block; 
+  height: 40px; 
+  width: auto;  
+  max-width: 100px; 
+  object-fit: contain;
+  border-radius: 4px; 
+}
+
+.plataforma-logo-fallback-text {
+  display: inline-block;
+  padding: 10px;
+  font-size: 0.8rem;
+  color: var(--color-grey-4);
+  border: 1px dashed var(--color-grey-3);
+  border-radius: 4px;
+}
+
+.plataforma-logo-list .visually-hidden-checkbox:checked + .plataforma-logo-label {
+  border-color: var(--color-yellow-2); 
+  background-color: var(--color-grey-2); 
+}
+
+.plataforma-logo-list .visually-hidden-checkbox:focus + .plataforma-logo-label {
+  outline: 2px solid var(--color-blue-2); 
+  outline-offset: 2px;
 }
 
 /* ----------------------------------------------- */

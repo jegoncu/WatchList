@@ -89,21 +89,23 @@
               th:if="${#fields.hasErrors('duracionMin')}"
               th:errors="*{duracionMin}"></div>
           </div>
-          
+
           <div>
             <label>Géneros:</label>
-            <div class="checkbox-list genero-tag-list"> 
+            <div class="checkbox-list genero-tag-list">
               <th:block th:each="genero : ${allGeneros}">
                 <div class="genero-tag-item">
-                  <input type="checkbox"
-                         th:id="'genero-' + ${genero.id}"
-                         name="generoIds"
-                         th:value="${genero.id}"
-                         th:checked="${pelicula.generos != null && #lists.contains(pelicula.generos.![id], genero.id)}"
-                         class="visually-hidden-checkbox"/> 
-                  <label th:for="'genero-' + ${genero.id}" 
-                         class="genero-tag-label"
-                         th:text="${genero.nombre}"></label>
+                  <input
+                    type="checkbox"
+                    th:id="'genero-' + ${genero.id}"
+                    name="generoIds"
+                    th:value="${genero.id}"
+                    th:checked="${pelicula.generos != null && #lists.contains(pelicula.generos.![id], genero.id)}"
+                    class="visually-hidden-checkbox" />
+                  <label
+                    th:for="'genero-' + ${genero.id}"
+                    class="genero-tag-label"
+                    th:text="${genero.nombre}"></label>
                 </div>
               </th:block>
             </div>
@@ -111,16 +113,29 @@
 
           <div>
             <label>Plataformas:</label>
-            <div class="checkbox-list"> 
+            <div class="checkbox-list plataforma-logo-list">
               <th:block th:each="plataforma : ${allPlataformas}">
-                <div class="checkbox-item">
-                  <input type="checkbox"
-                         th:id="'plataforma-' + ${plataforma.id}"
-                         name="plataformaIds"
-                         th:value="${plataforma.id}"
-                         th:checked="${pelicula.plataformas != null && #lists.contains(pelicula.plataformas.![id], plataforma.id)}"
-                         class="form-check-input"/>
-                  <label th:for="'plataforma-' + ${plataforma.id}" th:text="${plataforma.nombre}" class="form-check-label"></label>
+                <div class="plataforma-logo-item">
+                  <input
+                    type="checkbox"
+                    th:id="'plataforma-' + ${plataforma.id}"
+                    name="plataformaIds"
+                    th:value="${plataforma.id}"
+                    th:checked="${pelicula.plataformas != null && #lists.contains(pelicula.plataformas.![id], plataforma.id)}"
+                    class="visually-hidden-checkbox" />
+                  <label
+                    th:for="'plataforma-' + ${plataforma.id}"
+                    class="plataforma-logo-label">
+                    <img
+                      th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
+                      th:src="@{${plataforma.logo}}"
+                      th:alt="${plataforma.nombre}"
+                      class="plataforma-logo-img" />
+                    <span
+                      th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}"
+                      th:text="${plataforma.nombre}"
+                      class="plataforma-logo-fallback-text"></span>
+                  </label>
                 </div>
               </th:block>
             </div>
@@ -149,8 +164,7 @@
       </div>
     </section>
     <th:block th:fragment="pageScript">
-      <script>
-      </script>
+      <script></script>
     </th:block>
   </body>
 </html>
