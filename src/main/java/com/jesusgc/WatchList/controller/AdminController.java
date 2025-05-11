@@ -4,7 +4,6 @@ import com.jesusgc.WatchList.model.Pelicula;
 import com.jesusgc.WatchList.service.PeliculaService;
 import com.jesusgc.WatchList.service.GeneroService;
 import com.jesusgc.WatchList.service.PlataformaService;
-import com.jesusgc.WatchList.service.UsuarioService;
 import com.jesusgc.WatchList.service.PersonaService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ public class AdminController {
     private final PlataformaService plataformaService;
     private final PersonaService personaService;
 
-    public AdminController(UsuarioService usuarioService,
+    public AdminController(
             PeliculaService peliculaService,
             GeneroService generoService,
             PlataformaService plataformaService,
@@ -149,8 +148,8 @@ public class AdminController {
         try {
             peliculaService.deleteById(id);
             redirectAttributes.addFlashAttribute("successMessage", "Película eliminada correctamente.");
-        } catch (Exception e) { // Catch more specific exceptions if needed
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la película.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la película: " + e.getMessage());
         }
         return "redirect:/admin/peliculas";
     }
@@ -158,7 +157,6 @@ public class AdminController {
     // --- Series CRUD (Placeholders) ---
     @GetMapping("/series")
     public String listarSeriesAdmin(Model model) {
-        // TODO: Implementar lógica de listado de películas
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Series");
         model.addAttribute("message", "Página de gestión de Series en construcción.");
@@ -168,7 +166,6 @@ public class AdminController {
     // --- Gente CRUD (Placeholders) ---
     @GetMapping("/gente")
     public String listarGenteAdmin(Model model) {
-        // TODO: Implementar lógica de listado de personas
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Gente");
         model.addAttribute("message", "Página de gestión de Gente en construcción.");
@@ -178,7 +175,6 @@ public class AdminController {
     // --- Listas CRUD (Placeholders) ---
     @GetMapping("/listas")
     public String listarListasAdmin(Model model) {
-        // TODO: Implementar lógica de listado de listas
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Listas");
         model.addAttribute("message", "Página de gestión de Listas en construcción.");
@@ -188,10 +184,10 @@ public class AdminController {
     // --- Usuarios CRUD (Placeholders) ---
     @GetMapping("/usuarios")
     public String listarUsuariosAdmin(Model model) {
-        // TODO: Implementar lógica de listado de usuarios
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Usuarios");
         model.addAttribute("message", "Página de gestión de Usuarios en construcción.");
         return "admin/placeholder-list";
     }
+
 }

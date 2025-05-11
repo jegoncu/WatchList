@@ -16,12 +16,8 @@
           Formulario de Película
         </h2>
 
-        <div
-          th:if="${successMessage}"
-          th:text="${successMessage}"></div>
-        <div
-          th:if="${errorMessage}"
-          th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
         <form th:action="${formAction}" th:object="${pelicula}" method="post">
           <div>
@@ -93,7 +89,7 @@
               th:if="${#fields.hasErrors('duracionMin')}"
               th:errors="*{duracionMin}"></div>
           </div>
-
+          
           <div>
             <label for="generoIds">Géneros:</label>
             <select
@@ -110,10 +106,7 @@
 
           <div>
             <label for="plataformaIds">Plataformas:</label>
-            <select
-              multiple="multiple"
-              id="plataformaIds"
-              name="plataformaIds">
+            <select multiple="multiple" id="plataformaIds" name="plataformaIds">
               <option
                 th:each="plataforma : ${allPlataformas}"
                 th:value="${plataforma.id}"
@@ -124,10 +117,7 @@
 
           <div>
             <label for="personaIds">Personas (Actores/Directores):</label>
-            <select
-              multiple="multiple"
-              id="personaIds"
-              name="personaIds">
+            <select multiple="multiple" id="personaIds" name="personaIds">
               <option
                 th:each="persona : ${allPersonas}"
                 th:value="${persona.id}"
@@ -147,6 +137,9 @@
         </form>
       </div>
     </section>
-    <th:block th:fragment="pageScript"></th:block>
+    <th:block th:fragment="pageScript">
+      <script>
+      </script>
+    </th:block>
   </body>
 </html>

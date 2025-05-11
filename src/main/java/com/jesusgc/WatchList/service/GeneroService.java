@@ -37,4 +37,8 @@ public class GeneroService {
         }
         generoRepository.deleteById(id);
     }
+
+    public long count() {
+        return generoRepository.count();
+    }
 }
