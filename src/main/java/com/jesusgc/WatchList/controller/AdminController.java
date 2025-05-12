@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map; 
+import java.util.HashMap; 
+import java.util.Arrays; 
 
 @Controller
 @RequestMapping("/admin")
@@ -50,12 +53,17 @@ public class AdminController {
 
     // --- Películas CRUD ---
 
+    private static final List<String> POSSIBLE_ROLES = Arrays.asList(
+         "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje", "Showrunner"
+    );
+
     @GetMapping("/peliculas/nuevo")
     public String mostrarFormularioNuevaPelicula(Model model) {
         model.addAttribute("pelicula", new Pelicula());
         model.addAttribute("allGeneros", generoService.findAll());
         model.addAttribute("allPlataformas", plataformaService.findAll());
         model.addAttribute("allPersonas", personaService.findAll());
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Añadir Nueva Película");
         model.addAttribute("formAction", "/admin/peliculas/nuevo");
@@ -68,20 +76,32 @@ public class AdminController {
             BindingResult result,
             @RequestParam(name = "generoIds", required = false) List<Long> generoIds,
             @RequestParam(name = "plataformaIds", required = false) List<Long> plataformaIds,
-            @RequestParam(name = "personaIds", required = false) List<Long> personaIds,
+            @RequestParam(name = "persona_ids", required = false) List<Long> persona_ids,
+            @RequestParam(name = "persona_roles", required = false) List<String> persona_roles,
             Model model,
             RedirectAttributes redirectAttributes) {
+
+        Map<Long, String> personaRolesMap = new HashMap<>();
+        if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
+            for (int i = 0; i < persona_ids.size(); i++) {
+                if (persona_ids.get(i) != null && persona_roles.get(i) != null && !persona_roles.get(i).trim().isEmpty()) {
+                    personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
+                }
+            }
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("allGeneros", generoService.findAll());
             model.addAttribute("allPlataformas", plataformaService.findAll());
             model.addAttribute("allPersonas", personaService.findAll());
+            model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
             model.addAttribute("currentPage", "admin");
             model.addAttribute("pageTitle", "Añadir Nueva Película");
             model.addAttribute("formAction", "/admin/peliculas/nuevo");
             return "admin/peliculas/form-pelicula";
         }
 
-        peliculaService.savePeliculaWithRelations(pelicula, generoIds, plataformaIds, personaIds);
+        peliculaService.savePeliculaWithRelations(pelicula, generoIds, plataformaIds, personaRolesMap);
         redirectAttributes.addFlashAttribute("successMessage", "Película añadida correctamente.");
         return "redirect:/admin/peliculas";
     }
@@ -111,6 +131,8 @@ public class AdminController {
         model.addAttribute("allGeneros", generoService.findAll());
         model.addAttribute("allPlataformas", plataformaService.findAll());
         model.addAttribute("allPersonas", personaService.findAll());
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
+        // ... existing code for selectedPersonaRoles if you implement it ...
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Editar Película");
         model.addAttribute("formAction", "/admin/peliculas/editar/" + id);
@@ -124,20 +146,32 @@ public class AdminController {
             BindingResult result,
             @RequestParam(name = "generoIds", required = false) List<Long> generoIds,
             @RequestParam(name = "plataformaIds", required = false) List<Long> plataformaIds,
-            @RequestParam(name = "personaIds", required = false) List<Long> personaIds,
+            @RequestParam(name = "persona_ids", required = false) List<Long> persona_ids,
+            @RequestParam(name = "persona_roles", required = false) List<String> persona_roles,
             Model model,
             RedirectAttributes redirectAttributes) {
+
+        Map<Long, String> personaRolesMap = new HashMap<>();
+        if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
+            for (int i = 0; i < persona_ids.size(); i++) {
+                 if (persona_ids.get(i) != null && persona_roles.get(i) != null && !persona_roles.get(i).trim().isEmpty()) {
+                    personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
+                }
+            }
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("allGeneros", generoService.findAll());
             model.addAttribute("allPlataformas", plataformaService.findAll());
             model.addAttribute("allPersonas", personaService.findAll());
+            model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
             model.addAttribute("currentPage", "admin");
             model.addAttribute("pageTitle", "Editar Película");
             model.addAttribute("formAction", "/admin/peliculas/editar/" + id);
             return "admin/peliculas/form-pelicula";
         }
 
-        peliculaService.updatePeliculaWithRelations(id, peliculaForm, generoIds, plataformaIds, personaIds);
+        peliculaService.updatePeliculaWithRelations(id, peliculaForm, generoIds, plataformaIds, personaRolesMap);
         redirectAttributes.addFlashAttribute("successMessage", "Película actualizada correctamente.");
         return "redirect:/admin/peliculas";
     }

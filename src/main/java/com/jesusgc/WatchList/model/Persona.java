@@ -21,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = { "medias" })
+@ToString(exclude = { "participaciones" })
 public class Persona {
 
     @Id
@@ -40,17 +40,21 @@ public class Persona {
     @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
 
-    @ManyToMany(mappedBy = "personas")
-    @Builder.Default
-    private Set<Media> medias = new HashSet<>();
+    @Column(name = "foto_url")
+    private String fotoUrl;
 
-    public void addMedia(Media media) {
-        medias.add(media);
-        media.getPersonas().add(this);
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Credito> participaciones = new HashSet<>();
+
+    public void addParticipacion(Media media, String rol) {
+        Credito credito = new Credito(media, this, rol);
+        this.participaciones.add(credito);
     }
 
-    public void removeMedia(Media media) {
-        medias.remove(media);
-        media.getPersonas().remove(this);
+    public void removeParticipacion(Credito credito) {
+        this.participaciones.remove(credito);
+        credito.setPersona(null);
+        credito.setMedia(null);
     }
 }

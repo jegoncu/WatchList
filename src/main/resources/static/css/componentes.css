@@ -287,3 +287,33 @@ input:-webkit-autofill {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-yellow-2);
 }
+
+/* ----------------------------------------------- */
+/* Styles for Personas y Roles section */
+.persona-rol-fila {
+  display: flex; /* Arrange items in a row */
+  align-items: center; /* Align items vertically */
+  gap: 10px; /* Space between items */
+  margin-bottom: 10px; /* Space below each row */
+}
+
+.persona-selector-contenedor,
+.rol-selector-contenedor {
+  flex-grow: 1; /* Allow selectors to take available space */
+  /* You might want to set a flex-basis or min-width if needed */
+}
+
+.persona-selector-contenedor select, /* Or use .persona-select if you added that class */
+.rol-selector-contenedor select { /* Or use .rol-select if you added that class */
+  width: 100%; /* Make select take full width of its container */
+  /* Your existing select styles from componentes.css should apply here */
+}
+
+.eliminar-fila-contenedor {
+  flex-shrink: 0; /* Prevent the button container from shrinking */
+}
+
+/* Ensure the "Añadir Persona y Rol" button has some margin if needed */
+#add-persona-role-button {
+  margin-top: 10px; /* Example margin */
+}
