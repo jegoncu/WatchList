@@ -141,15 +141,63 @@
             </div>
           </div>
 
-          <div>
-            <label for="personaIds">Personas (Actores/Directores):</label>
-            <select multiple="multiple" id="personaIds" name="personaIds">
-              <option
-                th:each="persona : ${allPersonas}"
-                th:value="${persona.id}"
-                th:text="${persona.nombre}"
-                th:selected="${pelicula.personas != null && pelicula.personas.contains(persona)}"></option>
-            </select>
+          <div class="form-group">
+            <label>Personas y Roles:</label>
+            <div id="persona-roles-container">
+
+                <!-- Template for a new person-role entry -->
+                <div id="persona-role-template" style="display: none;" class="persona-rol-fila"> <!-- CUSTOM CLASS -->
+                    <div class="persona-selector-contenedor"> <!-- CUSTOM CLASS -->
+                        <select name="persona_ids" class="persona-select"> <!-- Keep existing select styling or add custom -->
+                            <option value="">Seleccionar Persona...</option>
+                            <th:block th:each="persona : ${allPersonas}">
+                                <option th:value="${persona.id}" th:text="${persona.nombre}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="rol-selector-contenedor"> <!-- CUSTOM CLASS -->
+                        <select name="persona_roles" class="rol-select"> <!-- Keep existing select styling or add custom -->
+                            <option value="">Seleccionar Rol...</option>
+                            <option th:each="possibleRole : ${possibleRoles}" th:value="${possibleRole}" th:text="${possibleRole}"></option>
+                        </select>
+                    </div>
+                    <div class="eliminar-fila-contenedor"> <!-- CUSTOM CLASS -->
+                        <button type="button" class="btn btn-small btn-red remove-persona-role-btn" onclick="removePersonaRoleEntry(this)">Eliminar</button>
+                    </div>
+                </div>
+
+                <!-- For Editing: Pre-populate existing creditos -->
+                <th:block th:if="${pelicula.id != null and pelicula.creditos != null}">
+                    <div th:each="credito, iterStat : ${pelicula.creditos}" class="persona-rol-fila"> <!-- CUSTOM CLASS -->
+                        <div class="persona-selector-contenedor"> <!-- CUSTOM CLASS -->
+                            <select name="persona_ids" class="persona-select">
+                                <option value="">Seleccionar Persona...</option>
+                                <th:block th:each="personaOpt : ${allPersonas}">
+                                    <option th:value="${personaOpt.id}"
+                                            th:text="${personaOpt.nombre}"
+                                            th:selected="${personaOpt.id == credito.persona.id}">
+                                    </option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="rol-selector-contenedor"> <!-- CUSTOM CLASS -->
+                            <select name="persona_roles" class="rol-select">
+                                <option value="">Seleccionar Rol...</option>
+                                <option th:each="possibleRole : ${possibleRoles}"
+                                        th:value="${possibleRole}"
+                                        th:text="${possibleRole}"
+                                        th:selected="${possibleRole == credito.rol}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="eliminar-fila-contenedor"> <!-- CUSTOM CLASS -->
+                            <button type="button" class="btn btn-small btn-red remove-persona-role-btn" onclick="removePersonaRoleEntry(this)">Eliminar</button>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <!-- Use your custom button classes if 'btn-success btn-sm mt-2' are Bootstrap -->
+            <button type="button" id="add-persona-role-button" class="btn btn-small btn-green">Añadir Persona y Rol</button> <!-- Example: using your btn-green -->
           </div>
 
           <div>
@@ -164,7 +212,7 @@
       </div>
     </section>
     <th:block th:fragment="pageScript">
-      <script></script>
+      <script th:src="@{/js/admin-form-pelicula.js}"></script>
     </th:block>
   </body>
 </html>

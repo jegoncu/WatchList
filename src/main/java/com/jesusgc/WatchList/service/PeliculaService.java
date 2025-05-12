@@ -4,6 +4,7 @@ import com.jesusgc.WatchList.model.Pelicula;
 import com.jesusgc.WatchList.model.Genero;
 import com.jesusgc.WatchList.model.Plataforma;
 import com.jesusgc.WatchList.model.Persona;
+import com.jesusgc.WatchList.model.Credito;
 import com.jesusgc.WatchList.repository.PeliculaRepository;
 import com.jesusgc.WatchList.repository.GeneroRepository;
 import com.jesusgc.WatchList.repository.PlataformaRepository;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 @Service
 public class PeliculaService {
@@ -44,14 +46,14 @@ public class PeliculaService {
 
     @Transactional
     public Pelicula savePeliculaWithRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
-            List<Long> personaIds) {
-        updateRelations(pelicula, generoIds, plataformaIds, personaIds);
+            Map<Long, String> personaRoles) { 
+        updateRelations(pelicula, generoIds, plataformaIds, personaRoles); 
         return peliculaRepository.save(pelicula);
     }
 
     @Transactional
     public Pelicula updatePeliculaWithRelations(Long id, Pelicula peliculaForm, List<Long> generoIds,
-            List<Long> plataformaIds, List<Long> personaIds) {
+            List<Long> plataformaIds, Map<Long, String> personaRoles) { 
         Pelicula peliculaExistente = peliculaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
 
@@ -64,12 +66,12 @@ public class PeliculaService {
 
         peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
 
-        updateRelations(peliculaExistente, generoIds, plataformaIds, personaIds);
+        updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles); 
         return peliculaRepository.save(peliculaExistente);
     }
 
     private void updateRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
-            List<Long> personaIds) {
+                                 Map<Long, String> personaRoles) {
         if (generoIds != null) {
             Set<Genero> generos = new HashSet<>(generoRepository.findAllById(generoIds));
             pelicula.setGeneros(generos);
@@ -84,11 +86,19 @@ public class PeliculaService {
             pelicula.setPlataformas(new HashSet<>());
         }
 
-        if (personaIds != null) {
-            Set<Persona> personas = new HashSet<>(personaRepository.findAllById(personaIds));
-            pelicula.setPersonas(personas);
-        } else {
-            pelicula.setPersonas(new HashSet<>());
+        pelicula.getCreditos().clear();
+
+        if (personaRoles != null) {
+            for (Map.Entry<Long, String> entry : personaRoles.entrySet()) {
+                Long personaId = entry.getKey();
+                String rol = entry.getValue();
+
+                Persona persona = personaRepository.findById(personaId)
+                        .orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
+                
+                Credito novoCredito = new Credito(pelicula, persona, rol);
+                pelicula.getCreditos().add(novoCredito);
+            }
         }
     }
 

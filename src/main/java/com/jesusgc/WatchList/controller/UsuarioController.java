@@ -127,7 +127,6 @@ public class UsuarioController {
             return "redirect:/login";
         }
         model.addAttribute("usuario", usuario);
-        // TODO: fetchear y añadir al modelo las listas del usuario
         model.addAttribute("currentPage", "mis-listas");
         return "mis-listas";
     }
