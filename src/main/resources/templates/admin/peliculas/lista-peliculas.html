@@ -7,12 +7,74 @@
     <title th:text="${pageTitle ?: 'Gestionar Películas'}">
       Gestionar Películas - WatchList
     </title>
-    <th:block th:fragment="pageCss"> </th:block>
+    <th:block th:fragment="pageCss">
+      <style>
+        .admin-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        .admin-table th, .admin-table td {
+          border: 1px solid var(--color-grey-3);
+          padding: 8px 12px;
+          text-align: left;
+          vertical-align: middle;
+        }
+        .admin-table th {
+          background-color: var(--color-grey-2);
+          color: var(--color-yellow-2);
+        }
+        .admin-table td {
+          color: var(--color-grey-4);
+        }
+        .admin-table .acciones-cell {
+          white-space: nowrap;
+          width: 1%;
+        }
+        .admin-table .acciones-cell form {
+          display: inline-block;
+          margin-left: 5px;
+        }
+        .tabla-poster-img {
+          max-width: 60px; 
+          max-height: 90px; 
+          height: auto;
+          border-radius: 4px;
+          object-fit: cover;
+          display: block; 
+          margin: 0 auto; 
+        }
+        .tabla-poster-sin-imagen {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px; 
+          height: 90px; 
+          background-color: var(--color-grey-2);
+          color: var(--color-grey-4);
+          font-size: 0.75em;
+          text-align: center;
+          border-radius: 4px;
+          margin: 0 auto;
+        }
+        .admin-table .col-poster {
+          width: 80px; 
+          text-align: center;
+        }
+        .admin-table .col-anio, .admin-table .col-duracion {
+          width: 100px;
+        }
+        .admin-table .col-director, .admin-table .col-generos {
+            min-width: 150px; 
+        }
+      </style>
+    </th:block>
+    <!-- TODO mover estilos a archivo externo -->
   </head>
   <body>
     <section>
-      <div>
-        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}" style="margin: 0;">
           Gestionar Películas
         </h2>
         <div>
@@ -32,23 +94,42 @@
         th:text="${errorMessage}"></div>
 
       <div th:if="${not #lists.isEmpty(peliculas)}">
-        <table>
+        <table class="admin-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th class="col-poster">Póster</th>
               <th>Título</th>
-              <th>Año</th>
-              <th>Duración (min)</th>
+              <th class="col-director">Dirección</th>
+              <th class="col-generos">Géneros</th>
+              <th class="col-anio">Año</th>
+              <th class="col-duracion">Duración</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="pelicula : ${peliculas}">
-              <td th:text="${pelicula.id}"></td>
+              <td class="col-poster">
+                <img th:if="${pelicula.urlImagen}" th:src="${pelicula.urlImagen}" th:alt="${pelicula.titulo}" class="tabla-poster-img" />
+                <div th:unless="${pelicula.urlImagen}" class="tabla-poster-sin-imagen">
+                  <span>Sin Póster</span>
+                </div>
+              </td>
               <td th:text="${pelicula.titulo}"></td>
+              <td class="col-director">
+                <th:block th:with="directores=${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+                  <span th:each="credito, iterStat : ${directores}">
+                    <span th:text="${credito.persona.nombre}"></span><th:block th:if="${!iterStat.last}">, </th:block>
+                  </span>
+                  <span th:if="${#lists.isEmpty(directores)}">-</span>
+                </th:block>
+              </td>
+              <td class="col-generos">
+                <span th:if="${not #lists.isEmpty(pelicula.generos)}" th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}"></span>
+                <span th:if="${#lists.isEmpty(pelicula.generos)}">-</span>
+              </td>
               <td th:text="${pelicula.anioEstreno}"></td>
-              <td th:text="${pelicula.duracionMin}"></td>
-              <td>
+              <td th:text="${pelicula.duracionMin != null ? pelicula.duracionMin + ' min' : '-'}"></td>
+              <td class="acciones-cell">
                 <a
                   th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}"
                   class="btn btn-small btn-blue"
@@ -65,6 +146,7 @@
           </tbody>
         </table>
       </div>
+
       <div th:if="${#lists.isEmpty(peliculas)}">
         <p>No hay películas para mostrar.</p>
       </div>
