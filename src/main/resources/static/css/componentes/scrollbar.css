@@ -1,0 +1,25 @@
+/* Estilos para el Scrollbar */
+
+/* Webkit (navegadores basados en chromium) */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-grey-3);
+  border-radius: 5px;
+  border: 2px solid var(--color-grey-2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-yellow-2);
+}
+
+/* TODO: mover aquí el estilo de scroll especifico de firefox, actualemnte en base.css */

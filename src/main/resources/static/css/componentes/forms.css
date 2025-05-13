@@ -1,0 +1,149 @@
+/* Estilos generales para formularios */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="url"],
+textarea,
+select {
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-grey-2);
+  color: var(--color-grey-5);
+}
+
+.header-container input[type="search"] { 
+/* TODO: mover a layout o a un css especifico para el header */
+  padding: 4px 10px;
+  border: 1px solid var(--color-grey-4);
+  margin: 0;
+}
+
+/* Desactivar el estilo por defecto de los navegadores para el deautofill */
+input:-webkit-autofill {
+  appearance: none !important;
+  background-color: var(--color-grey-1) !important;
+  color: var(--color-grey-5) !important;
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+  transition-delay: 9999s;
+}
+
+/* Estilo para selector multiple de checkboxes (genero y plataforma) */
+.checkbox-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 5px 0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.visually-hidden-checkbox {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.genero-tag-label {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: var(--color-grey-2);
+  color: var(--color-grey-5);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  user-select: none;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.genero-tag-label:hover {
+  background-color: var(--color-grey-3);
+}
+
+.genero-tag-list .visually-hidden-checkbox:checked + .genero-tag-label {
+  background-color: var(--color-yellow-2);
+  color: var(--color-grey-1);
+}
+
+.plataforma-logo-list {
+  gap: 10px; 
+}
+
+.plataforma-logo-label {
+  display: inline-block;
+  padding: 5px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  line-height: 0;
+}
+
+.plataforma-logo-img {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 100px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.plataforma-logo-fallback-text {
+  display: inline-block;
+  padding: 10px;
+  font-size: 0.8rem;
+  color: var(--color-grey-4);
+  border: 1px dashed var(--color-grey-3);
+  border-radius: 4px;
+}
+
+.plataforma-logo-list
+  .visually-hidden-checkbox:checked
+  + .plataforma-logo-label {
+  border-color: var(--color-yellow-2);
+  background-color: var(--color-grey-2);
+}
+
+/* Estilos para  Personas y Roles */
+.persona-rol-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.persona-selector-contenedor,
+.rol-selector-contenedor {
+  flex-grow: 1;
+}
+
+.persona-selector-contenedor select,
+.rol-selector-contenedor select {
+  width: 100%;
+}
+
+.eliminar-fila-contenedor {
+  flex-shrink: 0;
+}
+
+#add-persona-role-button { 
+  margin-top: 10px;
+}

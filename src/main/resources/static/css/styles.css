@@ -1,4 +1,13 @@
 @import url("variables.css");
 @import url("base.css");
 @import url("layout.css");
-@import url("componentes.css");
+
+/* Componentes */
+@import url("componentes/dropdown.css");
+@import url("componentes/forms.css");
+@import url("componentes/buttons.css");
+@import url("componentes/alerts.css");
+@import url("componentes/scrollbar.css"); 
+@import url("componentes/admin-tables.css");
+@import url("componentes/movie-cards.css");
+@import url("componentes/pelicula-detalle.css");
