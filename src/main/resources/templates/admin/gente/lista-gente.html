@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${pageTitle ?: 'Gestionar Gente'}">
+      Gestionar Gente - WatchList
+    </title>
+    <th:block th:fragment="pageCss">
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+        <h2 th:text="${pageTitle ?: 'Gestionar Gente'}" style="margin: 0">
+          Gestionar Gente
+        </h2>
+        <div>
+          <a
+            th:href="@{/admin/gente/nuevo}"
+            class="btn btn-small btn-yellow"
+            >Añadir Nueva Persona</a
+          >
+        </div>
+      </div>
+
+      <div
+        th:if="${successMessage}"
+        class="alert alert-success"
+        th:text="${successMessage}"></div>
+      <div
+        th:if="${errorMessage}"
+        class="alert alert-danger"
+        th:text="${errorMessage}"></div>
+
+      <div th:if="${not #lists.isEmpty(personas)}">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-poster">Foto</th>
+              <th>Nombre</th>
+              <th>Fecha de Nacimiento</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="persona : ${personas}">
+              <td class="col-poster">
+                <img
+                  th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                  th:src="${persona.fotoUrl}"
+                  th:alt="${persona.nombre}"
+                  class="tabla-poster-img" />
+                <div
+                  th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                  class="tabla-poster-sin-imagen">
+                  <span>Sin Foto</span>
+                </div>
+              </td>
+              <td th:text="${persona.nombre}"></td>
+              <td th:text="${persona.fechaNac != null ? #temporals.format(persona.fechaNac, 'dd/MM/yyyy') : '-'}"></td>
+              <td class="acciones-cell">
+                <a
+                  th:href="@{/admin/gente/editar/{id}(id=${persona.id})}"
+                  class="btn btn-small btn-blue"
+                  >Editar</a
+                >
+                <form
+                  th:action="@{/admin/gente/eliminar/{id}(id=${persona.id})}"
+                  method="post"
+                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar a esta persona?');"
+                  style="display: inline;">
+                  <button type="submit" class="btn btn-small btn-red">
+                    Eliminar
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div th:if="${#lists.isEmpty(personas)}">
+        <p>No hay personas para mostrar.</p>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"></th:block>
+  </body>
+</html>

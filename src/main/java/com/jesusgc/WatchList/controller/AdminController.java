@@ -1,6 +1,7 @@
 package com.jesusgc.WatchList.controller;
 
 import com.jesusgc.WatchList.model.Pelicula;
+import com.jesusgc.WatchList.model.Persona;
 import com.jesusgc.WatchList.service.PeliculaService;
 import com.jesusgc.WatchList.service.GeneroService;
 import com.jesusgc.WatchList.service.PlataformaService;
@@ -191,10 +192,10 @@ public class AdminController {
 
     @GetMapping("/gente")
     public String listarGenteAdmin(Model model) {
-        model.addAttribute("currentPage", "admin");
+        model.addAttribute("personas", personaService.findAll()); // Fetch all personas
+        model.addAttribute("currentPage", "admin"); // Keep admin section active
         model.addAttribute("pageTitle", "Gestionar Gente");
-        model.addAttribute("message", "Página de gestión de Gente en construcción.");
-        return "admin/placeholder-list";
+        return "admin/gente/lista-gente"; // Path to the new Thymeleaf template
     }
 
     @GetMapping("/listas")
