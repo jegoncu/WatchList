@@ -182,20 +182,89 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    @GetMapping("/series")
-    public String listarSeriesAdmin(Model model) {
-        model.addAttribute("currentPage", "admin");
-        model.addAttribute("pageTitle", "Gestionar Series");
-        model.addAttribute("message", "Página de gestión de Series en construcción.");
-        return "admin/placeholder-list";
-    }
+    // --- Métodos para Gestionar Gente ---
 
     @GetMapping("/gente")
     public String listarGenteAdmin(Model model) {
-        model.addAttribute("personas", personaService.findAll()); // Fetch all personas
-        model.addAttribute("currentPage", "admin"); // Keep admin section active
+        model.addAttribute("personas", personaService.findAll());
+        model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Gente");
-        return "admin/gente/lista-gente"; // Path to the new Thymeleaf template
+        return "admin/gente/lista-gente";
+    }
+
+    @GetMapping("/gente/nuevo")
+    public String mostrarFormularioNuevaPersona(Model model) {
+        model.addAttribute("persona", new Persona());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Añadir Nueva Persona");
+        model.addAttribute("formAction", "/admin/gente/nuevo");
+        return "admin/gente/form-persona";
+    }
+
+    @PostMapping("/gente/nuevo")
+    public String procesarNuevaPersona(@Valid @ModelAttribute("persona") Persona persona,
+                                       BindingResult result,
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Añadir Nueva Persona");
+            model.addAttribute("formAction", "/admin/gente/nuevo");
+            return "admin/gente/form-persona";
+        }
+        personaService.save(persona);
+        redirectAttributes.addFlashAttribute("successMessage", "Persona añadida correctamente.");
+        return "redirect:/admin/gente";
+    }
+
+    @GetMapping("/gente/editar/{id}")
+    public String mostrarFormularioEditarPersona(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+        Persona persona = personaService.findById(id).orElse(null);
+        if (persona == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Persona no encontrada.");
+            return "redirect:/admin/gente";
+        }
+        model.addAttribute("persona", persona);
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Editar Persona");
+        model.addAttribute("formAction", "/admin/gente/editar/" + id);
+        return "admin/gente/form-persona";
+    }
+
+    @PostMapping("/gente/editar/{id}")
+    public String procesarEditarPersona(@PathVariable("id") Long id,
+                                        @Valid @ModelAttribute("persona") Persona personaForm,
+                                        BindingResult result,
+                                        Model model,
+                                        RedirectAttributes redirectAttributes) {
+        if (!personaService.findById(id).isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Persona no encontrada.");
+            return "redirect:/admin/gente";
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Editar Persona");
+            model.addAttribute("formAction", "/admin/gente/editar/" + id);
+            // Ensure the ID is preserved in the form object if validation fails
+            // personaForm.setId(id); // Not strictly necessary if th:object binds ID, but good for clarity
+            return "admin/gente/form-persona";
+        }
+        personaForm.setId(id); // Ensure the ID is set for the update
+        personaService.save(personaForm);
+        redirectAttributes.addFlashAttribute("successMessage", "Persona actualizada correctamente.");
+        return "redirect:/admin/gente";
+    }
+
+    @PostMapping("/gente/eliminar/{id}")
+    public String eliminarPersona(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            personaService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Persona eliminada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la persona: " + e.getMessage());
+        }
+        return "redirect:/admin/gente";
     }
 
     @GetMapping("/listas")
