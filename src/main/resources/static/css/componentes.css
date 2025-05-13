@@ -317,3 +317,65 @@ input:-webkit-autofill {
 #add-persona-role-button {
   margin-top: 10px; /* Example margin */
 }
+
+/* ----------------------------------------------- */
+/* Estilos para Admin Tables */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.admin-table th, .admin-table td {
+  border: 1px solid var(--color-grey-3);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.admin-table th {
+  background-color: var(--color-grey-2);
+  color: var(--color-yellow-2);
+}
+.admin-table td {
+  color: var(--color-grey-4);
+}
+.admin-table .acciones-cell {
+  white-space: nowrap;
+  width: 1%;
+}
+.admin-table .acciones-cell form {
+  display: inline-block;
+  margin-left: 5px;
+}
+.tabla-poster-img {
+  max-width: 60px;
+  max-height: 90px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+.tabla-poster-sin-imagen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 90px;
+  background-color: var(--color-grey-2);
+  color: var(--color-grey-4);
+  font-size: 0.75em;
+  text-align: center;
+  border-radius: 4px;
+  margin: 0 auto;
+}
+.admin-table .col-poster {
+  width: 80px;
+  text-align: center;
+}
+.admin-table .col-anio, .admin-table .col-duracion {
+  width: 100px;
+}
+.admin-table .col-director, .admin-table .col-generos {
+    min-width: 150px;
+}

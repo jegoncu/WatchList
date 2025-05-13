@@ -172,3 +172,4 @@ Ref: media_genero.id_media > media.id_media
 Ref: media_genero.id_genero > genero.id_genero
 
 ```
+<!-- TODO: persona con más de un credito distinto -->
