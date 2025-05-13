@@ -18,7 +18,7 @@ public class CreditoId implements Serializable {
     private Long personaId;
 
     @Column(name = "rol")
-    private String rol; 
+    private String rol;
 
     public CreditoId() {
     }
@@ -55,12 +55,14 @@ public class CreditoId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         CreditoId that = (CreditoId) o;
         return Objects.equals(mediaId, that.mediaId) &&
-               Objects.equals(personaId, that.personaId) &&
-               Objects.equals(rol, that.rol);
+                Objects.equals(personaId, that.personaId) &&
+                Objects.equals(rol, that.rol);
     }
 
     @Override

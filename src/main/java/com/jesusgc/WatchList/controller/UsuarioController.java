@@ -35,7 +35,6 @@ public class UsuarioController {
             redirectAttributes.addFlashAttribute("mensaje", "Registro exitoso. Ahora puedes iniciar sesión.");
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
-            // Si hay error, devolvemos los datos para no tener que reescribirlos
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("email", email);
             redirectAttributes.addFlashAttribute("nombre", nombre);
@@ -58,7 +57,6 @@ public class UsuarioController {
         try {
             Usuario usuario = usuarioService.login(email, contrasenia);
 
-            // Guardamos datos del usuario en sesión
             session.setAttribute("usuarioId", usuario.getId());
             session.setAttribute("usuarioNombre", usuario.getNombre());
             session.setAttribute("usuarioEsAdmin", usuario.getEsAdmin());
@@ -81,14 +79,12 @@ public class UsuarioController {
     public String inicio(HttpSession session, Model model) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
 
-        // Verificamos si hay usuario en sesión
         if (usuarioId == null) {
             return "redirect:/login";
         }
 
         Usuario usuario = usuarioService.findById(usuarioId);
 
-        // Verificamos si el usuario existe en base de datos
         if (usuario == null) {
             session.invalidate();
             return "redirect:/login";

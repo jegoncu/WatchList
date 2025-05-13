@@ -58,7 +58,7 @@ public class Lista {
     @PrePersist
     protected void onCreate() {
         if (esPublica == null) {
-            esPublica = true; // Por defecto, las listas son públicas
+            esPublica = true;
         }
     }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import lombok.Builder; 
+import lombok.Builder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,11 +18,11 @@ import java.util.Set;
 @Entity
 @Table(name = "media")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(of = "id") 
+@EqualsAndHashCode(of = "id")
 
 @ToString(exclude = { "comentarios", "listas", "plataformas", "generos", "creditos" })
 public abstract class Media {
@@ -42,7 +42,7 @@ public abstract class Media {
     @Min(value = 1895, message = "El año de estreno debe ser posterior a 1895")
     @Column(name = "anio_estreno")
     private Integer anioEstreno;
-    
+
     @Max(value = 10, message = "La puntuación debe ser como máximo 10")
     @Min(value = 0, message = "La puntuación debe ser como mínimo 0")
     @Column(name = "puntuacion")
@@ -55,33 +55,25 @@ public abstract class Media {
     private String urlTrailer;
 
     @OneToMany(mappedBy = "media")
-    @Builder.Default 
+    @Builder.Default
     private Set<Comentario> comentarios = new HashSet<>();
 
     @ManyToMany(mappedBy = "medias")
-    @Builder.Default 
+    @Builder.Default
     private Set<Lista> listas = new HashSet<>();
 
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default 
+    @Builder.Default
     private Set<Credito> creditos = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(
-            name = "media_plataforma",
-            joinColumns = @JoinColumn(name = "id_media"),
-            inverseJoinColumns = @JoinColumn(name = "id_plataforma")
-    )
-    @Builder.Default 
+    @JoinTable(name = "media_plataforma", joinColumns = @JoinColumn(name = "id_media"), inverseJoinColumns = @JoinColumn(name = "id_plataforma"))
+    @Builder.Default
     private Set<Plataforma> plataformas = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(
-            name = "media_genero",
-            joinColumns = @JoinColumn(name = "id_media"),
-            inverseJoinColumns = @JoinColumn(name = "id_genero")
-    )
-    @Builder.Default 
+    @JoinTable(name = "media_genero", joinColumns = @JoinColumn(name = "id_media"), inverseJoinColumns = @JoinColumn(name = "id_genero"))
+    @Builder.Default
     private Set<Genero> generos = new HashSet<>();
 
     public void addCredito(Persona persona, String rol) {
@@ -92,6 +84,6 @@ public abstract class Media {
     public void removeCredito(Credito credito) {
         this.creditos.remove(credito);
         credito.setMedia(null);
-        credito.setPersona(null); 
+        credito.setPersona(null);
     }
 }

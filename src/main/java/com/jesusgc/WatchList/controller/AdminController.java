@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map; 
-import java.util.HashMap; 
-import java.util.Arrays; 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/admin")
@@ -42,7 +42,6 @@ public class AdminController {
         this.personaService = personaService;
     }
 
-    // Manejador de la página principal del panel de administración
     @GetMapping
     public String mostrarAdminPanel(Model model) {
 
@@ -51,11 +50,9 @@ public class AdminController {
         return "admin";
     }
 
-    // --- Películas CRUD ---
-
     private static final List<String> POSSIBLE_ROLES = Arrays.asList(
-         "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje", "Showrunner"
-    );
+            "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje",
+            "Showrunner");
 
     @GetMapping("/peliculas/nuevo")
     public String mostrarFormularioNuevaPelicula(Model model) {
@@ -70,7 +67,6 @@ public class AdminController {
         return "admin/peliculas/form-pelicula";
     }
 
-    // Añadir pelicula
     @PostMapping("/peliculas/nuevo")
     public String procesarNuevaPelicula(@Valid @ModelAttribute("pelicula") Pelicula pelicula,
             BindingResult result,
@@ -84,7 +80,8 @@ public class AdminController {
         Map<Long, String> personaRolesMap = new HashMap<>();
         if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
             for (int i = 0; i < persona_ids.size(); i++) {
-                if (persona_ids.get(i) != null && persona_roles.get(i) != null && !persona_roles.get(i).trim().isEmpty()) {
+                if (persona_ids.get(i) != null && persona_roles.get(i) != null
+                        && !persona_roles.get(i).trim().isEmpty()) {
                     personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
                 }
             }
@@ -106,7 +103,6 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // Listar todas las películas
     @GetMapping("/peliculas")
     public String listarPeliculasAdmin(Model model) {
         model.addAttribute("peliculas", peliculaService.findAll());
@@ -115,7 +111,6 @@ public class AdminController {
         return "admin/peliculas/lista-peliculas";
     }
 
-    // Mostrar formulario de edición de película
     @GetMapping("/peliculas/editar/{id}")
     public String mostrarFormularioEditarPelicula(@PathVariable("id") Long id, Model model,
             RedirectAttributes redirectAttributes) {
@@ -131,15 +126,13 @@ public class AdminController {
         model.addAttribute("allGeneros", generoService.findAll());
         model.addAttribute("allPlataformas", plataformaService.findAll());
         model.addAttribute("allPersonas", personaService.findAll());
-        model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
-        // ... existing code for selectedPersonaRoles if you implement it ...
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES);
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Editar Película");
         model.addAttribute("formAction", "/admin/peliculas/editar/" + id);
         return "admin/peliculas/form-pelicula";
     }
 
-    // Proceso de edición de película
     @PostMapping("/peliculas/editar/{id}")
     public String procesarEditarPelicula(@PathVariable("id") Long id,
             @Valid @ModelAttribute("pelicula") Pelicula peliculaForm,
@@ -154,7 +147,8 @@ public class AdminController {
         Map<Long, String> personaRolesMap = new HashMap<>();
         if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
             for (int i = 0; i < persona_ids.size(); i++) {
-                 if (persona_ids.get(i) != null && persona_roles.get(i) != null && !persona_roles.get(i).trim().isEmpty()) {
+                if (persona_ids.get(i) != null && persona_roles.get(i) != null
+                        && !persona_roles.get(i).trim().isEmpty()) {
                     personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
                 }
             }
@@ -164,7 +158,7 @@ public class AdminController {
             model.addAttribute("allGeneros", generoService.findAll());
             model.addAttribute("allPlataformas", plataformaService.findAll());
             model.addAttribute("allPersonas", personaService.findAll());
-            model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
+            model.addAttribute("possibleRoles", POSSIBLE_ROLES);
             model.addAttribute("currentPage", "admin");
             model.addAttribute("pageTitle", "Editar Película");
             model.addAttribute("formAction", "/admin/peliculas/editar/" + id);
@@ -176,7 +170,6 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // Eliminar película
     @PostMapping("/peliculas/eliminar/{id}")
     public String eliminarPelicula(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
@@ -188,7 +181,6 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // --- Series CRUD (Placeholders) ---
     @GetMapping("/series")
     public String listarSeriesAdmin(Model model) {
         model.addAttribute("currentPage", "admin");
@@ -197,7 +189,6 @@ public class AdminController {
         return "admin/placeholder-list";
     }
 
-    // --- Gente CRUD (Placeholders) ---
     @GetMapping("/gente")
     public String listarGenteAdmin(Model model) {
         model.addAttribute("currentPage", "admin");
@@ -206,7 +197,6 @@ public class AdminController {
         return "admin/placeholder-list";
     }
 
-    // --- Listas CRUD (Placeholders) ---
     @GetMapping("/listas")
     public String listarListasAdmin(Model model) {
         model.addAttribute("currentPage", "admin");
@@ -215,7 +205,6 @@ public class AdminController {
         return "admin/placeholder-list";
     }
 
-    // --- Usuarios CRUD (Placeholders) ---
     @GetMapping("/usuarios")
     public String listarUsuariosAdmin(Model model) {
         model.addAttribute("currentPage", "admin");

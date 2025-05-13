@@ -46,14 +46,14 @@ public class PeliculaService {
 
     @Transactional
     public Pelicula savePeliculaWithRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
-            Map<Long, String> personaRoles) { 
-        updateRelations(pelicula, generoIds, plataformaIds, personaRoles); 
+            Map<Long, String> personaRoles) {
+        updateRelations(pelicula, generoIds, plataformaIds, personaRoles);
         return peliculaRepository.save(pelicula);
     }
 
     @Transactional
     public Pelicula updatePeliculaWithRelations(Long id, Pelicula peliculaForm, List<Long> generoIds,
-            List<Long> plataformaIds, Map<Long, String> personaRoles) { 
+            List<Long> plataformaIds, Map<Long, String> personaRoles) {
         Pelicula peliculaExistente = peliculaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
 
@@ -66,12 +66,12 @@ public class PeliculaService {
 
         peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
 
-        updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles); 
+        updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles);
         return peliculaRepository.save(peliculaExistente);
     }
 
     private void updateRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
-                                 Map<Long, String> personaRoles) {
+            Map<Long, String> personaRoles) {
         if (generoIds != null) {
             Set<Genero> generos = new HashSet<>(generoRepository.findAllById(generoIds));
             pelicula.setGeneros(generos);
@@ -93,9 +93,8 @@ public class PeliculaService {
                 Long personaId = entry.getKey();
                 String rol = entry.getValue();
 
-                Persona persona = personaRepository.findById(personaId)
-                        .orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
-                
+                Persona persona = personaRepository.findById(personaId).orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
+
                 Credito novoCredito = new Credito(pelicula, persona, rol);
                 pelicula.getCreditos().add(novoCredito);
             }

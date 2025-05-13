@@ -6,21 +6,24 @@
   <head>
     <title>Bienvenido a WatchList</title>
     <th:block th:fragment="pageCss">
-      <style>
-      </style>
+      <style></style>
     </th:block>
   </head>
   <body>
     <section>
-        <h1>Descubre Tu Próxima Película o Serie Favorita</h1>
-        <p>
-          Explora un vasto catálogo de películas y series. Crea tus listas
-          personalizadas, comparte tus opiniones y mucho más.
-        </p>
-        <div>
-          <a th:href="@{/peliculas}" class="btn btn-big btn-yellow">Explorar Catálogo</a>
-          <a th:href="@{/registro}" class="btn btn-big btn-green">Regístrate Gratis</a>
-        </div>
+      <h1>Descubre Tu Próxima Película o Serie Favorita</h1>
+      <p>
+        Explora un vasto catálogo de películas y series. Crea tus listas
+        personalizadas, comparte tus opiniones y mucho más.
+      </p>
+      <div>
+        <a th:href="@{/peliculas}" class="btn btn-big btn-yellow"
+          >Explorar Catálogo</a
+        >
+        <a th:href="@{/registro}" class="btn btn-big btn-green"
+          >Regístrate Gratis</a
+        >
+      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
   </body>

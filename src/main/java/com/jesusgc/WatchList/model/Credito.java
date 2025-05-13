@@ -1,5 +1,6 @@
 package com.jesusgc.WatchList.model;
 
+import jakarta.persistence.Column; // Ensure this import is present
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -30,6 +31,9 @@ public class Credito {
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     private Persona persona;
 
+    @Column(name = "personaje")
+    private String personaje;
+
     public Credito(Media media, Persona persona, String rol) {
         this.media = media;
         this.persona = persona;
@@ -48,7 +52,6 @@ public class Credito {
 
     public void setRol(String rol) {
         if (this.id == null) {
-
             this.id = new CreditoId();
         }
         this.id.setRol(rol);

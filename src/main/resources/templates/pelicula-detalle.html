@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${pageTitle ?: 'Detalle de Película - WatchList'}">
+      Detalle de Película
+    </title>
+    <th:block th:fragment="pageCss"> </th:block>
+  </head>
+  <body>
+    <section th:fragment="section">
+      <div
+        class="content-container pelicula-detalle-container"
+        th:if="${pelicula != null}">
+        <div class="pelicula-detalle-header">
+          <h1 th:text="${pelicula.titulo}">Título de la Película</h1>
+          <span
+            class="pelicula-detalle-year"
+            th:text="'(' + ${pelicula.anioEstreno} + ')'">
+            (Año)</span
+          >
+        </div>
+
+        <div class="pelicula-detalle-main-content">
+          <div class="pelicula-detalle-poster-container">
+            <img
+              th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+              th:src="${pelicula.urlImagen}"
+              th:alt="${pelicula.titulo}"
+              class="pelicula-detalle-poster" />
+            <div
+              th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+              class="pelicula-detalle-poster-placeholder">
+              <span>Sin Póster</span>
+            </div>
+          </div>
+
+          <div class="pelicula-detalle-info">
+            <div class="info-section" th:if="${pelicula.duracionMin != null}">
+              <h2>Duración</h2>
+              <p th:text="${pelicula.duracionMin} + ' min'">120 min</p>
+            </div>
+
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
+              <h2>Dirección</h2>
+              <p>
+                <span
+                  th:each="credito, iterStat : ${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+                  <span th:text="${credito.persona.nombre}"
+                    >Nombre Director</span
+                  ><th:block th:if="${!iterStat.last}">, </th:block>
+                </span>
+              </p>
+            </div>
+
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(pelicula.generos)}">
+              <h2>Géneros</h2>
+              <p class="tag-list">
+                <span
+                  th:each="genero : ${pelicula.generos}"
+                  class="tag"
+                  th:text="${genero.nombre}"
+                  >Género</span
+                >
+              </p>
+            </div>
+
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(pelicula.plataformas)}">
+              <h2>Disponible en</h2>
+              <p class="tag-list">
+                <span
+                  th:each="plataforma : ${pelicula.plataformas}"
+                  class="tag tag-platform"
+                  th:text="${plataforma.nombre}"
+                  >Plataforma</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="info-section pelicula-detalle-sinopsis"
+          th:if="${pelicula.sinopsis != null and not #strings.isEmpty(pelicula.sinopsis)}">
+          <h2>Sinopsis</h2>
+          <p th:text="${pelicula.sinopsis}">Descripción de la película...</p>
+        </div>
+
+        <div
+          class="info-section pelicula-detalle-cast"
+          th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
+          <h2>Reparto Principal</h2>
+          <ul class="cast-list">
+            <li
+              th:each="credito : ${pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))]}">
+              <strong th:text="${credito.persona.nombre}"
+                >Nombre Actor/Actriz</strong
+              >
+              <span
+                th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}"
+                th:text="' como ' + ${credito.personaje}">
+                como Personaje</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div th:if="${pelicula == null}" class="content-container">
+        <p style="text-align: center; margin-top: 50px">
+          Película no encontrada.
+        </p>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"> </th:block>
+  </body>
+</html>

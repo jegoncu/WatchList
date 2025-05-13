@@ -80,10 +80,10 @@ public class Usuario {
     @PrePersist
     protected void onCreate() {
         if (esPublico == null) {
-            esPublico = true; // Por defecto, los perfiles son públicos
+            esPublico = true;
         }
         if (esAdmin == null) {
-            esAdmin = false; // Por defecto, los usuarios no son administradores
+            esAdmin = false;
         }
     }
 }

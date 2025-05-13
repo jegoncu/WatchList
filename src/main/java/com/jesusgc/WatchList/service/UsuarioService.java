@@ -18,18 +18,16 @@ public class UsuarioService {
     private PasswordEncoder passwordEncoder;
 
     public Usuario registrar(String email, String nombre, String contrasenia, boolean esPublico) {
-        // Comprobar si el email ya existe
         if (usuarioRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
 
-        // Crear nuevo usuario
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setNombre(nombre);
         usuario.setContrasenia(passwordEncoder.encode(contrasenia));
         usuario.setEsPublico(esPublico);
-        usuario.setEsAdmin(false); // Por defecto no es admin
+        usuario.setEsAdmin(false); 
 
         return usuarioRepository.save(usuario);
     }

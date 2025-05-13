@@ -7,19 +7,24 @@
     <title th:text="${pageTitle ?: 'Gestionar Películas'}">
       Gestionar Películas - WatchList
     </title>
-    <th:block th:fragment="pageCss">
-      <!-- Inline styles removed. Styles are now in componentes.css -->
-      <!-- No specific link needed here if _layout.html already loads styles.css which imports componentes.css -->
-    </th:block>
+    <th:block th:fragment="pageCss"> </th:block>
   </head>
   <body>
     <section>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}" style="margin: 0;">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        ">
+        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}" style="margin: 0">
           Gestionar Películas
         </h2>
         <div>
-          <a th:href="@{/admin/peliculas/nuevo}" class="btn btn-small btn-yellow"
+          <a
+            th:href="@{/admin/peliculas/nuevo}"
+            class="btn btn-small btn-yellow"
             >Añadir Nueva Película</a
           >
         </div>
@@ -50,26 +55,37 @@
           <tbody>
             <tr th:each="pelicula : ${peliculas}">
               <td class="col-poster">
-                <img th:if="${pelicula.urlImagen}" th:src="${pelicula.urlImagen}" th:alt="${pelicula.titulo}" class="tabla-poster-img" />
-                <div th:unless="${pelicula.urlImagen}" class="tabla-poster-sin-imagen">
+                <img
+                  th:if="${pelicula.urlImagen}"
+                  th:src="${pelicula.urlImagen}"
+                  th:alt="${pelicula.titulo}"
+                  class="tabla-poster-img" />
+                <div
+                  th:unless="${pelicula.urlImagen}"
+                  class="tabla-poster-sin-imagen">
                   <span>Sin Póster</span>
                 </div>
               </td>
               <td th:text="${pelicula.titulo}"></td>
               <td class="col-director">
-                <th:block th:with="directores=${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+                <th:block
+                  th:with="directores=${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
                   <span th:each="credito, iterStat : ${directores}">
-                    <span th:text="${credito.persona.nombre}"></span><th:block th:if="${!iterStat.last}">, </th:block>
+                    <span th:text="${credito.persona.nombre}"></span
+                    ><th:block th:if="${!iterStat.last}">, </th:block>
                   </span>
                   <span th:if="${#lists.isEmpty(directores)}">-</span>
                 </th:block>
               </td>
               <td class="col-generos">
-                <span th:if="${not #lists.isEmpty(pelicula.generos)}" th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}"></span>
+                <span
+                  th:if="${not #lists.isEmpty(pelicula.generos)}"
+                  th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}"></span>
                 <span th:if="${#lists.isEmpty(pelicula.generos)}">-</span>
               </td>
               <td th:text="${pelicula.anioEstreno}"></td>
-              <td th:text="${pelicula.duracionMin != null ? pelicula.duracionMin + ' min' : '-'}"></td>
+              <td
+                th:text="${pelicula.duracionMin != null ? pelicula.duracionMin + ' min' : '-'}"></td>
               <td class="acciones-cell">
                 <a
                   th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}"
@@ -80,7 +96,9 @@
                   th:action="@{/admin/peliculas/eliminar/{id}(id=${pelicula.id})}"
                   method="post"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta película?');">
-                  <button type="submit" class="btn btn-small btn-red">Eliminar</button>
+                  <button type="submit" class="btn btn-small btn-red">
+                    Eliminar
+                  </button>
                 </form>
               </td>
             </tr>

@@ -1,10 +1,12 @@
 # WatchList
+
 ## Proyecto Integrado para Desarrollo de Aplicaciones Web
-### *Jesús González Cuenca*
+
+### _Jesús González Cuenca_
 
 #### Descripción del proyecto:
 
-WatchList es una aplicación Web que ofrece un catalogo de peliculas, series de televisión, y trabajadores relacionados con la industria (directores, actores, etc). 
+WatchList es una aplicación Web que ofrece un catalogo de peliculas, series de televisión, y trabajadores relacionados con la industria (directores, actores, etc).
 
 De cara a los usuarios, estos podrán consultar el catalogo empleando su sistema de filtrado y ordenación según los "metadatos" relacionados con cada elemento (pelicula, serie o persona).
 
@@ -12,7 +14,7 @@ Por ejemplo, un usuario podría filtrar peliculas estrenadas dentre los años 20
 
 Se trata básicamente de una interfaz gráfica para hacer consultas a la base de datos.
 
-Está funcionalidad tendrá su propia vista dínamica que cargará los distintos formularios según el tipo de objeto que se esté tratando (película, serie o persona) así como una galería dónde se cargarán los resultados de la consulta. 
+Está funcionalidad tendrá su propia vista dínamica que cargará los distintos formularios según el tipo de objeto que se esté tratando (película, serie o persona) así como una galería dónde se cargarán los resultados de la consulta.
 
 Se podran abrir los objetos de la galería para ver todos los datos relacionados con los mismos (los "metadatos").
 
@@ -58,6 +60,7 @@ comentarios y artistas.
 migración y despliegue en distintos entornos.
 
 #### Modelo Entidad-Relacion
+
 dbdiagram.io:
 
 ```dbml
@@ -75,7 +78,7 @@ Table pelicula {
 }
 
 Table serie {
-  id_media int [pk] 
+  id_media int [pk]
   anio_estreno int
   anio_fin int
   n_temporadas int
@@ -160,7 +163,7 @@ Ref: comentario.id_usuario > usuario.id_usuario
 Ref: comentario.id_media > media.id_media
 
 Ref: pelicula.id_media > media.id_media
-Ref: serie.id_media > media.id_media 
+Ref: serie.id_media > media.id_media
 
 Ref: media_persona.id_media > media.id_media
 Ref: media_persona.id_persona > persona.id_persona
@@ -172,4 +175,5 @@ Ref: media_genero.id_media > media.id_media
 Ref: media_genero.id_genero > genero.id_genero
 
 ```
+
 <!-- TODO: persona con más de un credito distinto -->
