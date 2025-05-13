@@ -203,9 +203,9 @@ public class AdminController {
 
     @PostMapping("/gente/nuevo")
     public String procesarNuevaPersona(@Valid @ModelAttribute("persona") Persona persona,
-                                       BindingResult result,
-                                       Model model,
-                                       RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("currentPage", "admin");
             model.addAttribute("pageTitle", "Añadir Nueva Persona");
@@ -218,7 +218,8 @@ public class AdminController {
     }
 
     @GetMapping("/gente/editar/{id}")
-    public String mostrarFormularioEditarPersona(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String mostrarFormularioEditarPersona(@PathVariable("id") Long id, Model model,
+            RedirectAttributes redirectAttributes) {
         Persona persona = personaService.findById(id).orElse(null);
         if (persona == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Persona no encontrada.");
@@ -233,10 +234,10 @@ public class AdminController {
 
     @PostMapping("/gente/editar/{id}")
     public String procesarEditarPersona(@PathVariable("id") Long id,
-                                        @Valid @ModelAttribute("persona") Persona personaForm,
-                                        BindingResult result,
-                                        Model model,
-                                        RedirectAttributes redirectAttributes) {
+            @Valid @ModelAttribute("persona") Persona personaForm,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (!personaService.findById(id).isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Persona no encontrada.");
             return "redirect:/admin/gente";
@@ -246,11 +247,9 @@ public class AdminController {
             model.addAttribute("currentPage", "admin");
             model.addAttribute("pageTitle", "Editar Persona");
             model.addAttribute("formAction", "/admin/gente/editar/" + id);
-            // Ensure the ID is preserved in the form object if validation fails
-            // personaForm.setId(id); // Not strictly necessary if th:object binds ID, but good for clarity
             return "admin/gente/form-persona";
         }
-        personaForm.setId(id); // Ensure the ID is set for the update
+        personaForm.setId(id);
         personaService.save(personaForm);
         redirectAttributes.addFlashAttribute("successMessage", "Persona actualizada correctamente.");
         return "redirect:/admin/gente";

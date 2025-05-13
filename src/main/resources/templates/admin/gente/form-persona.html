@@ -26,7 +26,6 @@
           th:text="${errorMessage}"></div>
 
         <form th:action="${formAction}" th:object="${persona}" method="post">
-          <!-- Campo oculto para el ID en caso de edición -->
           <input type="hidden" th:if="${persona.id != null}" th:field="*{id}" />
 
           <div>
