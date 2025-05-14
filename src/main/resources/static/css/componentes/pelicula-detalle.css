@@ -137,6 +137,73 @@
   color: var(--color-grey-3);
 }
 
+.plataforma-icons-list {
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+  gap: 15px; 
+  margin-top: 10px;
+  align-items: center; 
+}
+
+.plataforma-icon {
+  display: inline-block;
+}
+
+.plataforma-icon .plataforma-logo-img {
+  height: 50px; 
+  width: auto;
+  max-width: 120px; 
+  object-fit: contain;
+  border-radius: 4px;
+  transition: transform 0.2s ease-in-out;
+  filter: brightness(1.05); 
+}
+
+.plataforma-icon .plataforma-logo-img:hover {
+  transform: scale(1.1);
+}
+
+.plataforma-icon .plataforma-logo-fallback-text {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  color: var(--color-grey-5);
+  background-color: var(--color-grey-2);
+  border: 1px solid var(--color-grey-3);
+  border-radius: 4px;
+}
+
+/* Grid de actores */
+.actores-grid {
+  margin-top: 15px;
+}
+
+.actor-card .persona-card-poster {
+  object-position: top; 
+}
+
+.actor-card-info {
+  text-align: center;
+}
+
+.actor-card-info .movie-card-title {
+  font-size: 0.9em;
+  margin-bottom: 3px;
+}
+
+.actor-card-info .movie-card-character {
+  font-size: 0.8em;
+  font-style: italic;
+  color: var(--color-grey-3);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .pelicula-detalle-main-content {
@@ -168,5 +235,8 @@
   }
   .pelicula-detalle-year {
     font-size: 1.2em;
+  }
+  .actores-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 }

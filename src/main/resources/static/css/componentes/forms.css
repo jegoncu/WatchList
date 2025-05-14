@@ -6,6 +6,7 @@ input[type="password"],
 input[type="search"],
 input[type="number"],
 input[type="url"],
+input[type="date"],
 textarea,
 select {
   padding: 10px 20px;
@@ -23,6 +24,16 @@ select {
   padding: 4px 10px;
   border: 1px solid var(--color-grey-4);
   margin: 0;
+}
+
+/* Estilos para el selector de fecha */
+input[type="date"] {
+  color-scheme: dark; 
+}
+
+/* Estilizar el icono del selector de fecha en navegadores WebKit */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
 }
 
 /* Desactivar el estilo por defecto de los navegadores para el deautofill */
@@ -146,4 +157,19 @@ input:-webkit-autofill {
 
 #add-persona-role-button { 
   margin-top: 10px;
+}
+
+/* Estilos para etiquetas de formulario y mensajes de error */
+form label {
+  display: block; 
+  margin-bottom: 5px;
+  color: var(--color-grey-4); 
+  font-weight: 500; 
+  font-size: 0.9em; 
+}
+
+.field-error {
+  color: var(--color-red-2); 
+  font-size: 0.875em; 
+  margin-top: 4px; 
 }

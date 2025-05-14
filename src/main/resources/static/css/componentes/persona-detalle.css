@@ -1,0 +1,149 @@
+/* Estilos para Persona Detalle */
+
+.persona-detalle-container {
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.persona-detalle-header {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--color-grey-2);
+  padding-bottom: 15px;
+}
+
+.persona-detalle-header h1 {
+  color: var(--color-yellow-2);
+  margin: 0;
+  font-size: 2.2em;
+}
+
+.persona-detalle-nacimiento {
+  font-size: 1.2em;
+  color: var(--color-grey-3);
+}
+
+.persona-detalle-main-content {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.persona-detalle-foto-container {
+  flex-shrink: 0;
+  width: 250px;
+}
+
+.persona-detalle-foto {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: top; /* Para mostrar la cara */
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.persona-detalle-foto-placeholder {
+  width: 100%;
+  height: 375px;
+  background-color: var(--color-grey-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-grey-4);
+  border-radius: 6px;
+  font-size: 1em;
+}
+
+.persona-detalle-info {
+  flex-grow: 1;
+}
+
+.persona-detalle-biografia h2 {
+  font-size: 1.4em;
+  color: var(--color-yellow-2);
+  margin-bottom: 15px;
+}
+
+.persona-detalle-biografia p {
+  font-size: 1em;
+  line-height: 1.7;
+  color: var(--color-grey-4);
+}
+
+.persona-detalle-filmografia {
+  margin-top: 30px;
+}
+
+.persona-detalle-filmografia h2 {
+  font-size: 1.4em;
+  color: var(--color-yellow-2);
+  margin-bottom: 20px;
+}
+
+.participacion-tipo-titulo {
+  font-size: 1.2em;
+  color: var(--color-yellow-3);
+  margin: 25px 0 15px 0;
+  border-bottom: 1px solid var(--color-grey-2);
+  padding-bottom: 5px;
+}
+
+/* Ajuste específico para las tarjetas en la vista de detalle de persona */
+.persona-detalle-filmografia .movie-grid {
+  margin-bottom: 30px;
+}
+
+.persona-detalle-filmografia .movie-card-character {
+  font-size: 0.8em;
+  color: var(--color-grey-4);
+  font-style: italic;
+}
+
+.persona-detalle-filmografia .movie-card-credits {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .persona-detalle-main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .persona-detalle-foto-container {
+    width: 70%;
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .persona-detalle-foto-placeholder {
+    height: auto;
+    padding-top: 150%;
+    position: relative;
+  }
+  
+  .persona-detalle-foto-placeholder span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .persona-detalle-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .persona-detalle-header h1 {
+    font-size: 1.8em;
+  }
+  
+  .persona-detalle-nacimiento {
+    font-size: 1em;
+  }
+}

@@ -43,7 +43,7 @@
 
           <div>
             <label for="fechaNac">Fecha de Nacimiento:</label>
-            <input type="date" id="fechaNac" th:field="*{fechaNac}" />
+            <input type="date" id="fechaNac" name="fechaNac" th:value="*{fechaNac != null ? #temporals.format(fechaNac, 'yyyy-MM-dd') : ''}" />
             <div
               class="field-error"
               th:if="${#fields.hasErrors('fechaNac')}"

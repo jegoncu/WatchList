@@ -4,13 +4,81 @@
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
   <head>
-    <title>Gente - WatchList</title>
-    <th:block th:fragment="pageCss"> </th:block>
+    <title>Actores y Directores - WatchList</title>
+    <th:block th:fragment="pageCss">
+      <style>
+        .persona-card-info {
+          padding: 10px;
+          text-align: center; 
+        }
+
+        .persona-card-name {
+          font-size: 0.95em;
+          font-weight: 600;
+          color: var(--color-grey-5);
+          margin-bottom: 4px;
+          line-height: 1.3;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          min-height: 2.6em;
+        }
+
+        .persona-card-poster {
+          object-position: top; 
+        }
+      </style>
+    </th:block>
   </head>
   <body>
-    <section>
-      <h1>Gente</h1>
-      <p>Listado de gente aparecerá aquí.</p>
+    <section th:fragment="section">
+      <div class="content-container">
+        <h1
+          style="
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--color-yellow-2);
+          ">
+          Actores y Directores
+        </h1>
+
+        <div th:if="${personas == null or #lists.isEmpty(personas)}">
+          <p style="text-align: center">
+            No hay personas para mostrar en este momento.
+          </p>
+        </div>
+
+        <div
+          class="movie-grid"
+          th:if="${personas != null and not #lists.isEmpty(personas)}">
+          <div class="movie-card" th:each="persona : ${personas}">
+            <a
+              th:href="@{/gente/{id}(id=${persona.id})}"
+              class="movie-card-link"
+              th:title="${persona.nombre}">
+              <div class="movie-card-poster-container">
+                <img
+                  th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                  th:src="${persona.fotoUrl}"
+                  th:alt="${persona.nombre}"
+                  class="movie-card-poster persona-card-poster"
+                  loading="lazy" />
+                <div
+                  th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                  class="movie-card-poster-placeholder">
+                  <span>Sin Foto</span>
+                </div>
+              </div>
+              <div class="movie-card-info persona-card-info">
+                <h3 class="movie-card-title persona-card-name" th:text="${persona.nombre}">
+                  Nombre de la Persona
+                </h3>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
   </body>
