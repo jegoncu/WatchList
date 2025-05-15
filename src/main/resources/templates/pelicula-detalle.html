@@ -17,14 +17,19 @@
         <div class="pelicula-detalle-header">
           <h1 th:text="${pelicula.titulo}">Título de la Película</h1>
           <span
-            class="pelicula-detalle-year"
-            th:text="'(' + ${pelicula.anioEstreno} + ')'">
-            (Año)</span
-          >
+            class="pelicula-detalle-anio"
+            th:if="${pelicula.anioEstreno != null}"
+            th:text="${pelicula.anioEstreno}">
+            Año de Estreno
+          </span>
         </div>
 
         <div class="pelicula-detalle-main-content">
           <div class="pelicula-detalle-poster-container">
+            <div class="poster-rating-badge" th:if="${pelicula.puntuacion != null}">
+              <span class="rating-number" th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}">0.0</span>
+            </div>
+            
             <img
               th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
               th:src="${pelicula.urlImagen}"
@@ -38,11 +43,7 @@
           </div>
 
           <div class="pelicula-detalle-info">
-            <div class="info-section" th:if="${pelicula.duracionMin != null}">
-              <h2>Duración</h2>
-              <p th:text="${pelicula.duracionMin} + ' min'">120 min</p>
-            </div>
-
+            
             <div
               class="info-section"
               th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
@@ -100,14 +101,24 @@
           <h2>Sinopsis</h2>
           <p th:text="${pelicula.sinopsis}">Descripción de la película...</p>
         </div>
+        <div
+          class="info-section pelicula-detalle-trailer"
+          th:if="${pelicula.urlTrailer != null and not #strings.isEmpty(pelicula.urlTrailer)}">
+          <h2>Trailer</h2>
+          <div class="trailer-container">
+            <iframe
+              th:src="${#strings.replace(pelicula.urlTrailer, 'watch?v=', 'embed/')}"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
 
-        <!-- Reemplazamos la lista de actores por un grid de tarjetas -->
         <div
           class="info-section pelicula-detalle-cast"
           th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
           <h2>Reparto Principal</h2>
           
-          <!-- Nuevo grid de tarjetas para actores -->
           <div class="movie-grid actores-grid">
             <div class="movie-card actor-card" th:each="credito : ${pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))]}">
               <a
