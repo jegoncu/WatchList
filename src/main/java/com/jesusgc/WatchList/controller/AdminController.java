@@ -60,6 +60,8 @@ public class AdminController {
             "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje",
             "Showrunner");
 
+    // --- Métodos para Gestionar Películas ---
+
     @GetMapping("/peliculas/nuevo")
     public String mostrarFormularioNuevaPelicula(Model model) {
         model.addAttribute("pelicula", new Pelicula());
@@ -323,10 +325,9 @@ public class AdminController {
         Map<Long, String> personaRolesMap = new HashMap<>();
         if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
             for (int i = 0; i < persona_ids.size(); i++) {
-                Long personaId = persona_ids.get(i);
-                String rol = persona_roles.get(i);
-                if (personaId != null && rol != null && !rol.isEmpty()) {
-                    personaRolesMap.put(personaId, rol);
+                if (persona_ids.get(i) != null && persona_roles.get(i) != null
+                        && !persona_roles.get(i).trim().isEmpty()) {
+                    personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
                 }
             }
         }
@@ -337,6 +338,8 @@ public class AdminController {
             model.addAttribute("allPersonas", personaService.findAll());
             model.addAttribute("possibleRoles", POSSIBLE_ROLES);
             model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Añadir Nueva Serie");
+            model.addAttribute("formAction", "/admin/series/nuevo");
             return "admin/series/form-serie";
         }
 
@@ -348,10 +351,11 @@ public class AdminController {
     @GetMapping("/series/editar/{id}")
     public String mostrarFormularioEditarSerie(@PathVariable("id") Long id, Model model,
             RedirectAttributes redirectAttributes) {
-        Serie serie = serieService.findById(id).orElse(null);
+        Serie serie = serieService.findById(id)
+                .orElse(null);
 
         if (serie == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "La serie no existe.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Serie no encontrada.");
             return "redirect:/admin/series";
         }
 
@@ -380,10 +384,9 @@ public class AdminController {
         Map<Long, String> personaRolesMap = new HashMap<>();
         if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
             for (int i = 0; i < persona_ids.size(); i++) {
-                Long personaId = persona_ids.get(i);
-                String rol = persona_roles.get(i);
-                if (personaId != null && rol != null && !rol.isEmpty()) {
-                    personaRolesMap.put(personaId, rol);
+                if (persona_ids.get(i) != null && persona_roles.get(i) != null
+                        && !persona_roles.get(i).trim().isEmpty()) {
+                    personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
                 }
             }
         }
@@ -394,6 +397,8 @@ public class AdminController {
             model.addAttribute("allPersonas", personaService.findAll());
             model.addAttribute("possibleRoles", POSSIBLE_ROLES);
             model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Editar Serie");
+            model.addAttribute("formAction", "/admin/series/editar/" + id);
             return "admin/series/form-serie";
         }
 
@@ -412,5 +417,4 @@ public class AdminController {
         }
         return "redirect:/admin/series";
     }
-    
 }

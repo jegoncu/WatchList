@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SerieRepository extends JpaRepository<Serie, Long> {
-    // No es necesario añadir métodos personalizados si usamos solo operaciones CRUD básicas
 }

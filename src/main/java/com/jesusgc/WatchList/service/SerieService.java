@@ -61,11 +61,9 @@ public class SerieService {
         serieExistente.setSinopsis(serieForm.getSinopsis());
         serieExistente.setAnioEstreno(serieForm.getAnioEstreno());
         serieExistente.setPuntuacion(serieForm.getPuntuacion());
-        // Ya no necesitamos setear urlTrailer en Serie
-        // serieExistente.setUrlTrailer(serieForm.getUrlTrailer());
         serieExistente.setUrlImagen(serieForm.getUrlImagen());
-
-        // Campos específicos de serie
+        
+        // Campos específicos de Serie
         serieExistente.setAnioFin(serieForm.getAnioFin());
         serieExistente.setNTemporadas(serieForm.getNTemporadas());
 
@@ -96,10 +94,11 @@ public class SerieService {
                 Long personaId = entry.getKey();
                 String rol = entry.getValue();
 
-                Persona persona = personaRepository.findById(personaId).orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
+                Persona persona = personaRepository.findById(personaId)
+                        .orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
 
-                Credito novoCredito = new Credito(serie, persona, rol);
-                serie.getCreditos().add(novoCredito);
+                Credito nuevoCredito = new Credito(serie, persona, rol);
+                serie.getCreditos().add(nuevoCredito);
             }
         }
     }
