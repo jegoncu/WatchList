@@ -61,7 +61,8 @@ public class SerieService {
         serieExistente.setSinopsis(serieForm.getSinopsis());
         serieExistente.setAnioEstreno(serieForm.getAnioEstreno());
         serieExistente.setPuntuacion(serieForm.getPuntuacion());
-        serieExistente.setUrlTrailer(serieForm.getUrlTrailer());
+        // Ya no necesitamos setear urlTrailer en Serie
+        // serieExistente.setUrlTrailer(serieForm.getUrlTrailer());
         serieExistente.setUrlImagen(serieForm.getUrlImagen());
 
         // Campos específicos de serie

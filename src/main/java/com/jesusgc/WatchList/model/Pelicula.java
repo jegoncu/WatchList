@@ -22,4 +22,11 @@ public class Pelicula extends Media {
     @Min(value = 1, message = "La duración debe ser mayor a 0 minutos")
     @Column(name = "duracion_min")
     private Integer duracionMin;
+    
+    @Column(name = "url_trailer")
+    private String urlTrailer;
+    
+    // Agregar estos métodos si no usas Lombok
+    public String getUrlTrailer() { return urlTrailer; }
+    public void setUrlTrailer(String urlTrailer) { this.urlTrailer = urlTrailer; }
 }

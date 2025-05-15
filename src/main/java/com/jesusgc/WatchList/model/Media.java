@@ -51,9 +51,6 @@ public abstract class Media {
     @Column(name = "url_imagen")
     private String urlImagen;
 
-    @Column(name = "url_trailer")
-    private String urlTrailer;
-
     @OneToMany(mappedBy = "media")
     @Builder.Default
     private Set<Comentario> comentarios = new HashSet<>();

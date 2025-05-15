@@ -61,6 +61,7 @@ public class PeliculaService {
         peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
         peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
         peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
+// La propiedad urlTrailer ahora pertenece a Pelicula, no a Media
         peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
         peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
 
