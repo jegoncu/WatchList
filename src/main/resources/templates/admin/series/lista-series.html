@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${pageTitle ?: 'Gestionar Series'}">
+      Gestionar Series - WatchList
+    </title>
+    <th:block th:fragment="pageCss"> </th:block>
+  </head>
+  <body>
+    <section>
+      <div class="content-container">
+        <h2 th:text="${pageTitle ?: 'Gestionar Series'}">Gestionar Series</h2>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+          <p th:text="${successMessage}">Operación exitosa</p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+          <p th:text="${errorMessage}">Ha ocurrido un error</p>
+        </div>
+
+        <div class="actions-bar">
+          <a
+            th:href="@{/admin/series/nuevo}"
+            class="btn btn-blue btn-small">
+            Añadir Serie
+          </a>
+        </div>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-poster">Póster</th>
+              <th>Título</th>
+              <th class="col-anio">Años</th>
+              <th>Temporadas</th>
+              <th>Géneros</th>
+              <th class="col-director">Creador/Showrunner</th>
+              <th class="acciones-cell">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:if="${series.empty}">
+              <td colspan="7">No hay series registradas.</td>
+            </tr>
+            <tr th:each="serie : ${series}">
+              <td class="col-poster">
+                <img
+                  th:if="${serie.urlImagen != null && !serie.urlImagen.isEmpty()}"
+                  th:src="${serie.urlImagen}"
+                  class="tabla-poster-img"
+                  alt="Póster" />
+                <div
+                  th:unless="${serie.urlImagen != null && !serie.urlImagen.isEmpty()}"
+                  class="tabla-poster-sin-imagen">
+                  Sin imagen
+                </div>
+              </td>
+              <td>
+                <a
+                  th:href="@{/series/{id}(id=${serie.id})}"
+                  th:text="${serie.titulo}"
+                  target="_blank">
+                  Título
+                </a>
+              </td>
+              <td>
+                <span th:text="${serie.anioEstreno}">Año Inicio</span>
+                <span th:if="${serie.anioFin != null}">
+                  - <span th:text="${serie.anioFin}">Año Fin</span>
+                </span>
+                <span th:unless="${serie.anioFin != null}">
+                  - presente
+                </span>
+              </td>
+              <td th:text="${serie.nTemporadas}">Temporadas</td>
+              <td>
+                <span
+                  th:each="genero, iterStat : ${serie.generos}"
+                  th:text="${genero.nombre + (iterStat.last ? '' : ', ')}">
+                  Género
+                </span>
+              </td>
+              <td>
+                <span
+                  th:each="credito, iterStat : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'dirección') or #strings.equalsIgnoreCase(rol, 'showrunner'))]}"
+                  th:text="${credito.persona.nombre + (iterStat.last ? '' : ', ')}">
+                  Nombre del Director/Showrunner
+                </span>
+              </td>
+              <td class="acciones-cell">
+                <a
+                  th:href="@{/admin/series/editar/{id}(id=${serie.id})}"
+                  class="btn btn-blue btn-small">
+                  Editar
+                </a>
+                <form
+                  th:action="@{/admin/series/eliminar/{id}(id=${serie.id})}"
+                  method="post"
+                  onsubmit="return confirm('¿Estás seguro de eliminar esta serie?');">
+                  <button type="submit" class="btn btn-red btn-small">
+                    Eliminar
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"> </th:block>
+  </body>
+</html>

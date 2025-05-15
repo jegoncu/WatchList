@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${pageTitle ?: 'Formulario de Serie'}">
+      Formulario de Serie - WatchList
+    </title>
+    <th:block th:fragment="pageCss"> </th:block>
+  </head>
+  <body>
+    <section>
+      <div class="content-container">
+        <h2 th:text="${pageTitle ?: 'Formulario de Serie'}">
+          Formulario de Serie
+        </h2>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+          <p th:text="${successMessage}">Operación exitosa</p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+          <p th:text="${errorMessage}">Ha ocurrido un error</p>
+        </div>
+
+        <form
+          th:action="@{${formAction}}"
+          th:object="${serie}"
+          method="post"
+          class="media-form">
+          <div class="form-section">
+            <h3>Información Básica</h3>
+            
+            <div class="form-group">
+              <label for="titulo">Título *</label>
+              <input
+                type="text"
+                id="titulo"
+                th:field="*{titulo}"
+                required
+                placeholder="Introduce el título de la serie" />
+              <div
+                th:if="${#fields.hasErrors('titulo')}"
+                class="field-error"
+                th:errors="*{titulo}"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="sinopsis">Sinopsis</label>
+              <textarea
+                id="sinopsis"
+                th:field="*{sinopsis}"
+                rows="5"
+                placeholder="Introduce una descripción o sinopsis"></textarea>
+              <div
+                th:if="${#fields.hasErrors('sinopsis')}"
+                class="field-error"
+                th:errors="*{sinopsis}"></div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-half">
+                <label for="anioEstreno">Año de Estreno</label>
+                <input
+                  type="number"
+                  id="anioEstreno"
+                  th:field="*{anioEstreno}"
+                  min="1895"
+                  th:max="${#temporals.format(#temporals.createNow(), 'yyyy')}"
+                  placeholder="AAAA" />
+                <div
+                  th:if="${#fields.hasErrors('anioEstreno')}"
+                  class="field-error"
+                  th:errors="*{anioEstreno}"></div>
+              </div>
+
+              <div class="form-group form-group-half">
+                <label for="anioFin">Año de Finalización</label>
+                <input
+                  type="number"
+                  id="anioFin"
+                  th:field="*{anioFin}"
+                  min="1895"
+                  th:max="${#temporals.format(#temporals.createNow(), 'yyyy')}"
+                  placeholder="AAAA (Dejar vacío si sigue en emisión)" />
+                <div
+                  th:if="${#fields.hasErrors('anioFin')}"
+                  class="field-error"
+                  th:errors="*{anioFin}"></div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-half">
+                <label for="nTemporadas">Número de Temporadas *</label>
+                <input
+                  type="number"
+                  id="nTemporadas"
+                  th:field="*{nTemporadas}"
+                  min="1"
+                  required
+                  placeholder="Número de temporadas" />
+                <div
+                  th:if="${#fields.hasErrors('nTemporadas')}"
+                  class="field-error"
+                  th:errors="*{nTemporadas}"></div>
+              </div>
+
+              <div class="form-group form-group-half">
+                <label for="puntuacion">Puntuación</label>
+                <input
+                  type="number"
+                  id="puntuacion"
+                  th:field="*{puntuacion}"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  placeholder="0-10" />
+                <div
+                  th:if="${#fields.hasErrors('puntuacion')}"
+                  class="field-error"
+                  th:errors="*{puntuacion}"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="urlImagen">URL de la Imagen de Portada</label>
+              <input
+                type="url"
+                id="urlImagen"
+                th:field="*{urlImagen}"
+                placeholder="URL de la imagen (poster)" />
+              <div
+                th:if="${#fields.hasErrors('urlImagen')}"
+                class="field-error"
+                th:errors="*{urlImagen}"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="urlTrailer">URL del Trailer</label>
+              <input
+                type="url"
+                id="urlTrailer"
+                th:field="*{urlTrailer}"
+                placeholder="URL del trailer (YouTube)" />
+              <div
+                th:if="${#fields.hasErrors('urlTrailer')}"
+                class="field-error"
+                th:errors="*{urlTrailer}"></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Géneros</h3>
+            <div class="form-group">
+              <div class="checkbox-list genero-tag-list">
+                <div
+                  class="checkbox-item"
+                  th:each="genero : ${allGeneros}">
+                  <input
+                    type="checkbox"
+                    class="visually-hidden-checkbox"
+                    name="generoIds"
+                    th:id="${'genero-' + genero.id}"
+                    th:value="${genero.id}"
+                    th:checked="${serie.generos != null && serie.generos.contains(genero)}" />
+                  <label
+                    class="genero-tag-label"
+                    th:for="${'genero-' + genero.id}"
+                    th:text="${genero.nombre}">
+                    Nombre del género
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Plataformas de Streaming</h3>
+            <div class="form-group">
+              <div class="checkbox-list plataforma-logo-list">
+                <div
+                  class="checkbox-item"
+                  th:each="plataforma : ${allPlataformas}">
+                  <input
+                    type="checkbox"
+                    class="visually-hidden-checkbox"
+                    name="plataformaIds"
+                    th:id="${'plataforma-' + plataforma.id}"
+                    th:value="${plataforma.id}"
+                    th:checked="${serie.plataformas != null && serie.plataformas.contains(plataforma)}" />
+                  <label
+                    class="plataforma-logo-label"
+                    th:for="${'plataforma-' + plataforma.id}">
+                    <img
+                      th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
+                      th:src="@{${plataforma.logo}}"
+                      th:alt="${plataforma.nombre}"
+                      class="plataforma-logo-img" />
+                    <span
+                      th:unless="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
+                      th:text="${plataforma.nombre}"
+                      class="plataforma-logo-fallback-text"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Reparto y Equipo</h3>
+            <div id="persona-roles-container">
+              <!-- Elementos existentes -->
+              <div
+                th:each="credito, stat : ${serie.creditos}"
+                class="persona-rol-fila">
+                <div class="persona-selector-contenedor">
+                  <select
+                    name="persona_ids"
+                    required
+                    th:attr="data-index=${stat.index}">
+                    <option value="" disabled>Selecciona una persona</option>
+                    <option
+                      th:each="persona : ${allPersonas}"
+                      th:value="${persona.id}"
+                      th:text="${persona.nombre}"
+                      th:selected="${credito.persona != null && credito.persona.id == persona.id}">
+                      Nombre de la Persona
+                    </option>
+                  </select>
+                </div>
+                <div class="rol-selector-contenedor">
+                  <select
+                    name="persona_roles"
+                    required
+                    th:attr="data-index=${stat.index}">
+                    <option value="" disabled>Selecciona un rol</option>
+                    <option
+                      th:each="rol : ${possibleRoles}"
+                      th:value="${rol}"
+                      th:text="${rol}"
+                      th:selected="${credito.rol != null && credito.rol == rol}">
+                      Rol
+                    </option>
+                  </select>
+                </div>
+                <div class="eliminar-fila-contenedor">
+                  <button
+                    type="button"
+                    class="btn btn-red btn-small eliminar-fila-btn">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Template para nuevas filas -->
+              <div id="persona-rol-template" style="display: none">
+                <div class="persona-rol-fila">
+                  <div class="persona-selector-contenedor">
+                    <select name="persona_ids" required>
+                      <option value="" disabled selected>
+                        Selecciona una persona
+                      </option>
+                      <option
+                        th:each="persona : ${allPersonas}"
+                        th:value="${persona.id}"
+                        th:text="${persona.nombre}">
+                        Nombre de la Persona
+                      </option>
+                    </select>
+                  </div>
+                  <div class="rol-selector-contenedor">
+                    <select name="persona_roles" required>
+                      <option value="" disabled selected>Selecciona un rol</option>
+                      <option
+                        th:each="rol : ${possibleRoles}"
+                        th:value="${rol}"
+                        th:text="${rol}">
+                        Rol
+                      </option>
+                    </select>
+                  </div>
+                  <div class="eliminar-fila-contenedor">
+                    <button
+                      type="button"
+                      class="btn btn-red btn-small eliminar-fila-btn">
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              id="add-persona-role-button"
+              class="btn btn-blue btn-small">
+              Añadir Persona
+            </button>
+          </div>
+
+          <div class="form-actions">
+            <a
+              th:href="@{/admin/series}"
+              class="btn btn-grey btn-big">
+              Cancelar
+            </a>
+            <button type="submit" class="btn btn-yellow btn-big">
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript">
+      <script th:src="@{/js/admin-form-serie.js}"></script>
+    </th:block>
+  </body>
+</html>

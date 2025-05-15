@@ -2,10 +2,12 @@ package com.jesusgc.WatchList.controller;
 
 import com.jesusgc.WatchList.model.Pelicula;
 import com.jesusgc.WatchList.model.Persona;
+import com.jesusgc.WatchList.model.Serie;
 import com.jesusgc.WatchList.service.PeliculaService;
 import com.jesusgc.WatchList.service.GeneroService;
 import com.jesusgc.WatchList.service.PlataformaService;
 import com.jesusgc.WatchList.service.PersonaService;
+import com.jesusgc.WatchList.service.SerieService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,16 +33,19 @@ public class AdminController {
     private final GeneroService generoService;
     private final PlataformaService plataformaService;
     private final PersonaService personaService;
+    private final SerieService serieService;
 
     public AdminController(
             PeliculaService peliculaService,
             GeneroService generoService,
             PlataformaService plataformaService,
-            PersonaService personaService) {
+            PersonaService personaService,
+            SerieService serieService) {
         this.peliculaService = peliculaService;
         this.generoService = generoService;
         this.plataformaService = plataformaService;
         this.personaService = personaService;
+        this.serieService = serieService;
     }
 
     @GetMapping
@@ -282,4 +287,130 @@ public class AdminController {
         return "admin/placeholder-list";
     }
 
+    // --- Métodos para Gestionar Series ---
+
+    @GetMapping("/series")
+    public String listarSeriesAdmin(Model model) {
+        model.addAttribute("series", serieService.findAll());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Gestionar Series");
+        return "admin/series/lista-series";
+    }
+
+    @GetMapping("/series/nuevo")
+    public String mostrarFormularioNuevaSerie(Model model) {
+        model.addAttribute("serie", new Serie());
+        model.addAttribute("allGeneros", generoService.findAll());
+        model.addAttribute("allPlataformas", plataformaService.findAll());
+        model.addAttribute("allPersonas", personaService.findAll());
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES);
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Añadir Nueva Serie");
+        model.addAttribute("formAction", "/admin/series/nuevo");
+        return "admin/series/form-serie";
+    }
+
+    @PostMapping("/series/nuevo")
+    public String procesarNuevaSerie(@Valid @ModelAttribute("serie") Serie serie,
+            BindingResult result,
+            @RequestParam(name = "generoIds", required = false) List<Long> generoIds,
+            @RequestParam(name = "plataformaIds", required = false) List<Long> plataformaIds,
+            @RequestParam(name = "persona_ids", required = false) List<Long> persona_ids,
+            @RequestParam(name = "persona_roles", required = false) List<String> persona_roles,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Map<Long, String> personaRolesMap = new HashMap<>();
+        if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
+            for (int i = 0; i < persona_ids.size(); i++) {
+                Long personaId = persona_ids.get(i);
+                String rol = persona_roles.get(i);
+                if (personaId != null && rol != null && !rol.isEmpty()) {
+                    personaRolesMap.put(personaId, rol);
+                }
+            }
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("allGeneros", generoService.findAll());
+            model.addAttribute("allPlataformas", plataformaService.findAll());
+            model.addAttribute("allPersonas", personaService.findAll());
+            model.addAttribute("possibleRoles", POSSIBLE_ROLES);
+            model.addAttribute("currentPage", "admin");
+            return "admin/series/form-serie";
+        }
+
+        serieService.saveSerieWithRelations(serie, generoIds, plataformaIds, personaRolesMap);
+        redirectAttributes.addFlashAttribute("successMessage", "Serie añadida correctamente.");
+        return "redirect:/admin/series";
+    }
+
+    @GetMapping("/series/editar/{id}")
+    public String mostrarFormularioEditarSerie(@PathVariable("id") Long id, Model model,
+            RedirectAttributes redirectAttributes) {
+        Serie serie = serieService.findById(id).orElse(null);
+
+        if (serie == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "La serie no existe.");
+            return "redirect:/admin/series";
+        }
+
+        model.addAttribute("serie", serie);
+        model.addAttribute("allGeneros", generoService.findAll());
+        model.addAttribute("allPlataformas", plataformaService.findAll());
+        model.addAttribute("allPersonas", personaService.findAll());
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES);
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Editar Serie");
+        model.addAttribute("formAction", "/admin/series/editar/" + id);
+        return "admin/series/form-serie";
+    }
+
+    @PostMapping("/series/editar/{id}")
+    public String procesarEditarSerie(@PathVariable("id") Long id,
+            @Valid @ModelAttribute("serie") Serie serieForm,
+            BindingResult result,
+            @RequestParam(name = "generoIds", required = false) List<Long> generoIds,
+            @RequestParam(name = "plataformaIds", required = false) List<Long> plataformaIds,
+            @RequestParam(name = "persona_ids", required = false) List<Long> persona_ids,
+            @RequestParam(name = "persona_roles", required = false) List<String> persona_roles,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Map<Long, String> personaRolesMap = new HashMap<>();
+        if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
+            for (int i = 0; i < persona_ids.size(); i++) {
+                Long personaId = persona_ids.get(i);
+                String rol = persona_roles.get(i);
+                if (personaId != null && rol != null && !rol.isEmpty()) {
+                    personaRolesMap.put(personaId, rol);
+                }
+            }
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("allGeneros", generoService.findAll());
+            model.addAttribute("allPlataformas", plataformaService.findAll());
+            model.addAttribute("allPersonas", personaService.findAll());
+            model.addAttribute("possibleRoles", POSSIBLE_ROLES);
+            model.addAttribute("currentPage", "admin");
+            return "admin/series/form-serie";
+        }
+
+        serieService.updateSerieWithRelations(id, serieForm, generoIds, plataformaIds, personaRolesMap);
+        redirectAttributes.addFlashAttribute("successMessage", "Serie actualizada correctamente.");
+        return "redirect:/admin/series";
+    }
+
+    @PostMapping("/series/eliminar/{id}")
+    public String eliminarSerie(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            serieService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Serie eliminada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la serie: " + e.getMessage());
+        }
+        return "redirect:/admin/series";
+    }
+    
 }
