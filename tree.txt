@@ -1,0 +1,489 @@
+watchilist:.
+│   .gitattributes
+│   .gitignore
+│   data-dump.sql
+│   mvnw
+│   mvnw.cmd
+│   pom.xml
+│   README.md
+│   tree.txt
+│
+├───.mvn
+│   └───wrapper
+│           maven-wrapper.properties
+│
+├───.vscode
+│       launch.json
+│       settings.json
+│
+├───src
+│   ├───main
+│   │   ├───java
+│   │   │   └───com
+│   │   │       └───jesusgc
+│   │   │           └───WatchList
+│   │   │               │   ServletInitializer.java
+│   │   │               │   WatchListApplication.java
+│   │   │               │
+│   │   │               ├───config
+│   │   │               │       SecurityConfig.java
+│   │   │               │
+│   │   │               ├───controller
+│   │   │               │       AdminController.java
+│   │   │               │       GenteController.java
+│   │   │               │       HomeController.java
+│   │   │               │       ListasController.java
+│   │   │               │       PeliculasController.java
+│   │   │               │       SeriesController.java
+│   │   │               │       UsuarioController.java
+│   │   │               │
+│   │   │               ├───model
+│   │   │               │       Comentario.java
+│   │   │               │       Credito.java
+│   │   │               │       CreditoId.java
+│   │   │               │       Genero.java
+│   │   │               │       Lista.java
+│   │   │               │       Media.java
+│   │   │               │       Pelicula.java
+│   │   │               │       Persona.java
+│   │   │               │       Plataforma.java
+│   │   │               │       Serie.java
+│   │   │               │       Usuario.java
+│   │   │               │
+│   │   │               ├───repository
+│   │   │               │       CreditoRepository.java
+│   │   │               │       GeneroRepository.java
+│   │   │               │       PeliculaRepository.java
+│   │   │               │       PersonaRepository.java
+│   │   │               │       PlataformaRepository.java
+│   │   │               │       SerieRepository.java
+│   │   │               │       UsuarioRepository.java
+│   │   │               │
+│   │   │               └───service
+│   │   │                       GeneroService.java
+│   │   │                       PeliculaService.java
+│   │   │                       PersonaService.java
+│   │   │                       PlataformaService.java
+│   │   │                       SerieService.java
+│   │   │                       UsuarioService.java
+│   │   │
+│   │   └───resources
+│   │       │   application.properties
+│   │       │
+│   │       ├───static
+│   │       │   ├───css
+│   │       │   │   │   base.css
+│   │       │   │   │   layout.css
+│   │       │   │   │   styles.css
+│   │       │   │   │   variables.css
+│   │       │   │   │
+│   │       │   │   └───componentes
+│   │       │   │           admin-tables.css
+│   │       │   │           alerts.css
+│   │       │   │           buttons.css
+│   │       │   │           dropdown.css
+│   │       │   │           forms.css
+│   │       │   │           movie-cards.css
+│   │       │   │           pelicula-detalle.css
+│   │       │   │           persona-detalle.css
+│   │       │   │           scrollbar.css
+│   │       │   │
+│   │       │   ├───img
+│   │       │   │   └───logos
+│   │       │   │           apple.png
+│   │       │   │           crunchyroll.png
+│   │       │   │           disney.png
+│   │       │   │           filmin.png
+│   │       │   │           HBO.png
+│   │       │   │           movistar.png
+│   │       │   │           netflix.png
+│   │       │   │           prime.png
+│   │       │   │           skyshowtime.png
+│   │       │   │           youtube.png
+│   │       │   │
+│   │       │   └───js
+│   │       │           admin-form-pelicula.js
+│   │       │           admin-form-serie.js
+│   │       │           dropdown.js
+│   │       │           htmx.min.js
+│   │       │
+│   │       └───templates
+│   │           │   inicio.html
+│   │           │   landing.html
+│   │           │   _layout.html
+│   │           │
+│   │           ├───admin
+│   │           │   │   admin.html
+│   │           │   │   placeholder-list.html
+│   │           │   │
+│   │           │   ├───gente
+│   │           │   │       form-persona.html
+│   │           │   │       lista-gente.html
+│   │           │   │
+│   │           │   ├───peliculas
+│   │           │   │       form-pelicula.html
+│   │           │   │       lista-peliculas.html
+│   │           │   │
+│   │           │   └───series
+│   │           │           form-serie.html
+│   │           │           lista-series.html
+│   │           │
+│   │           ├───auth
+│   │           │       login.html
+│   │           │       registro.html
+│   │           │
+│   │           ├───fragments
+│   │           │       _footer.html
+│   │           │       _header.html
+│   │           │       _sidebar.html
+│   │           │
+│   │           ├───gente
+│   │           │       gente.html
+│   │           │       persona-detalle.html
+│   │           │
+│   │           ├───listas
+│   │           │       listas.html
+│   │           │
+│   │           ├───peliculas
+│   │           │       pelicula-detalle.html
+│   │           │       peliculas.html
+│   │           │
+│   │           ├───series
+│   │           │       serie-detalle.html
+│   │           │       series.html
+│   │           │
+│   │           └───usuario
+│   │                   mis-listas.html
+│   │                   perfil.html
+│   │
+│   └───test
+│       └───java
+│           └───com
+│               └───jesusgc
+│                   └───WatchList
+│                       │   WatchListApplicationTests.java
+│                       │
+│                       ├───controller
+│                       ├───repository
+│                       └───service
+└───target
+    │   WatchList-0.0.1-SNAPSHOT.war
+    │   WatchList-0.0.1-SNAPSHOT.war.original
+    │
+    ├───classes
+    │   │   application.properties
+    │   │
+    │   ├───com
+    │   │   └───jesusgc
+    │   │       └───WatchList
+    │   │           │   ServletInitializer.class
+    │   │           │   WatchListApplication.class
+    │   │           │
+    │   │           ├───config
+    │   │           │       SecurityConfig.class
+    │   │           │
+    │   │           ├───controller
+    │   │           │       AdminController.class
+    │   │           │       GenteController.class
+    │   │           │       HomeController.class
+    │   │           │       ListasController.class
+    │   │           │       PeliculasController.class
+    │   │           │       SeriesController.class
+    │   │           │       UsuarioController.class
+    │   │           │
+    │   │           ├───model
+    │   │           │       Comentario$ComentarioBuilder.class
+    │   │           │       Comentario.class
+    │   │           │       Credito.class
+    │   │           │       CreditoId.class
+    │   │           │       Genero$GeneroBuilder.class
+    │   │           │       Genero.class
+    │   │           │       Lista$ListaBuilder.class
+    │   │           │       Lista.class
+    │   │           │       Media$MediaBuilder.class
+    │   │           │       Media.class
+    │   │           │       Pelicula$PeliculaBuilder.class
+    │   │           │       Pelicula$PeliculaBuilderImpl.class
+    │   │           │       Pelicula.class
+    │   │           │       Persona$PersonaBuilder.class
+    │   │           │       Persona.class
+    │   │           │       Plataforma$PlataformaBuilder.class
+    │   │           │       Plataforma.class
+    │   │           │       Serie$SerieBuilder.class
+    │   │           │       Serie$SerieBuilderImpl.class
+    │   │           │       Serie.class
+    │   │           │       Usuario$UsuarioBuilder.class
+    │   │           │       Usuario.class
+    │   │           │
+    │   │           ├───repository
+    │   │           │       CreditoRepository.class
+    │   │           │       GeneroRepository.class
+    │   │           │       PeliculaRepository.class
+    │   │           │       PersonaRepository.class
+    │   │           │       PlataformaRepository.class
+    │   │           │       SerieRepository.class
+    │   │           │       UsuarioRepository.class
+    │   │           │
+    │   │           └───service
+    │   │                   GeneroService.class
+    │   │                   PeliculaService.class
+    │   │                   PersonaService.class
+    │   │                   PlataformaService.class
+    │   │                   SerieService.class
+    │   │                   UsuarioService.class
+    │   │
+    │   ├───static
+    │   │   ├───css
+    │   │   │   │   base.css
+    │   │   │   │   layout.css
+    │   │   │   │   styles.css
+    │   │   │   │   variables.css
+    │   │   │   │
+    │   │   │   └───componentes
+    │   │   │           admin-tables.css
+    │   │   │           alerts.css
+    │   │   │           buttons.css
+    │   │   │           dropdown.css
+    │   │   │           forms.css
+    │   │   │           movie-cards.css
+    │   │   │           pelicula-detalle.css
+    │   │   │           persona-detalle.css
+    │   │   │           scrollbar.css
+    │   │   │
+    │   │   ├───img
+    │   │   │   └───logos
+    │   │   │           apple.png
+    │   │   │           crunchyroll.png
+    │   │   │           disney.png
+    │   │   │           filmin.png
+    │   │   │           HBO.png
+    │   │   │           movistar.png
+    │   │   │           netflix.png
+    │   │   │           prime.png
+    │   │   │           skyshowtime.png
+    │   │   │           youtube.png
+    │   │   │
+    │   │   └───js
+    │   │           admin-form-pelicula.js
+    │   │           admin-form-serie.js
+    │   │           dropdown.js
+    │   │           htmx.min.js
+    │   │
+    │   └───templates
+    │       │   inicio.html
+    │       │   landing.html
+    │       │   _layout.html
+    │       │
+    │       ├───admin
+    │       │   │   admin.html
+    │       │   │   placeholder-list.html
+    │       │   │
+    │       │   ├───gente
+    │       │   │       form-persona.html
+    │       │   │       lista-gente.html
+    │       │   │
+    │       │   ├───peliculas
+    │       │   │       form-pelicula.html
+    │       │   │       lista-peliculas.html
+    │       │   │
+    │       │   └───series
+    │       │           form-serie.html
+    │       │           lista-series.html
+    │       │
+    │       ├───auth
+    │       │       login.html
+    │       │       registro.html
+    │       │
+    │       ├───fragments
+    │       │       _footer.html
+    │       │       _header.html
+    │       │       _sidebar.html
+    │       │
+    │       ├───gente
+    │       │       gente.html
+    │       │       persona-detalle.html
+    │       │
+    │       ├───listas
+    │       │       listas.html
+    │       │
+    │       ├───peliculas
+    │       │       pelicula-detalle.html
+    │       │       peliculas.html
+    │       │
+    │       ├───series
+    │       │       serie-detalle.html
+    │       │       series.html
+    │       │
+    │       └───usuario
+    │               mis-listas.html
+    │               perfil.html
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───generated-test-sources
+    │   └───test-annotations
+    ├───maven-archiver
+    │       pom.properties
+    │
+    ├───maven-status
+    │   └───maven-compiler-plugin
+    │       ├───compile
+    │       │   └───default-compile
+    │       │           createdFiles.lst
+    │       │           inputFiles.lst
+    │       │
+    │       └───testCompile
+    │           └───default-testCompile
+    │                   createdFiles.lst
+    │                   inputFiles.lst
+    │
+    ├───surefire-reports
+    │       com.jesusgc.WatchList.WatchListApplicationTests.txt
+    │       TEST-com.jesusgc.WatchList.WatchListApplicationTests.xml
+    │
+    ├───test-classes
+    │   └───com
+    │       └───jesusgc
+    │           └───WatchList
+    │               │   WatchListApplicationTests.class
+    │               │
+    │               ├───controller
+    │               ├───repository
+    │               └───service
+    └───WatchList-0.0.1-SNAPSHOT
+        ├───META-INF
+        └───WEB-INF
+            ├───classes
+            │   │   application.properties
+            │   │
+            │   ├───com
+            │   │   └───jesusgc
+            │   │       └───WatchList
+            │   │           │   ServletInitializer.class
+            │   │           │   WatchListApplication.class
+            │   │           │
+            │   │           ├───config
+            │   │           │       SecurityConfig.class
+            │   │           │
+            │   │           ├───controller
+            │   │           │       UsuarioController.class
+            │   │           │
+            │   │           ├───model
+            │   │           │       Comentario$ComentarioBuilder.class
+            │   │           │       Comentario.class
+            │   │           │       Genero$GeneroBuilder.class
+            │   │           │       Genero.class
+            │   │           │       Lista$ListaBuilder.class
+            │   │           │       Lista.class
+            │   │           │       Media$MediaBuilder.class
+            │   │           │       Media.class
+            │   │           │       Pelicula$PeliculaBuilder.class
+            │   │           │       Pelicula$PeliculaBuilderImpl.class
+            │   │           │       Pelicula.class
+            │   │           │       Persona$PersonaBuilder.class
+            │   │           │       Persona.class
+            │   │           │       Plataforma$PlataformaBuilder.class
+            │   │           │       Plataforma.class
+            │   │           │       Serie$SerieBuilder.class
+            │   │           │       Serie$SerieBuilderImpl.class
+            │   │           │       Serie.class
+            │   │           │       Usuario$UsuarioBuilder.class
+            │   │           │       Usuario.class
+            │   │           │
+            │   │           ├───repository
+            │   │           │       UsuarioRepository.class
+            │   │           │
+            │   │           └───service
+            │   │                   UsuarioService.class
+            │   │
+            │   ├───static
+            │   │   └───js
+            │   │           htmx.min.js
+            │   │
+            │   └───templates
+            │           login.html
+            │           registro.html
+            │
+            └───lib
+                    angus-activation-2.0.2.jar
+                    antlr4-runtime-4.13.0.jar
+                    aspectjweaver-1.9.23.jar
+                    attoparser-2.0.7.RELEASE.jar
+                    byte-buddy-1.15.11.jar
+                    classmate-1.7.0.jar
+                    HdrHistogram-2.2.2.jar
+                    hibernate-commons-annotations-7.0.3.Final.jar
+                    hibernate-core-6.6.11.Final.jar
+                    hibernate-validator-8.0.2.Final.jar
+                    HikariCP-5.1.0.jar
+                    istack-commons-runtime-4.1.2.jar
+                    jackson-annotations-2.18.3.jar
+                    jackson-core-2.18.3.jar
+                    jackson-databind-2.18.3.jar
+                    jackson-datatype-jdk8-2.18.3.jar
+                    jackson-datatype-jsr310-2.18.3.jar
+                    jackson-module-parameter-names-2.18.3.jar
+                    jakarta.activation-api-2.1.3.jar
+                    jakarta.annotation-api-2.1.1.jar
+                    jakarta.inject-api-2.0.1.jar
+                    jakarta.mail-2.0.3.jar
+                    jakarta.persistence-api-3.1.0.jar
+                    jakarta.transaction-api-2.0.1.jar
+                    jakarta.validation-api-3.0.2.jar
+                    jakarta.xml.bind-api-4.0.2.jar
+                    jandex-3.2.0.jar
+                    jaxb-core-4.0.5.jar
+                    jaxb-runtime-4.0.5.jar
+                    jboss-logging-3.6.1.Final.jar
+                    jul-to-slf4j-2.0.17.jar
+                    LatencyUtils-2.0.3.jar
+                    log4j-api-2.24.3.jar
+                    log4j-to-slf4j-2.24.3.jar
+                    logback-classic-1.5.18.jar
+                    logback-core-1.5.18.jar
+                    mariadb-java-client-3.5.3.jar
+                    micrometer-commons-1.14.5.jar
+                    micrometer-core-1.14.5.jar
+                    micrometer-jakarta9-1.14.5.jar
+                    micrometer-observation-1.14.5.jar
+                    slf4j-api-2.0.17.jar
+                    snakeyaml-2.3.jar
+                    spring-aop-6.2.5.jar
+                    spring-aspects-6.2.5.jar
+                    spring-beans-6.2.5.jar
+                    spring-boot-3.4.4.jar
+                    spring-boot-actuator-3.4.4.jar
+                    spring-boot-actuator-autoconfigure-3.4.4.jar
+                    spring-boot-autoconfigure-3.4.4.jar
+                    spring-boot-starter-3.4.4.jar
+                    spring-boot-starter-actuator-3.4.4.jar
+                    spring-boot-starter-data-jpa-3.4.4.jar
+                    spring-boot-starter-jdbc-3.4.4.jar
+                    spring-boot-starter-json-3.4.4.jar
+                    spring-boot-starter-logging-3.4.4.jar
+                    spring-boot-starter-mail-3.4.4.jar
+                    spring-boot-starter-security-3.4.4.jar
+                    spring-boot-starter-thymeleaf-3.4.4.jar
+                    spring-boot-starter-validation-3.4.4.jar
+                    spring-boot-starter-web-3.4.4.jar
+                    spring-context-6.2.5.jar
+                    spring-context-support-6.2.5.jar
+                    spring-core-6.2.5.jar
+                    spring-data-commons-3.4.4.jar
+                    spring-data-jpa-3.4.4.jar
+                    spring-expression-6.2.5.jar
+                    spring-jcl-6.2.5.jar
+                    spring-jdbc-6.2.5.jar
+                    spring-orm-6.2.5.jar
+                    spring-security-config-6.4.4.jar
+                    spring-security-core-6.4.4.jar
+                    spring-security-crypto-6.4.4.jar
+                    spring-security-web-6.4.4.jar
+                    spring-tx-6.2.5.jar
+                    spring-web-6.2.5.jar
+                    spring-webmvc-6.2.5.jar
+                    thymeleaf-3.1.3.RELEASE.jar
+                    thymeleaf-spring6-3.1.3.RELEASE.jar
+                    tomcat-embed-el-10.1.39.jar
+                    txw2-4.0.5.jar
+                    unbescape-1.1.6.RELEASE.jar

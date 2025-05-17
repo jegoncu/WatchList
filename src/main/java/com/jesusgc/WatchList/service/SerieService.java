@@ -63,7 +63,6 @@ public class SerieService {
         serieExistente.setPuntuacion(serieForm.getPuntuacion());
         serieExistente.setUrlImagen(serieForm.getUrlImagen());
         
-        // Campos específicos de Serie
         serieExistente.setAnioFin(serieForm.getAnioFin());
         serieExistente.setNTemporadas(serieForm.getNTemporadas());
 

@@ -17,9 +17,14 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/login")
+    public String mostrarLogin() {
+        return "auth/login"; 
+    }
+
     @GetMapping("/registro")
     public String mostrarRegistro() {
-        return "registro";
+        return "auth/registro"; 
     }
 
     @PostMapping("/registro")
@@ -40,11 +45,6 @@ public class UsuarioController {
             redirectAttributes.addFlashAttribute("nombre", nombre);
             return "redirect:/registro";
         }
-    }
-
-    @GetMapping("/login")
-    public String mostrarLogin() {
-        return "login";
     }
 
     @PostMapping("/login")
@@ -96,7 +96,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/perfil")
-    public String mostrarPerfil(HttpSession session, Model model) {
+    public String mostrarPerfil(Model model, HttpSession session) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
             return "redirect:/login";
@@ -108,11 +108,11 @@ public class UsuarioController {
         }
         model.addAttribute("usuario", usuario);
         model.addAttribute("currentPage", "perfil");
-        return "perfil";
+        return "usuario/perfil"; 
     }
-
+    
     @GetMapping("/mis-listas")
-    public String mostrarMisListas(HttpSession session, Model model) {
+    public String mostrarMisListas(Model model, HttpSession session) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
             return "redirect:/login";
@@ -124,6 +124,6 @@ public class UsuarioController {
         }
         model.addAttribute("usuario", usuario);
         model.addAttribute("currentPage", "mis-listas");
-        return "mis-listas";
+        return "usuario/mis-listas"; 
     }
 }

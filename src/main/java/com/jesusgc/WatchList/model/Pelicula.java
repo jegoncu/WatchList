@@ -26,7 +26,6 @@ public class Pelicula extends Media {
     @Column(name = "url_trailer")
     private String urlTrailer;
     
-    // Agregar estos métodos si no usas Lombok
     public String getUrlTrailer() { return urlTrailer; }
     public void setUrlTrailer(String urlTrailer) { this.urlTrailer = urlTrailer; }
 }

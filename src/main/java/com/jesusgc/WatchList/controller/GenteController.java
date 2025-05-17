@@ -19,16 +19,15 @@ public class GenteController {
     }
     
     @GetMapping("/gente")
-    public String mostrarGente(Model model) {
+    public String mostrarListaGente(Model model) {
         List<Persona> personas = personaService.findAll();
         model.addAttribute("personas", personas);
         model.addAttribute("currentPage", "gente");
-        return "gente";
+        return "gente/gente"; 
     }
     
-    // Esta función se puede implementar más adelante para mostrar los detalles de una persona
-    @GetMapping("/gente/{id}")
-    public String mostrarDetallesPersona(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/persona/{id}")
+    public String mostrarDetallePersona(@PathVariable Long id, Model model) {
         Persona persona = personaService.findById(id).orElse(null);
         if (persona == null) {
             return "redirect:/gente";
@@ -37,6 +36,6 @@ public class GenteController {
         model.addAttribute("persona", persona);
         model.addAttribute("currentPage", "gente");
         model.addAttribute("pageTitle", persona.getNombre());
-        return "persona-detalle"; 
+        return "gente/persona-detalle"; 
     }
 }

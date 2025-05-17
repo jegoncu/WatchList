@@ -26,10 +26,10 @@ public class PeliculasController {
         model.addAttribute("currentPage", "peliculas");
         List<Pelicula> peliculas = peliculaService.findAll();
         model.addAttribute("peliculas", peliculas);
-        return "peliculas";
+        return "peliculas/peliculas"; 
     }
 
-    @GetMapping("/peliculas/{id}")
+    @GetMapping("/pelicula/{id}")
     public String mostrarDetallePelicula(@PathVariable("id") Long id, Model model) {
         Optional<Pelicula> peliculaOptional = peliculaService.findById(id);
         if (peliculaOptional.isPresent()) {
@@ -37,7 +37,7 @@ public class PeliculasController {
             model.addAttribute("pelicula", pelicula);
             model.addAttribute("currentPage", "peliculas");
             model.addAttribute("pageTitle", pelicula.getTitulo() + " - WatchList");
-            return "pelicula-detalle";
+            return "peliculas/pelicula-detalle"; 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Película no encontrada");
         }

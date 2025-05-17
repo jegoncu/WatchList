@@ -53,7 +53,7 @@ public class AdminController {
 
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Panel de Administración");
-        return "admin";
+        return "admin/admin";
     }
 
     private static final List<String> POSSIBLE_ROLES = Arrays.asList(
@@ -68,7 +68,7 @@ public class AdminController {
         model.addAttribute("allGeneros", generoService.findAll());
         model.addAttribute("allPlataformas", plataformaService.findAll());
         model.addAttribute("allPersonas", personaService.findAll());
-        model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
+        model.addAttribute("possibleRoles", POSSIBLE_ROLES);
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Añadir Nueva Película");
         model.addAttribute("formAction", "/admin/peliculas/nuevo");

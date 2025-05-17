@@ -9,6 +9,6 @@ public class ListasController {
     @GetMapping("/listas")
     public String mostrarListas(Model model) {
         model.addAttribute("currentPage", "listas");
-        return "listas";
+        return "listas/listas"; 
     }
 }

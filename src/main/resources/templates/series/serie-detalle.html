@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${pageTitle ?: 'Detalle de Serie - WatchList'}">
+      Detalle de Serie
+    </title>
+    <th:block th:fragment="pageCss">
+      <link rel="stylesheet" th:href="@{/css/componentes/pelicula-detalle.css}" />
+      <style>
+        .serie-detalle-temporadas {
+            font-size: 0.9em;
+            color: var(--color-grey-4);
+        }
+        /* TODO mover a css dedicado */
+      </style>
+    </th:block>
+  </head>
+  <body>
+    <section th:fragment="section">
+      <div
+        class="content-container pelicula-detalle-container" 
+        th:if="${serie != null}">
+        <div class="pelicula-detalle-header">
+          <h1 th:text="${serie.titulo}">Título de la Serie</h1>
+          <span
+            class="pelicula-detalle-anio"
+            th:if="${serie.anioEstreno != null}">
+            <span th:text="${serie.anioEstreno}">Año de Estreno</span>
+            <span th:if="${serie.anioFin != null}" th:text="' - ' + ${serie.anioFin}"></span>
+            <span th:if="${serie.anioFin == null}" th:text="' - Presente'"></span>
+          </span>
+          <div th:if="${serie.nTemporadas != null}" class="serie-detalle-temporadas">
+            <span th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})"></span>
+          </div>
+        </div>
+
+        <div class="pelicula-detalle-main-content">
+          <div class="pelicula-detalle-poster-container">
+            <div class="poster-rating-badge" th:if="${serie.puntuacion != null}">
+              <span class="rating-number" th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}">0.0</span>
+            </div>
+            
+            <img
+              th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
+              th:src="${serie.urlImagen}"
+              th:alt="${serie.titulo}"
+              class="pelicula-detalle-poster" 
+              loading="lazy"/>
+            <div
+              th:unless="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
+              class="pelicula-detalle-poster-placeholder">
+              <span>Sin Póster</span>
+            </div>
+          </div>
+
+          <div class="pelicula-detalle-info">
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'creador') or #strings.equalsIgnoreCase(rol, 'showrunner') or #strings.equalsIgnoreCase(rol, 'dirección'))])}">
+              <h2>Creador(es) / Dirección</h2>
+              <p>
+                <span
+                  th:each="credito, iterStat : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'creador') or #strings.equalsIgnoreCase(rol, 'showrunner') or #strings.equalsIgnoreCase(rol, 'dirección'))]}">
+                  <a 
+                    th:href="@{/gente/{id}(id=${credito.persona.id})}"
+                    class="director-link"
+                    th:text="${credito.persona.nombre}">Nombre Creador/Director</a><th:block th:if="${!iterStat.last}">, </th:block>
+                </span>
+              </p>
+            </div>
+
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(serie.generos)}">
+              <h2>Géneros</h2>
+              <p class="tag-list">
+                <span
+                  th:each="genero : ${serie.generos}"
+                  class="tag"
+                  th:text="${genero.nombre}"
+                  >Género</span
+                >
+              </p>
+            </div>
+
+            <div
+              class="info-section"
+              th:if="${not #lists.isEmpty(serie.plataformas)}">
+              <h2>Disponible en</h2>
+              <p class="plataforma-icons-list">
+                <span th:each="plataforma : ${serie.plataformas}" class="plataforma-icon">
+                  <img
+                    th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
+                    th:src="@{${plataforma.logo}}"
+                    th:alt="${plataforma.nombre}"
+                    th:title="${plataforma.nombre}"
+                    class="plataforma-logo-img" />
+                  <span
+                    th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}"
+                    th:text="${plataforma.nombre}"
+                    class="plataforma-logo-fallback-text"></span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="info-section pelicula-detalle-sinopsis"
+          th:if="${serie.sinopsis != null and not #strings.isEmpty(serie.sinopsis)}">
+          <h2>Sinopsis</h2>
+          <p th:text="${serie.sinopsis}">Descripción de la serie...</p>
+        </div>
+        <div
+          class="info-section pelicula-detalle-cast"
+          th:if="${not #lists.isEmpty(serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
+          <h2>Reparto Principal</h2>
+          
+          <div class="movie-grid actores-grid">
+            <div class="movie-card actor-card" th:each="credito : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))]}">
+              <a
+                th:href="@{/gente/{id}(id=${credito.persona.id})}"
+                class="movie-card-link"
+                th:title="${credito.persona.nombre}">
+                <div class="movie-card-poster-container">
+                  <img
+                    th:if="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
+                    th:src="${credito.persona.fotoUrl}"
+                    th:alt="${credito.persona.nombre}"
+                    class="movie-card-poster persona-card-poster"
+                    loading="lazy" />
+                  <div
+                    th:unless="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
+                    class="movie-card-poster-placeholder">
+                    <span>Sin Foto</span>
+                  </div>
+                </div>
+                <div class="movie-card-info actor-card-info">
+                  <h3 class="movie-card-title" th:text="${credito.persona.nombre}">
+                    Nombre del Actor
+                  </h3>
+                  <p class="movie-card-character" th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}" th:text="${credito.personaje}">
+                    Personaje
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div th:if="${serie == null}" class="content-container">
+        <p style="text-align: center; margin-top: 50px">
+          Serie no encontrada.
+        </p>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"> </th:block>
+  </body>
+</html>
