@@ -29,7 +29,7 @@ public class PeliculasController {
         return "peliculas/peliculas"; 
     }
 
-    @GetMapping("/pelicula/{id}")
+    @GetMapping("/peliculas/{id}") 
     public String mostrarDetallePelicula(@PathVariable("id") Long id, Model model) {
         Optional<Pelicula> peliculaOptional = peliculaService.findById(id);
         if (peliculaOptional.isPresent()) {

@@ -33,4 +33,9 @@ public class Serie extends Media {
     public boolean estaEnEmision() {
         return anioFin == null;
     }
+
+    @Override
+    public String getTipo() {
+        return "serie";
+    }
 }

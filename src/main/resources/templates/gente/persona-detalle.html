@@ -7,7 +7,9 @@
     <title th:text="${pageTitle ?: 'Detalle de Persona - WatchList'}">
       Detalle de Persona
     </title>
-    <th:block th:fragment="pageCss"> </th:block>
+    <th:block th:fragment="pageCss"> 
+      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" /> 
+    </th:block>
   </head>
   <body>
     <section th:fragment="section">
@@ -15,7 +17,7 @@
         class="content-container persona-detalle-container"
         th:if="${persona != null}">
         <div class="persona-detalle-header">
-          <h1 th:text="${persona.nombre}">Nombre de la Persona</h1>
+          <h1 th:text="${persona.nombre}" class="page-title">Nombre de la Persona</h1> 
           <span
             class="persona-detalle-nacimiento"
             th:if="${persona.fechaNac != null}"
@@ -55,30 +57,30 @@
           
           <div th:if="${not #lists.isEmpty(persona.participaciones.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
             <h3 class="participacion-tipo-titulo">Como Director/a</h3>
-            <div class="movie-grid">
-              <div class="movie-card" th:each="credito : ${persona.participaciones.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+            <div class="card-grid"> 
+              <div class="content-card" th:each="credito : ${persona.participaciones.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección') and media != null]}"> 
                 <a
-                  th:href="@{/peliculas/{id}(id=${credito.media.id})}"
-                  class="movie-card-link"
+                  th:href="@{${credito.media.tipo == 'pelicula' ? '/peliculas' : '/serie'} + '/' + ${credito.media.id}}"
+                  class="content-card-link" 
                   th:title="${credito.media.titulo}">
-                  <div class="movie-card-poster-container">
+                  <div class="content-card-poster-container"> 
                     <img
                       th:if="${credito.media.urlImagen != null and not #strings.isEmpty(credito.media.urlImagen)}"
                       th:src="${credito.media.urlImagen}"
                       th:alt="${credito.media.titulo}"
-                      class="movie-card-poster"
+                      class="content-card-poster" 
                       loading="lazy" />
                     <div
                       th:unless="${credito.media.urlImagen != null and not #strings.isEmpty(credito.media.urlImagen)}"
-                      class="movie-card-poster-placeholder">
+                      class="content-card-poster-placeholder"> 
                       <span>Sin Póster</span>
                     </div>
                   </div>
-                  <div class="movie-card-info">
-                    <h3 class="movie-card-title" th:text="${credito.media.titulo}">
-                      Título de la Película
+                  <div class="content-card-info"> 
+                    <h3 class="content-card-title" th:text="${credito.media.titulo}"> 
+                      Título
                     </h3>
-                    <p class="movie-card-year" th:if="${credito.media.anioEstreno != null}" th:text="${credito.media.anioEstreno}">
+                    <p class="content-card-year" th:if="${credito.media.anioEstreno != null}" th:text="${credito.media.anioEstreno}"> 
                       Año
                     </p>
                   </div>
@@ -89,34 +91,34 @@
           
           <div th:if="${not #lists.isEmpty(persona.participaciones.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
             <h3 class="participacion-tipo-titulo">Como Actor/Actriz</h3>
-            <div class="movie-grid">
-              <div class="movie-card" th:each="credito : ${persona.participaciones.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))]}">
+            <div class="card-grid"> 
+              <div class="content-card" th:each="credito : ${persona.participaciones.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and media != null]}"> 
                 <a
-                  th:href="@{/peliculas/{id}(id=${credito.media.id})}"
-                  class="movie-card-link"
+                  th:href="@{${credito.media.tipo == 'pelicula' ? '/peliculas' : '/serie'} + '/' + ${credito.media.id}}"
+                  class="content-card-link" 
                   th:title="${credito.media.titulo}">
-                  <div class="movie-card-poster-container">
+                  <div class="content-card-poster-container"> 
                     <img
                       th:if="${credito.media.urlImagen != null and not #strings.isEmpty(credito.media.urlImagen)}"
                       th:src="${credito.media.urlImagen}"
                       th:alt="${credito.media.titulo}"
-                      class="movie-card-poster"
+                      class="content-card-poster" 
                       loading="lazy" />
                     <div
                       th:unless="${credito.media.urlImagen != null and not #strings.isEmpty(credito.media.urlImagen)}"
-                      class="movie-card-poster-placeholder">
+                      class="content-card-poster-placeholder"> 
                       <span>Sin Póster</span>
                     </div>
                   </div>
-                  <div class="movie-card-info">
-                    <h3 class="movie-card-title" th:text="${credito.media.titulo}">
-                      Título de la Película
+                  <div class="content-card-info"> 
+                    <h3 class="content-card-title" th:text="${credito.media.titulo}"> 
+                      Título
                     </h3>
-                    <div class="movie-card-credits">
-                      <p class="movie-card-year" th:if="${credito.media.anioEstreno != null}" th:text="${credito.media.anioEstreno}">
+                    <div class="content-card-credits"> 
+                      <p class="content-card-year" th:if="${credito.media.anioEstreno != null}" th:text="${credito.media.anioEstreno}"> 
                         Año
                       </p>
-                      <p class="movie-card-character" th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}" th:text="'como ' + ${credito.personaje}">
+                      <p class="content-card-character" th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}" th:text="'como ' + ${credito.personaje}"> 
                         como Personaje
                       </p>
                     </div>

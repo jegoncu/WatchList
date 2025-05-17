@@ -1,13 +1,13 @@
-/* Estilos para Movie Cards */
+/* Estilos para Tarjetas */
 
-.movie-grid {
+.card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
   padding: 0;
 }
 
-.movie-card {
+.content-card {
   background-color: var(--color-grey-2);
   border-radius: 6px;
   overflow: hidden;
@@ -17,12 +17,12 @@
   flex-direction: column;
 }
 
-.movie-card:hover {
+.content-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.movie-card-link {
+.content-card-link {
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -30,14 +30,14 @@
   height: 100%;
 }
 
-.movie-card-poster-container {
+.content-card-poster-container {
   width: 100%;
   padding-top: 150%;
   position: relative;
   background-color: var(--color-grey-1);
 }
 
-.movie-card-poster {
+.content-card-poster {
   position: absolute;
   top: 0;
   left: 0;
@@ -48,7 +48,7 @@
   border-top-right-radius: 6px;
 }
 
-.movie-card-poster-placeholder {
+.content-card-poster-placeholder {
   position: absolute;
   top: 0;
   left: 0;
@@ -64,7 +64,7 @@
   border-top-right-radius: 6px;
 }
 
-.movie-card-info {
+.content-card-info {
   padding: 10px;
   text-align: left;
   flex-grow: 1;
@@ -73,7 +73,7 @@
   justify-content: space-between;
 }
 
-.movie-card-title {
+.content-card-title {
   font-size: 0.95em;
   font-weight: 600;
   color: var(--color-grey-5);
@@ -81,12 +81,38 @@
   line-height: 1.3;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 2.6em;
 }
 
-.movie-card-year {
+.content-card-year {
   font-size: 0.8em;
   color: var(--color-grey-3);
+}
+
+.persona-card-info {
+  padding: 10px;
+  text-align: center; 
+}
+
+.persona-card-name {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--color-grey-5);
+  margin-bottom: 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; 
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6em; 
+}
+
+.persona-card-poster { 
+  object-position: top; 
 }

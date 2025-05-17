@@ -26,6 +26,8 @@ public class Pelicula extends Media {
     @Column(name = "url_trailer")
     private String urlTrailer;
     
-    public String getUrlTrailer() { return urlTrailer; }
-    public void setUrlTrailer(String urlTrailer) { this.urlTrailer = urlTrailer; }
+    @Override
+    public String getTipo() {
+        return "pelicula";
+    }
 }
