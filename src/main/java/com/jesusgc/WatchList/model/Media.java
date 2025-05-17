@@ -76,21 +76,14 @@ public abstract class Media {
     public void addCredito(Persona persona, String rol) {
         Credito credito = new Credito(this, persona, rol);
         this.creditos.add(credito);
-        // Asegúrate de que la relación bidireccional se establece también en Persona si es necesario
-        // persona.getParticipaciones().add(credito); // Si tienes esta relación en Persona
     }
 
     public void removeCredito(Credito credito) {
         this.creditos.remove(credito);
-        // Asegúrate de que la relación bidireccional se rompe también en Persona si es necesario
-        // if (credito.getPersona() != null) {
-        //     credito.getPersona().getParticipaciones().remove(credito);
-        // }
         credito.setMedia(null);
         credito.setPersona(null);
     }
 
-    // --- NUEVO MÉTODO ABSTRACTO ---
     public abstract String getTipo();
 
 }
