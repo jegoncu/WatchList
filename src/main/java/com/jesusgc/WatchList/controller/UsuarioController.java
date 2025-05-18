@@ -18,12 +18,16 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/login")
-    public String mostrarLogin() {
+    public String mostrarLogin(Model model) { 
+        model.addAttribute("pageTitle", "Iniciar Sesión - WatchList");
+        model.addAttribute("hideSidebar", true); 
         return "auth/login"; 
     }
 
     @GetMapping("/registro")
-    public String mostrarRegistro() {
+    public String mostrarRegistro(Model model) { 
+        model.addAttribute("pageTitle", "Registro - WatchList");
+        model.addAttribute("hideSidebar", true); 
         return "auth/registro"; 
     }
 
@@ -72,7 +76,7 @@ public class UsuarioController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/login"; 
     }
 
     @GetMapping("/inicio")
@@ -91,7 +95,9 @@ public class UsuarioController {
         }
 
         model.addAttribute("usuario", usuario);
-        model.addAttribute("currentPage", "inicio");
+        model.addAttribute("currentPage", "inicio"); 
+        model.addAttribute("pageTitle", "Inicio - WatchList");
+        model.addAttribute("hideSidebar", true); 
         return "inicio";
     }
 
@@ -107,7 +113,9 @@ public class UsuarioController {
             return "redirect:/login";
         }
         model.addAttribute("usuario", usuario);
-        model.addAttribute("currentPage", "perfil");
+        model.addAttribute("currentPage", "perfil"); 
+        model.addAttribute("pageTitle", "Mi Perfil - WatchList");
+        model.addAttribute("hideSidebar", true); 
         return "usuario/perfil"; 
     }
     
@@ -123,7 +131,9 @@ public class UsuarioController {
             return "redirect:/login";
         }
         model.addAttribute("usuario", usuario);
-        model.addAttribute("currentPage", "mis-listas");
+        model.addAttribute("currentPage", "mis-listas"); 
+        model.addAttribute("pageTitle", "Mis Listas - WatchList");
+        model.addAttribute("hideSidebar", true); 
         return "usuario/mis-listas"; 
     }
 }

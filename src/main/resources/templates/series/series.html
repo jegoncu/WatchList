@@ -6,13 +6,13 @@
   <head>
     <title>Series - WatchList</title>
     <th:block th:fragment="pageCss">
-      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" /> 
+      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
     </th:block>
   </head>
   <body>
     <section th:fragment="section">
       <div class="content-container">
-        <h1 class="page-title">Series</h1> 
+        <h1 class="page-title">Series</h1>
         <div th:if="${series == null or #lists.isEmpty(series)}">
           <p style="text-align: center">
             No hay series para mostrar en este momento.
@@ -20,31 +20,31 @@
         </div>
 
         <div
-          class="card-grid" 
+          class="card-grid"
           th:if="${series != null and not #lists.isEmpty(series)}">
-          <div class="content-card" th:each="serie : ${series}"> 
+          <div class="content-card" th:each="serie : ${series}">
             <a
-              th:href="@{/serie/{id}(id=${serie.id})}" 
-              class="content-card-link" 
+              th:href="@{/serie/{id}(id=${serie.id})}"
+              class="content-card-link"
               th:title="${serie.titulo}">
-              <div class="content-card-poster-container"> 
+              <div class="content-card-poster-container">
                 <img
                   th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
                   th:src="${serie.urlImagen}"
                   th:alt="${serie.titulo}"
-                  class="content-card-poster" 
+                  class="content-card-poster"
                   loading="lazy" />
                 <div
                   th:unless="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
-                  class="content-card-poster-placeholder"> 
+                  class="content-card-poster-placeholder">
                   <span>Sin Póster</span>
                 </div>
               </div>
-              <div class="content-card-info"> 
-                <h3 class="content-card-title" th:text="${serie.titulo}"> 
+              <div class="content-card-info">
+                <h3 class="content-card-title" th:text="${serie.titulo}">
                   Título de la Serie
                 </h3>
-                <p class="content-card-year" th:text="${serie.anioEstreno}"> 
+                <p class="content-card-year" th:text="${serie.anioEstreno}">
                   Año
                 </p>
               </div>

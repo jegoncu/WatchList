@@ -35,8 +35,9 @@ public class GenteController {
         if (personaOpt.isPresent()) {
             Persona persona = personaOpt.get();
             model.addAttribute("persona", persona);
-            model.addAttribute("currentPage", "gente");
+            model.addAttribute("currentPage", "gente"); 
             model.addAttribute("pageTitle", persona.getNombre() + " - WatchList");
+            model.addAttribute("hideSidebar", true);
             return "gente/persona-detalle";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Persona no encontrada");

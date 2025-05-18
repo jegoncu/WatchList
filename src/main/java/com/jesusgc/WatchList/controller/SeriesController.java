@@ -29,15 +29,16 @@ public class SeriesController {
         return "series/series"; 
     }
 
-    @GetMapping("/serie/{id}")
+    @GetMapping("/serie/{id}") 
     public String mostrarDetalleSerie(@PathVariable("id") Long id, Model model) {
         Optional<Serie> serieOptional = serieService.findById(id);
         if (serieOptional.isPresent()) {
             Serie serie = serieOptional.get();
             model.addAttribute("serie", serie);
             model.addAttribute("currentPage", "series"); 
-            model.addAttribute("pageTitle", serie.getTitulo() + " - WatchList"); 
-            return "series/serie-detalle"; 
+            model.addAttribute("pageTitle", serie.getTitulo() + " - WatchList");
+            model.addAttribute("hideSidebar", true); 
+            return "series/serie-detalle";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Serie no encontrada");
         }

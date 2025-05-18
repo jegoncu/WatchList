@@ -35,8 +35,9 @@ public class PeliculasController {
         if (peliculaOptional.isPresent()) {
             Pelicula pelicula = peliculaOptional.get();
             model.addAttribute("pelicula", pelicula);
-            model.addAttribute("currentPage", "peliculas");
+            model.addAttribute("currentPage", "peliculas"); 
             model.addAttribute("pageTitle", pelicula.getTitulo() + " - WatchList");
+            model.addAttribute("hideSidebar", true); 
             return "peliculas/pelicula-detalle"; 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Película no encontrada");

@@ -13,11 +13,17 @@
   </head>
   <body>
     <header th:replace="~{fragments/_header}"></header>
-    <main class="main-container">
-      <aside class="sidebar-container">
+    <main
+      class="main-container"
+      th:classappend="${hideSidebar != null and hideSidebar == true ? 'main-container-no-sidebar' : ''}">
+      <aside
+        class="sidebar-container"
+        th:if="${hideSidebar == null or hideSidebar == false}">
         <th:block th:replace="~{fragments/_sidebar}"></th:block>
       </aside>
-      <section class="content-container">
+      <section
+        class="content-container"
+        th:classappend="${hideSidebar != null and hideSidebar == true ? 'content-container-no-sidebar' : ''}">
         <th:block th:replace="${section}" />
       </section>
     </main>

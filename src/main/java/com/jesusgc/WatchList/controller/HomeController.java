@@ -15,7 +15,10 @@ public class HomeController {
         if (usuarioId != null) {
             return "redirect:/inicio";
         }
-        model.addAttribute("currentPage", "landing");
+        model.addAttribute("currentPage", "landing"); 
+        model.addAttribute("pageTitle", "Bienvenido a WatchList"); 
+        model.addAttribute("hideSidebar", true); 
         return "landing";
     }
+
 }

@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 public class ListasController {
     @GetMapping("/listas")
     public String mostrarListas(Model model) {
-        model.addAttribute("currentPage", "listas");
+        model.addAttribute("currentPage", "listas"); 
+        model.addAttribute("pageTitle", "Listas - WatchList");
+        model.addAttribute("hideSidebar", true); // AÑADIDO
         return "listas/listas"; 
     }
 }
