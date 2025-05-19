@@ -3,8 +3,8 @@ package com.jesusgc.WatchList.service;
 import com.jesusgc.WatchList.model.Usuario;
 import com.jesusgc.WatchList.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.mindrot.jbcrypt.BCrypt; 
 
 import java.util.Optional;
 
@@ -14,9 +14,6 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public Usuario registrar(String email, String nombre, String contrasenia, boolean esPublico) {
         if (usuarioRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("El email ya está registrado");
@@ -25,9 +22,13 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setNombre(nombre);
-        usuario.setContrasenia(passwordEncoder.encode(contrasenia));
+
+
+        String hashedPassword = BCrypt.hashpw(contrasenia, BCrypt.gensalt());
+        usuario.setContrasenia(hashedPassword);
+
         usuario.setEsPublico(esPublico);
-        usuario.setEsAdmin(false); 
+        usuario.setEsAdmin(false);
 
         return usuarioRepository.save(usuario);
     }
@@ -40,8 +41,7 @@ public class UsuarioService {
         }
 
         Usuario usuario = usuarioOpt.get();
-
-        if (!passwordEncoder.matches(contrasenia, usuario.getContrasenia())) {
+        if (!BCrypt.checkpw(contrasenia, usuario.getContrasenia())) {
             throw new IllegalArgumentException("Email o contraseña incorrectos");
         }
 
