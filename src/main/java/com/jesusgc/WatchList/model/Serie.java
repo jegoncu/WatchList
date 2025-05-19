@@ -6,17 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "serie")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class Serie extends Media {
 
     @Column(name = "anio_fin")
@@ -35,7 +33,7 @@ public class Serie extends Media {
     }
 
     @Override
-    public String getTipo() {
+    public String getMediaType() {
         return "serie";
     }
 }

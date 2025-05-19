@@ -179,3 +179,4 @@ Ref: media_genero.id_genero > genero.id_genero
 <!-- TODO: persona con más de un credito distinto -->
 <!-- TODO: investigar textura grainy para los fondos -->
 <!-- DONE: eliminar spring security y sustituir por otra libreria para encriptar las contraseñas -->
+<!-- TODO terminar estilos de las distintas vistas de Listas -->

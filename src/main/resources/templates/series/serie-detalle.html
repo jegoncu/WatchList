@@ -8,13 +8,15 @@
       Detalle de Serie
     </title>
     <th:block th:fragment="pageCss">
-      <link rel="stylesheet" th:href="@{/css/componentes/pelicula-detalle.css}" /> 
-      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" /> 
+      <link
+        rel="stylesheet"
+        th:href="@{/css/componentes/pelicula-detalle.css}" />
+      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
       <!-- TODO Mover .serie-detalle-temporadas a un CSS dedicado-->
-      <style> 
+      <style>
         .serie-detalle-temporadas {
-            font-size: 0.9em;
-            color: var(--color-grey-4);
+          font-size: 0.9em;
+          color: var(--color-grey-4);
         }
       </style>
     </th:block>
@@ -22,34 +24,49 @@
   <body>
     <section th:fragment="section">
       <div
-        class="content-container pelicula-detalle-container" 
+        class="content-container pelicula-detalle-container"
         th:if="${serie != null}">
         <div class="pelicula-detalle-header">
-          <h1 th:text="${serie.titulo}" class="page-title">Título de la Serie</h1>
+          <h1 th:text="${serie.titulo}" class="page-title">
+            Título de la Serie
+          </h1>
           <span
             class="pelicula-detalle-anio"
             th:if="${serie.anioEstreno != null}">
             <span th:text="${serie.anioEstreno}">Año de Estreno</span>
-            <span th:if="${serie.anioFin != null}" th:text="' - ' + ${serie.anioFin}"></span>
-            <span th:if="${serie.anioFin == null}" th:text="' - Presente'"></span>
+            <span
+              th:if="${serie.anioFin != null}"
+              th:text="' - ' + ${serie.anioFin}"></span>
+            <span
+              th:if="${serie.anioFin == null}"
+              th:text="' - Presente'"></span>
           </span>
-          <div th:if="${serie.nTemporadas != null}" class="serie-detalle-temporadas">
-            <span th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})"></span>
+          <div
+            th:if="${serie.nTemporadas != null}"
+            class="serie-detalle-temporadas">
+            <span
+              th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})"></span>
           </div>
         </div>
 
         <div class="pelicula-detalle-main-content">
           <div class="pelicula-detalle-poster-container">
-            <div class="poster-rating-badge" th:if="${serie.puntuacion != null}">
-              <span class="rating-number" th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}">0.0</span>
+            <div
+              class="poster-rating-badge"
+              th:if="${serie.puntuacion != null}">
+              <span
+                class="rating-number"
+                th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}"
+                >0.0</span
+              >
             </div>
-            
+
             <img
               th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
               th:src="${serie.urlImagen}"
               th:alt="${serie.titulo}"
-              class="pelicula-detalle-poster" 
-              loading="lazy"/>
+              class="pelicula-detalle-poster"
+              loading="lazy" />
             <div
               th:unless="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
               class="pelicula-detalle-poster-placeholder">
@@ -65,10 +82,12 @@
               <p>
                 <span
                   th:each="credito, iterStat : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'creador') or #strings.equalsIgnoreCase(rol, 'showrunner') or #strings.equalsIgnoreCase(rol, 'dirección'))]}">
-                  <a 
+                  <a
                     th:href="@{/gente/{id}(id=${credito.persona.id})}"
                     class="director-link"
-                    th:text="${credito.persona.nombre}">Nombre Creador/Director</a><th:block th:if="${!iterStat.last}">, </th:block>
+                    th:text="${credito.persona.nombre}"
+                    >Nombre Creador/Director</a
+                  ><th:block th:if="${!iterStat.last}">, </th:block>
                 </span>
               </p>
             </div>
@@ -92,7 +111,9 @@
               th:if="${not #lists.isEmpty(serie.plataformas)}">
               <h2>Disponible en</h2>
               <p class="plataforma-icons-list">
-                <span th:each="plataforma : ${serie.plataformas}" class="plataforma-icon">
+                <span
+                  th:each="plataforma : ${serie.plataformas}"
+                  class="plataforma-icon">
                   <img
                     th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
                     th:src="@{${plataforma.logo}}"
@@ -116,34 +137,41 @@
           <p th:text="${serie.sinopsis}">Descripción de la serie...</p>
         </div>
         <div
-          class="info-section pelicula-detalle-cast" 
+          class="info-section pelicula-detalle-cast"
           th:if="${not #lists.isEmpty(serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
           <h2>Reparto Principal</h2>
-          
-          <div class="card-grid actores-grid"> 
-            <div class="content-card actor-card" th:each="credito : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}"> 
+
+          <div class="card-grid actores-grid">
+            <div
+              class="content-card actor-card"
+              th:each="credito : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}">
               <a
                 th:href="@{/gente/{id}(id=${credito.persona.id})}"
-                class="content-card-link" 
+                class="content-card-link"
                 th:title="${credito.persona.nombre}">
-                <div class="content-card-poster-container"> 
+                <div class="content-card-poster-container">
                   <img
                     th:if="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
                     th:src="${credito.persona.fotoUrl}"
                     th:alt="${credito.persona.nombre}"
-                    class="content-card-poster persona-card-poster" 
+                    class="content-card-poster persona-card-poster"
                     loading="lazy" />
                   <div
                     th:unless="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
-                    class="content-card-poster-placeholder"> 
+                    class="content-card-poster-placeholder">
                     <span>Sin Foto</span>
                   </div>
                 </div>
-                <div class="content-card-info actor-card-info"> 
-                  <h3 class="content-card-title" th:text="${credito.persona.nombre}"> 
+                <div class="content-card-info actor-card-info">
+                  <h3
+                    class="content-card-title"
+                    th:text="${credito.persona.nombre}">
                     Nombre del Actor
                   </h3>
-                  <p class="content-card-character" th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}" th:text="${credito.personaje}"> 
+                  <p
+                    class="content-card-character"
+                    th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}"
+                    th:text="${credito.personaje}">
                     Personaje
                   </p>
                 </div>
@@ -151,11 +179,141 @@
             </div>
           </div>
         </div>
+
+        <!-- ****** INICIO: Sección para Añadir a Lista ****** -->
+        <div
+          th:if="${session.usuarioId != null and misListas != null}"
+          class="add-to-list-section info-section mt-4">
+          <h2>Añadir a Mis Listas</h2>
+
+          <div th:if="${misListas.isEmpty()}" class="mt-2">
+            <p>
+              No tienes listas creadas.
+              <a
+                th:href="@{/listas/nueva}"
+                class="btn btn-sm btn-outline-primary"
+                >Crea una lista primero</a
+              >.
+            </p>
+          </div>
+
+          <form
+            th:unless="${misListas.isEmpty()}"
+            th:action="@{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${serie.id}, listaId='__LISTA_ID__')}"
+            method="post"
+            id="addToListFormSerie"
+            class="form-inline mt-2">
+            <div class="form-group mr-2 mb-2">
+              <label for="listaSeleccionadaSerie" class="sr-only"
+                >Selecciona una lista:</label
+              >
+              <select
+                id="listaSeleccionadaSerie"
+                name="listaId"
+                class="form-control form-control-sm"
+                required>
+                <option value="" disabled selected>
+                  Selecciona una lista...
+                </option>
+                <option
+                  th:each="lista : ${misListas}"
+                  th:value="${lista.id}"
+                  th:text="${lista.titulo}">
+                  Nombre de la Lista
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mb-2">
+              Añadir a Lista
+            </button>
+          </form>
+          <script th:inline="javascript" class="dynamic-script">
+            const formSerie = document.getElementById("addToListFormSerie");
+            console.log("Script loaded. formSerie element:", formSerie);
+
+            if (formSerie) {
+              const selectSerie = document.getElementById(
+                "listaSeleccionadaSerie"
+              );
+              console.log("selectSerie element:", selectSerie);
+
+              if (!selectSerie) {
+                console.error(
+                  "CRITICAL: Elemento select con ID 'listaSeleccionadaSerie' no encontrado."
+                );
+              } else {
+                formSerie.addEventListener("submit", function (event) {
+                  console.log(
+                    "--- Form submit event triggered for addToListFormSerie ---"
+                  );
+                  event.preventDefault();
+                  console.log("Default form submission prevented.");
+
+                  const selectedValue = selectSerie.value;
+                  console.log(
+                    "Selected list ID (selectSerie.value):",
+                    selectedValue
+                  );
+
+                  if (selectedValue && selectedValue !== "") {
+                    let originalAction = formSerie.getAttribute("action");
+                    console.log(
+                      "Original form action from getAttribute:",
+                      originalAction
+                    );
+                    const placeholder = "LISTA_ID";
+
+                    if (originalAction.includes(placeholder)) {
+                      let newAction = originalAction.replace(
+                        placeholder,
+                        selectedValue
+                      );
+                      console.log("New form action after replace:", newAction);
+
+                      formSerie.setAttribute("action", newAction);
+                      console.log(
+                        "Form action after setAttribute (formSerie.action):",
+                        formSerie.action
+                      );
+                      console.log(
+                        "Form action after setAttribute (getAttribute):",
+                        formSerie.getAttribute("action")
+                      );
+
+                      console.log(
+                        "Attempting to submit form programmatically..."
+                      );
+                      formSerie.submit();
+                    } else {
+                      console.error(
+                        "CRITICAL: Placeholder '" +
+                          placeholder +
+                          "' not found in original action URL:",
+                        originalAction
+                      );
+                      alert(
+                        "Error de configuración del formulario. No se pudo actualizar la URL."
+                      );
+                    }
+                  } else {
+                    alert("Por favor, selecciona una lista.");
+                    console.log(
+                      "List not selected, alert shown. Form not submitted."
+                    );
+                  }
+                });
+                console.log("Submit event listener attached to formSerie.");
+              }
+            } else {
+              console.error(
+                "CRITICAL: Formulario con ID 'addToListFormSerie' no encontrado al cargar el script."
+              );
+            }
+          </script>
+        </div>
       </div>
       <div th:if="${serie == null}" class="content-container">
-        <p style="text-align: center; margin-top: 50px">
-          Serie no encontrada.
-        </p>
+        <p style="text-align: center; margin-top: 50px">Serie no encontrada.</p>
       </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>

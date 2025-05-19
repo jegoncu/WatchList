@@ -72,7 +72,6 @@ public abstract class Media {
     @Builder.Default
     private Set<Genero> generos = new HashSet<>();
 
-    // --- Métodos existentes ---
     public void addCredito(Persona persona, String rol) {
         Credito credito = new Credito(this, persona, rol);
         this.creditos.add(credito);
@@ -84,6 +83,6 @@ public abstract class Media {
         credito.setPersona(null);
     }
 
-    public abstract String getTipo();
+    public abstract String getMediaType();
 
 }

@@ -4,13 +4,40 @@
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
   <head>
-    <title>Series - WatchList</title>
-    <th:block th:fragment="pageCss"> </th:block>
+    <title th:text="${tituloPagina ?: 'Listas Públicas'} + ' - WatchList'">Listas Públicas - WatchList</title>
+    <th:block th:fragment="pageCss">
+    </th:block>
   </head>
   <body>
     <section>
-      <h1>Listas</h1>
-      <p>Listado de listas aparecerá aquí.</p>
+      <h1 th:text="${tituloPagina ?: 'Listas Públicas'}">Listas Públicas</h1>
+
+      <div th:if="${listas == null or listas.isEmpty()}">
+        <p>Actualmente no hay listas públicas disponibles.</p>
+      </div>
+
+      <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}"> 
+        <div class="content-card" th:each="lista : ${listas}">
+          <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
+            <div class="content-card-poster-container">
+              <div class="content-card-poster-placeholder">
+                <span th:text="${lista.titulo}">Título Lista</span>
+              </div>
+            </div>
+            <div class="content-card-info">
+              <h3 class="content-card-title" th:text="${lista.titulo}">Título de la Lista</h3>
+              <div class="content-card-details">
+                <p th:if="${lista.usuario != null}">
+                  Por: <span th:text="${lista.usuario.nombre}">Usuario</span>
+                </p>
+                <p>
+                  <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
   </body>

@@ -8,8 +8,10 @@
       Detalle de Película
     </title>
     <th:block th:fragment="pageCss">
-      <link rel="stylesheet" th:href="@{/css/componentes/pelicula-detalle.css}" /> 
-      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" /> 
+      <link
+        rel="stylesheet"
+        th:href="@{/css/componentes/pelicula-detalle.css}" />
+      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
     </th:block>
   </head>
   <body>
@@ -18,7 +20,9 @@
         class="content-container pelicula-detalle-container"
         th:if="${pelicula != null}">
         <div class="pelicula-detalle-header">
-          <h1 th:text="${pelicula.titulo}" class="page-title">Título de la Película</h1> 
+          <h1 th:text="${pelicula.titulo}" class="page-title">
+            Título de la Película
+          </h1>
           <span
             class="pelicula-detalle-anio"
             th:if="${pelicula.anioEstreno != null}"
@@ -29,10 +33,16 @@
 
         <div class="pelicula-detalle-main-content">
           <div class="pelicula-detalle-poster-container">
-            <div class="poster-rating-badge" th:if="${pelicula.puntuacion != null}">
-              <span class="rating-number" th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}">0.0</span>
+            <div
+              class="poster-rating-badge"
+              th:if="${pelicula.puntuacion != null}">
+              <span
+                class="rating-number"
+                th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}"
+                >0.0</span
+              >
             </div>
-            
+
             <img
               th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
               th:src="${pelicula.urlImagen}"
@@ -46,7 +56,6 @@
           </div>
 
           <div class="pelicula-detalle-info">
-            
             <div
               class="info-section"
               th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
@@ -54,10 +63,12 @@
               <p>
                 <span
                   th:each="credito, iterStat : ${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
-                  <a 
+                  <a
                     th:href="@{/gente/{id}(id=${credito.persona.id})}"
                     class="director-link"
-                    th:text="${credito.persona.nombre}">Nombre Director</a><th:block th:if="${!iterStat.last}">, </th:block>
+                    th:text="${credito.persona.nombre}"
+                    >Nombre Director</a
+                  ><th:block th:if="${!iterStat.last}">, </th:block>
                 </span>
               </p>
             </div>
@@ -81,7 +92,9 @@
               th:if="${not #lists.isEmpty(pelicula.plataformas)}">
               <h2>Disponible en</h2>
               <p class="plataforma-icons-list">
-                <span th:each="plataforma : ${pelicula.plataformas}" class="plataforma-icon">
+                <span
+                  th:each="plataforma : ${pelicula.plataformas}"
+                  class="plataforma-icon">
                   <img
                     th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
                     th:src="@{${plataforma.logo}}"
@@ -118,40 +131,149 @@
         </div>
 
         <div
-          class="info-section pelicula-detalle-cast" 
+          class="info-section pelicula-detalle-cast"
           th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
           <h2>Reparto Principal</h2>
-          
-          <div class="card-grid actores-grid"> 
-            <div class="content-card actor-card" th:each="credito : ${pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}"> 
+
+          <div class="card-grid actores-grid">
+            <div
+              class="content-card actor-card"
+              th:each="credito : ${pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}">
               <a
                 th:href="@{/gente/{id}(id=${credito.persona.id})}"
-                class="content-card-link" 
+                class="content-card-link"
                 th:title="${credito.persona.nombre}">
-                <div class="content-card-poster-container"> 
+                <div class="content-card-poster-container">
                   <img
                     th:if="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
                     th:src="${credito.persona.fotoUrl}"
                     th:alt="${credito.persona.nombre}"
-                    class="content-card-poster persona-card-poster" 
+                    class="content-card-poster persona-card-poster"
                     loading="lazy" />
                   <div
                     th:unless="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
-                    class="content-card-poster-placeholder"> 
+                    class="content-card-poster-placeholder">
                     <span>Sin Foto</span>
                   </div>
                 </div>
-                <div class="content-card-info actor-card-info"> 
-                  <h3 class="content-card-title" th:text="${credito.persona.nombre}"> 
+                <div class="content-card-info actor-card-info">
+                  <h3
+                    class="content-card-title"
+                    th:text="${credito.persona.nombre}">
                     Nombre del Actor
                   </h3>
-                  <p class="content-card-character" th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}" th:text="${credito.personaje}">
+                  <p
+                    class="content-card-character"
+                    th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}"
+                    th:text="${credito.personaje}">
                     Personaje
                   </p>
                 </div>
               </a>
             </div>
           </div>
+        </div>
+
+        <!-- ****** INICIO: Sección para Añadir a Lista ****** -->
+        <div
+          th:if="${session.usuarioId != null and misListas != null}"
+          class="add-to-list-section info-section mt-4">
+          <!-- mt-4 para un poco de margen superior -->
+          <h2>Añadir a Mis Listas</h2>
+
+          <div th:if="${misListas.isEmpty()}" class="mt-2">
+            <p>
+              No tienes listas creadas.
+              <a
+                th:href="@{/listas/nueva}"
+                class="btn btn-sm btn-outline-primary"
+                >Crea una lista primero</a
+              >.
+            </p>
+          </div>
+
+          <form
+            th:unless="${misListas.isEmpty()}"
+            th:action="@{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${pelicula.id}, listaId='__LISTA_ID__')}"
+            method="post"
+            id="addToListFormPelicula"
+            class="form-inline mt-2">
+            <div class="form-group mr-2 mb-2">
+              <label for="listaSeleccionadaPelicula" class="sr-only"
+                >Selecciona una lista:</label
+              >
+              <select
+                id="listaSeleccionadaPelicula"
+                name="listaId"
+                class="form-control form-control-sm"
+                required>
+                <option value="" disabled selected>
+                  Selecciona una lista...
+                </option>
+                <option
+                  th:each="lista : ${misListas}"
+                  th:value="${lista.id}"
+                  th:text="${lista.titulo}">
+                  Nombre de la Lista
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mb-2">
+              Añadir a Lista
+            </button>
+          </form>
+          <script th:inline="javascript" class="dynamic-script">
+            const formPelicula = document.getElementById(
+              "addToListFormPelicula"
+            );
+
+            if (formPelicula) {
+              const selectPelicula = document.getElementById(
+                "listaSeleccionadaPelicula"
+              );
+
+              if (!selectPelicula) {
+                console.error(
+                  "CRITICAL: Elemento select con ID 'listaSeleccionadaPelicula' no encontrado."
+                );
+              } else {
+                formPelicula.addEventListener("submit", function (event) {
+                  event.preventDefault();
+
+                  const selectedValue = selectPelicula.value;
+
+                  if (selectedValue && selectedValue !== "") {
+                    let originalAction = formPelicula.getAttribute("action");
+
+                    const placeholder = "LISTA_ID";
+
+                    if (originalAction.includes(placeholder)) {
+                      let newAction = originalAction.replace(
+                        placeholder,
+                        selectedValue
+                      );
+
+                      formPelicula.setAttribute("action", newAction);
+                      formPelicula.submit();
+                    } else {
+                      console.error(
+                        "CRITICAL: Placeholder '" +
+                          placeholder +
+                          "' not found in original action URL:",
+                        originalAction
+                      );
+                      alert(
+                        "Error de configuración del formulario. No se pudo actualizar la URL."
+                      );
+                    }
+                  } else {
+                    alert("Por favor, selecciona una lista.");
+                  }
+                });
+              }
+            } else {
+            }
+          </script>
         </div>
       </div>
       <div th:if="${pelicula == null}" class="content-container">

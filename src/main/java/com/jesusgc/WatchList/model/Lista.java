@@ -42,7 +42,11 @@ public class Lista {
 
     @ManyToMany
     @Builder.Default
-    @JoinTable(name = "lista_media", joinColumns = @JoinColumn(name = "id_lista"), inverseJoinColumns = @JoinColumn(name = "id_media"))
+    @JoinTable(
+        name = "lista_media",
+        joinColumns = @JoinColumn(name = "id_lista"),
+        inverseJoinColumns = @JoinColumn(name = "id_media")
+    )
     private Set<Media> medias = new HashSet<>();
 
     public void addMedia(Media media) {

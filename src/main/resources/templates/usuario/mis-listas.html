@@ -4,20 +4,59 @@
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
   <head>
-    <title>Mis Listas - WatchList</title>
-    <th:block th:fragment="pageCss"> </th:block>
+    <title th:text="${tituloPagina ?: 'Mis Listas'} + ' - WatchList'">Mis Listas - WatchList</title>
+    <th:block th:fragment="pageCss">
+    </th:block>
   </head>
   <body>
     <section>
-      <h1>Mis Listas</h1>
-      <div th:if="${usuario}">
+      <div class="page-header">
+        <h1 th:text="${tituloPagina ?: 'Mis Listas'}">Mis Listas</h1>
+        <a th:href="@{/listas/nueva}" class="btn btn-yellow btn-big">Crear Nueva Lista</a> 
+      </div>
+
+      <div th:if="${mensajeExito}" class="alert alert-success mt-2" role="alert">
+        <p th:text="${mensajeExito}"></p>
+      </div>
+      <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
+        <p th:text="${error}"></p>
+      </div>
+
+      <div th:if="${listas == null or listas.isEmpty()}">
+        <p>Aún no has creado ninguna lista.</p>
         <p>
-          Aquí se mostrarán las listas creadas por
-          <span th:text="${usuario.nombre}"></span>.
+          <a th:href="@{/listas/nueva}">¡Crea tu primera lista ahora!</a>
         </p>
       </div>
-      <div th:unless="${usuario}">
-        <p>Debes iniciar sesión para ver tus listas.</p>
+
+      <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}"> 
+        <div class="content-card" th:each="lista : ${listas}">
+          <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
+            <div class="content-card-poster-container">
+              <div class="content-card-poster-placeholder">
+                <span th:text="${lista.titulo}">Título Lista</span>
+              </div>
+            </div>
+            <div class="content-card-info">
+              <h3 class="content-card-title" th:text="${lista.titulo}">Título de la Lista</h3>
+              <div class="content-card-details">
+                <p>
+                  <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
+                </p>
+                <p>
+                  <span th:if="${lista.esPublica}" class="badge badge-info">Pública</span>
+                  <span th:unless="${lista.esPublica}" class="badge badge-secondary">Privada</span>
+                </p>
+              </div>
+            </div>
+          </a>
+          <div class="content-card-actions"> 
+             <a th:href="@{/listas/{id}/editar-info(id=${lista.id})}" class="btn btn-blue btn-small">Editar Info</a>
+            <form th:action="@{/listas/{id}/eliminar(id=${lista.id})}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta lista?');" style="display: inline-block;">
+              <button type="submit" class="btn btn-red btn-small">Eliminar</button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+  lang="es"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  <head>
+    <title th:text="${lista.titulo} + ' - WatchList'">Detalle de Lista - WatchList</title>
+    <th:block th:fragment="pageCss">
+    </th:block>
+  </head>
+  <body>
+    <section>
+      <div class="page-header">
+        <h1 th:text="${lista.titulo}">Título de la Lista</h1>
+        <div>
+            <span th:if="${lista.esPublica}" class="badge badge-info">Pública</span>
+            <span th:unless="${lista.esPublica}" class="badge badge-secondary">Privada</span>
+        </div>
+      </div>
+
+      <div th:if="${mensajeExito}" class="alert alert-success mt-2" role="alert">
+        <p th:text="${mensajeExito}"></p>
+      </div>
+      <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
+        <p th:text="${error}"></p>
+      </div>
+
+      <hr />
+      <h2>Contenido de la Lista</h2>
+
+      <div th:if="${lista.medias == null or lista.medias.isEmpty()}">
+        <p>Esta lista aún no tiene películas ni series.</p>
+        <p>
+          Puedes añadir contenido navegando a la página de una película o serie y
+          seleccionando "Añadir a lista".
+        </p>
+      </div>
+      <div class="card-grid" th:if="${lista.medias != null and not lista.medias.isEmpty()}">
+        <div class="content-card" th:each="media : ${lista.medias}">
+          <a th:href="${media.mediaType == 'pelicula' ? '/peliculas/' + media.id : '/series/' + media.id}" class="content-card-link" th:title="${media.titulo}">
+            <div class="content-card-poster-container">
+              <img
+                th:if="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
+                th:src="${media.urlImagen}"
+                th:alt="${media.titulo}"
+                class="content-card-poster" 
+                loading="lazy" />
+              <div
+                th:unless="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
+                class="content-card-poster-placeholder">
+                <span>Sin Póster</span>
+              </div>
+            </div>
+            <div class="content-card-info">
+              <h3 class="content-card-title" th:text="${media.titulo}">Título Media</h3>
+              <p class="content-card-year" th:if="${media.anioEstreno != null}" th:text="${media.anioEstreno}">Año</p>
+            </div>
+          </a>
+          <form class="remove-item-form"
+                th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}" 
+                method="post" 
+                onsubmit="return confirm('¿Estás seguro de que quieres quitar este ítem de la lista?');">
+            <button type="submit" class="remove-item-btn" title="Quitar de la lista">&times;</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="list-actions mt-4">
+        <a th:href="@{/mis-listas}" class="btn btn-grey">Volver a Mis Listas</a>
+      </div>
+    </section>
+
+    <th:block th:fragment="pageScript"></th:block>
+  </body>
+</html>
