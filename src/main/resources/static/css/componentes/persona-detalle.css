@@ -1,5 +1,3 @@
-/* Estilos para Persona Detalle */
-
 .persona-detalle-container {
   padding-top: 20px;
   padding-bottom: 40px;
@@ -40,7 +38,7 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  object-position: top; /* Para mostrar la cara */
+  object-position: top; 
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -91,7 +89,6 @@
   padding-bottom: 5px;
 }
 
-/* Ajuste específico para las tarjetas en la vista de detalle de persona */
 .persona-detalle-filmografia .movie-grid {
   margin-bottom: 30px;
 }
@@ -108,7 +105,6 @@
   gap: 2px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .persona-detalle-main-content {
     flex-direction: column;

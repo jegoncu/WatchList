@@ -26,17 +26,14 @@ select {
   margin: 0;
 }
 
-/* Estilos para el selector de fecha */
 input[type="date"] {
   color-scheme: dark; 
 }
 
-/* Estilizar el icono del selector de fecha en navegadores WebKit */
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-/* Desactivar el estilo por defecto de los navegadores para el deautofill */
 input:-webkit-autofill {
   appearance: none !important;
   background-color: var(--color-grey-1) !important;
@@ -45,7 +42,6 @@ input:-webkit-autofill {
   transition-delay: 9999s;
 }
 
-/* Estilo para selector multiple de checkboxes (genero y plataforma) */
 .checkbox-list {
   display: flex;
   flex-wrap: wrap;
@@ -133,7 +129,6 @@ input:-webkit-autofill {
   background-color: var(--color-grey-2);
 }
 
-/* Estilos para  Personas y Roles */
 .persona-rol-fila {
   display: flex;
   align-items: center;
@@ -159,7 +154,6 @@ input:-webkit-autofill {
   margin-top: 10px;
 }
 
-/* Estilos para etiquetas de formulario y mensajes de error */
 form label {
   display: block; 
   margin-bottom: 5px;

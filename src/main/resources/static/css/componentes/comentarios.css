@@ -1,0 +1,155 @@
+.comentarios-section,
+.nuevo-comentario-section {
+  margin-top: 30px; 
+  margin-bottom: 30px; 
+}
+
+.comentarios-section h2,
+.nuevo-comentario-section h2 {
+  margin-bottom: 1rem;
+  color: var(--color-yellow-2); 
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-grey-2); 
+}
+
+.comentario-mensaje {
+  padding: 10px 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px; 
+  font-size: 0.9em;
+}
+.comentario-mensaje-exito {
+  color: var(--color-green-1); 
+  background-color: var(--color-green-4); 
+  border-color: var(--color-green-2); 
+}
+.comentario-mensaje-error {
+  color: var(--color-red-1); 
+  background-color: var(--color-red-4); 
+  border-color: var(--color-red-2); 
+}
+
+.comentarios-vacio-mensaje {
+  margin-top: 15px;
+  color: var(--color-grey-4);
+}
+
+.comentarios-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+.comentario-item {
+  background-color: var(--color-grey-2); 
+  border: 1px solid var(--color-grey-3); 
+  border-radius: 4px; 
+  padding: 15px;
+  margin-bottom: 15px; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1)
+}
+
+.comentario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comentario-usuario {
+  font-weight: 600; 
+  color: var(--color-grey-5); 
+}
+
+.comentario-fecha {
+  font-size: 0.85em;
+  color: var(--color-grey-4);
+}
+
+.comentario-puntuacion {
+  margin-bottom: 10px;
+}
+
+.comentario-puntuacion .star {
+  font-size: 1.2em;
+  color: var(--color-grey-3); 
+  margin-right: 2px;
+}
+
+.comentario-puntuacion .star.filled {
+  color: var(--color-yellow-2); 
+}
+
+.comentario-texto {
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: var(--color-grey-4); 
+  white-space: pre-wrap;
+  word-wrap: break-word; 
+}
+
+.nuevo-comentario-section form {
+  margin-top: 15px;
+}
+
+.nuevo-comentario-section form div {
+  margin-bottom: 20px;
+}
+
+.rating-stars {
+  display: inline-flex; 
+  flex-direction: row-reverse;
+  justify-content: flex-end; 
+  margin-top: 5px; 
+}
+
+.rating-stars input[type="radio"] {
+  display: none;
+}
+
+.rating-stars label {
+  font-size: 1.8em;
+  color: var(--color-grey-3); 
+  cursor: pointer;
+  padding: 0 0.05em; 
+  transition: color 0.2s ease-in-out;
+  font-weight: normal;
+  display: inline;
+  margin-bottom: 0; 
+}
+
+.rating-stars input[type="radio"]:checked ~ label,
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+  color: var(--color-yellow-2); 
+}
+
+.comentario-login-mensaje {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--color-grey-2);
+  border: 1px solid var(--color-grey-3);
+  border-radius: 4px;
+  text-align: center;
+}
+.comentario-login-mensaje p {
+  color: var(--color-grey-4);
+}
+.comentario-login-mensaje a {
+  color: var(--color-yellow-2);
+  font-weight: 500;
+}
+
+.mensaje-no-encontrado {
+  text-align: center;
+  margin-top: 50px;
+  color: var(--color-grey-4);
+  font-size: 1.1em;
+}
+
+.nuevo-comentario-section .field-error p {
+  margin-top: 2px;
+  font-size: 0.85em;
+}

@@ -1,6 +1,3 @@
-/* ----------------------------------------------- */
-/* Estilos para el header */
-
 .header-container {
   display: flex;
   align-items: center;
@@ -40,23 +37,16 @@
   width: 100%;
 }
 
-/* ----------------------------------------------- */
-/* Estilos para el main */
-
 .main-container {
   flex: 1;
-  overflow-y: auto; /* esto es necesario aquí o en los hijos? */
+  overflow-y: auto; 
   display: flex;
   flex-direction: row;
-  min-height: 0; /* Esto es útil para que flexbox funcione bien en contenedores anidados con scroll */
-  /* height: calc(100vh - 120px); */ 
+  min-height: 0; 
 }
 
-/* ----------------------------------------------- */
-/* Estilos para el sidebar */
-
 .sidebar-container {
-  width: 25%; /* susittuir con flex-basis?*/
+  width: 25%; 
   min-width: 250px;
   max-width: 350px;
   background-color: var(--color-grey-1);
@@ -85,24 +75,17 @@
   margin-bottom: 0.5rem;
 }
 
-/* ----------------------------------------------- */
-/* Estilos para el contenido principal */
-
 .content-container {
   flex: 1; 
   padding: 1.5rem;
   overflow-y: auto;
 }
 
-/* sidebar está oculto */
 .content-container.content-container-no-sidebar {
   margin-left: 0; 
   width: 100%; 
-  max-width: 100%; /* O 'none'? */
+  max-width: 100%; 
 }
-
-/* ----------------------------------------------- */
-/* Estilos para el footer */
 
 .footer-container-1 {
   display: flex;

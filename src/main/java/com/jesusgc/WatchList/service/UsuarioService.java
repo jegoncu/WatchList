@@ -4,7 +4,7 @@ import com.jesusgc.WatchList.model.Usuario;
 import com.jesusgc.WatchList.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.mindrot.jbcrypt.BCrypt; 
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Optional;
 
@@ -22,7 +22,6 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setNombre(nombre);
-
 
         String hashedPassword = BCrypt.hashpw(contrasenia, BCrypt.gensalt());
         usuario.setContrasenia(hashedPassword);

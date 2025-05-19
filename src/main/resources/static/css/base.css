@@ -7,7 +7,6 @@
   list-style: none;
   font-family: "Montserrat", sans-serif;
 
-  /* Para Firefox Scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--color-grey-3) var(--color-grey-2);
 }

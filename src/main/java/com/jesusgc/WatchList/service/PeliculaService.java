@@ -93,7 +93,8 @@ public class PeliculaService {
                 Long personaId = entry.getKey();
                 String rol = entry.getValue();
 
-                Persona persona = personaRepository.findById(personaId).orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
+                Persona persona = personaRepository.findById(personaId)
+                        .orElseThrow(() -> new IllegalArgumentException("Persona no encontrada con ID: " + personaId));
 
                 Credito novoCredito = new Credito(pelicula, persona, rol);
                 pelicula.getCreditos().add(novoCredito);

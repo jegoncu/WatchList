@@ -1,7 +1,7 @@
 package com.jesusgc.WatchList.controller;
 
 import com.jesusgc.WatchList.model.Usuario;
-import com.jesusgc.WatchList.service.UsuarioService; // Importar UsuarioService
+import com.jesusgc.WatchList.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService; // Inyectar UsuarioService
+    private UsuarioService usuarioService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
@@ -27,31 +27,24 @@ public class UsuarioController {
     @PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute Usuario usuario, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            // Añade el objeto usuario de nuevo al modelo si hay errores de validación
-            // para que el formulario pueda repintar los valores ingresados.
             model.addAttribute("usuario", usuario);
             return "auth/registro";
         }
         try {
-            // Asumimos que el objeto Usuario del formulario tiene email, nombre, contrasenia.
-            // El valor de esPublico podría venir del formulario o tener un valor por defecto.
-            // Si no viene del formulario, asegúrate de establecerlo.
-            // Por ejemplo, si tienes un campo checkbox llamado 'esPublico':
-            // usuarioService.registrar(usuario.getEmail(), usuario.getNombre(), usuario.getContrasenia(), usuario.isEsPublico());
-            // O si siempre es público por defecto al registrarse:
-            usuarioService.registrar(usuario.getEmail(), usuario.getNombre(), usuario.getContrasenia(), true); // Ajusta 'esPublico' según necesidad
+            usuarioService.registrar(usuario.getEmail(), usuario.getNombre(), usuario.getContrasenia(), true);
             return "redirect:/login?registroExitoso";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("usuario", usuario); // Devolver el usuario para repintar el formulario
+            model.addAttribute("usuario", usuario);
             return "auth/registro";
         }
     }
 
     @GetMapping("/login")
-    public String mostrarFormularioLogin(Model model, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout, @RequestParam(value = "registroExitoso", required = false) String registroExitoso) {
+    public String mostrarFormularioLogin(Model model, @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "registroExitoso", required = false) String registroExitoso) {
         if (error != null) {
-            // El mensaje de error ahora vendrá de la excepción o se establecerá manualmente
             model.addAttribute("error", "Credenciales incorrectas. Por favor, inténtalo de nuevo.");
         }
         if (logout != null) {
@@ -64,14 +57,13 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public String loginUsuario(@RequestParam String email, @RequestParam String contrasenia, HttpSession session, Model model) {
+    public String loginUsuario(@RequestParam String email, @RequestParam String contrasenia, HttpSession session,
+            Model model) {
         try {
             Usuario usuario = usuarioService.login(email, contrasenia);
-            // Establecer atributos de sesión que usa _header.html
             session.setAttribute("usuarioId", usuario.getId());
             session.setAttribute("usuarioNombre", usuario.getNombre());
             session.setAttribute("usuarioEsAdmin", usuario.getEsAdmin());
-            // También puedes guardar el objeto completo si lo necesitas en otras partes
             session.setAttribute("usuarioLogueado", usuario);
 
             if (usuario.getEsAdmin() != null && usuario.getEsAdmin()) {

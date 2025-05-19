@@ -12,6 +12,7 @@
         rel="stylesheet"
         th:href="@{/css/componentes/pelicula-detalle.css}" />
       <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+      <link rel="stylesheet" th:href="@{/css/componentes/comentarios.css}" />
     </th:block>
   </head>
   <body>
@@ -177,8 +178,7 @@
         <!-- ****** INICIO: Sección para Añadir a Lista ****** -->
         <div
           th:if="${session.usuarioId != null and misListas != null}"
-          class="add-to-list-section info-section mt-4">
-          <!-- mt-4 para un poco de margen superior -->
+          class="add-to-list-section info-section"> 
           <h2>Añadir a Mis Listas</h2>
 
           <div th:if="${misListas.isEmpty()}" class="mt-2">
@@ -276,13 +276,76 @@
             }
           </script>
         </div>
+
+        <div class="info-section comentarios-section">
+          <h2>Comentarios</h2>
+          <div th:if="${exitoComentario}" class="comentario-mensaje comentario-mensaje-exito">
+            <span th:text="${exitoComentario}"></span>
+          </div>
+          <div th:if="${errorComentario}" class="comentario-mensaje comentario-mensaje-error">
+            <span th:text="${errorComentario}"></span>
+          </div>
+
+          <div th:if="${#lists.isEmpty(comentarios)}" class="comentarios-vacio-mensaje">
+            <p>Aún no hay comentarios para esta película. ¡Sé el primero!</p>
+          </div>
+          <ul th:unless="${#lists.isEmpty(comentarios)}" class="comentarios-list">
+            <li th:each="comentario : ${comentarios}" class="comentario-item">
+              <div class="comentario-header">
+                <strong th:text="${comentario.usuario.nombre}" class="comentario-usuario">Usuario</strong>
+                <span class="comentario-fecha" th:text="${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}">Fecha</span>
+              </div>
+              <div class="comentario-puntuacion">
+                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                      class="star"
+                      th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
+                <span class="sr-only" th:text="${comentario.puntuacion} + '/5'"></span>
+              </div>
+              <p th:text="${comentario.texto}" class="comentario-texto"></p>
+            </li>
+          </ul>
+        </div>
+        <div th:if="${session.usuarioId != null}" class="info-section nuevo-comentario-section">
+          <h2>Deja tu Comentario</h2>
+          <form th:action="@{/peliculas/{peliculaId}/comentar(peliculaId=${pelicula.id})}"
+                method="post"
+                th:object="${nuevoComentario}">
+                
+            <div> 
+              <label for="comentarioTexto">Tu opinión:</label>
+              <textarea id="comentarioTexto" th:field="*{texto}" rows="4" required="required" th:value="${textoPrevio ?: ''}"></textarea>
+              <div th:if="${#fields.hasErrors('texto')}" class="field-error">
+                  <p th:each="err : ${#fields.errors('texto')}" th:text="${err}"></p>
+              </div>
+            </div>
+
+            <div class="form-rating-group"> 
+              <label for="star1">Puntuación (1-5):</label> 
+              <div class="rating-stars">
+                  <input type="radio" id="star5" name="puntuacion" value="5" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 5}" required="required"/><label for="star5" title="5 estrellas">&#9733;</label>
+                  <input type="radio" id="star4" name="puntuacion" value="4" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 4}"/><label for="star4" title="4 estrellas">&#9733;</label>
+                  <input type="radio" id="star3" name="puntuacion" value="3" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 3}"/><label for="star3" title="3 estrellas">&#9733;</label>
+                  <input type="radio" id="star2" name="puntuacion" value="2" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 2}"/><label for="star2" title="2 estrellas">&#9733;</label>
+                  <input type="radio" id="star1" name="puntuacion" value="1" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 1 ?: (nuevoComentario.puntuacion == null)}"/><label for="star1" title="1 estrella">&#9733;</label>
+              </div>
+              <div th:if="${#fields.hasErrors('puntuacion')}" class="field-error">
+                  <p th:each="err : ${#fields.errors('puntuacion')}" th:text="${err}"></p>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-green">Enviar Comentario</button> 
+          </form>
+        </div>
+        <div th:unless="${session.usuarioId != null}" class="info-section comentario-login-mensaje">
+            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest.requestURI})}">iniciar sesión</a> para dejar un comentario.</p>
+        </div>
       </div>
       <div th:if="${pelicula == null}" class="content-container">
-        <p style="text-align: center; margin-top: 50px">
+        <p class="mensaje-no-encontrado"> 
           Película no encontrada.
         </p>
       </div>
     </section>
-    <th:block th:fragment="pageScript"> </th:block>
+    <th:block th:fragment="pageScript">
+    </th:block>
   </body>
 </html>

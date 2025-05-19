@@ -29,13 +29,13 @@ public class GenteController {
         return "gente/gente";
     }
 
-    @GetMapping("/gente/{id}") 
+    @GetMapping("/gente/{id}")
     public String mostrarDetallePersona(@PathVariable Long id, Model model) {
         Optional<Persona> personaOpt = personaService.findById(id);
         if (personaOpt.isPresent()) {
             Persona persona = personaOpt.get();
             model.addAttribute("persona", persona);
-            model.addAttribute("currentPage", "gente"); 
+            model.addAttribute("currentPage", "gente");
             model.addAttribute("pageTitle", persona.getNombre() + " - WatchList");
             model.addAttribute("hideSidebar", true);
             return "gente/persona-detalle";

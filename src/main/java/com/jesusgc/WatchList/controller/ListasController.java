@@ -69,9 +69,6 @@ public class ListasController {
         return "listas/form-lista";
     }
 
-    /**
-     * Procesa la creación de una nueva lista.
-     */
     @PostMapping("/listas/crear")
     public String procesarCrearLista(@Valid @ModelAttribute("lista") Lista lista,
             BindingResult result,

@@ -189,8 +189,6 @@ public class AdminController {
         return "redirect:/admin/peliculas";
     }
 
-    // --- Métodos para Gestionar Gente ---
-
     @GetMapping("/gente")
     public String listarGenteAdmin(Model model) {
         model.addAttribute("personas", personaService.findAll());
@@ -288,8 +286,6 @@ public class AdminController {
         model.addAttribute("message", "Página de gestión de Usuarios en construcción.");
         return "admin/placeholder-list";
     }
-
-    // --- Métodos para Gestionar Series ---
 
     @GetMapping("/series")
     public String listarSeriesAdmin(Model model) {
