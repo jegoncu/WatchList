@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Sort;
+import jakarta.servlet.http.HttpServletRequest; 
 
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +42,26 @@ public class PeliculasController {
     }
 
     @GetMapping("/peliculas")
-    public String mostrarPeliculas(Model model) {
+    public String mostrarPeliculas(Model model,
+                                   @RequestParam(defaultValue = "puntuacion") String sortBy,
+                                   @RequestParam(defaultValue = "desc") String sortDir,
+                                   HttpServletRequest request) {
         model.addAttribute("currentPage", "peliculas");
-        List<Pelicula> peliculas = peliculaService.findAll();
+
+        Sort.Direction direction = sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+
+        List<Pelicula> peliculas = peliculaService.findAll(sort); 
         model.addAttribute("peliculas", peliculas);
-        return "peliculas/peliculas";
+        model.addAttribute("currentSortBy", sortBy);
+        model.addAttribute("currentSortDir", sortDir);
+
+        String hxRequestHeader = request.getHeader("HX-Request");
+        if (hxRequestHeader != null && hxRequestHeader.equals("true")) {
+            return "peliculas/peliculas :: #peliculas-list-container"; 
+        }
+
+        return "peliculas/peliculas"; 
     }
 
     @GetMapping("/peliculas/{id}")

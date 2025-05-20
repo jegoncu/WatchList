@@ -60,8 +60,6 @@ public class AdminController {
             "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje",
             "Showrunner");
 
-    // --- Métodos para Gestionar Películas ---
-
     @GetMapping("/peliculas/nuevo")
     public String mostrarFormularioNuevaPelicula(Model model) {
         model.addAttribute("pelicula", new Pelicula());

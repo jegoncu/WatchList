@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Sort;
+import jakarta.servlet.http.HttpServletRequest; 
 
 import java.util.Collections;
 import java.util.List;
@@ -40,14 +42,33 @@ public class SeriesController {
     }
 
     @GetMapping("/series")
-    public String mostrarSeries(Model model) {
+    public String mostrarSeries(Model model,
+                                @RequestParam(defaultValue = "puntuacion") String sortBy, 
+                                @RequestParam(defaultValue = "desc") String sortDir,
+                                HttpServletRequest request) {
         model.addAttribute("currentPage", "series");
-        List<Serie> series = serieService.findAll();
+
+        Sort.Direction direction = sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        String sortProperty = sortBy;
+        if (!List.of("titulo", "anioEstreno", "puntuacion", "nTemporadas").contains(sortBy)) {
+            sortProperty = "puntuacion"; 
+        }
+        Sort sort = Sort.by(direction, sortProperty);
+
+        List<Serie> series = serieService.findAll(sort);
         model.addAttribute("series", series);
+        model.addAttribute("currentSortBy", sortBy);
+        model.addAttribute("currentSortDir", sortDir);
+
+        String hxRequestHeader = request.getHeader("HX-Request");
+        if (hxRequestHeader != null && hxRequestHeader.equals("true")) {
+            return "series/series :: #series-list-container";
+        }
+
         return "series/series";
     }
 
-    @GetMapping("/serie/{id}")
+    @GetMapping("/series/{id}") 
     public String mostrarDetalleSerie(@PathVariable("id") Long id, Model model, HttpSession session) {
         Optional<Serie> serieOptional = serieService.findById(id);
         if (serieOptional.isPresent()) {

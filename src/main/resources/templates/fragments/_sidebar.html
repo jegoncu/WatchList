@@ -9,32 +9,137 @@
 
       <!-- Contenidos para peliculas -->
       <div th:if="${currentPage == 'peliculas'}">
-        <h4>Películas Sidebar</h4>
-        <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Películas ' + ${i}"></li>
-        </ul>
+        <h4>Películas</h4>
+        <form id="sort-form-peliculas" class="sidebar-form">
+          <h5>Ordenar por:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortBy" value="titulo"
+                     th:checked="${currentSortBy == 'titulo'}"
+                     th:attr="hx-get=@{/peliculas}" 
+                     hx-target="#peliculas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-peliculas"> Título
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="anioEstreno"
+                     th:checked="${currentSortBy == 'anioEstreno'}"
+                     th:attr="hx-get=@{/peliculas}" 
+                     hx-target="#peliculas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-peliculas"> Año
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="puntuacion"
+                     th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}"
+                     th:attr="hx-get=@{/peliculas}" 
+                     hx-target="#peliculas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-peliculas"> Puntuación
+            </label>
+          </div>
+
+          <h5>Dirección:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortDir" value="asc"
+                     th:checked="${currentSortDir == 'asc'}"
+                     th:attr="hx-get=@{/peliculas}" 
+                     hx-target="#peliculas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-peliculas"> Ascendente
+            </label>
+            <label>
+              <input type="radio" name="sortDir" value="desc"
+                     th:checked="${currentSortDir == 'desc' or currentSortDir == null}"
+                     th:attr="hx-get=@{/peliculas}" 
+                     hx-target="#peliculas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-peliculas"> Descendente
+            </label>
+          </div>
+        </form>
+        <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
       </div>
 
       <!-- Contenidos para series -->
       <div th:if="${currentPage == 'series'}">
-        <h4>Series Sidebar</h4>
-        <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Series ' + ${i}"></li>
-        </ul>
+        <h4>Series</h4>
+        <form id="sort-form-series" class="sidebar-form">
+          <h5>Ordenar por:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortBy" value="titulo"
+                     th:checked="${currentSortBy == 'titulo'}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Título
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="anioEstreno"
+                     th:checked="${currentSortBy == 'anioEstreno'}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Año
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="puntuacion"
+                     th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Puntuación
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="nTemporadas"
+                     th:checked="${currentSortBy == 'nTemporadas'}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Temporadas
+            </label>
+          </div>
+
+          <h5>Dirección:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortDir" value="asc"
+                     th:checked="${currentSortDir == 'asc'}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Ascendente
+            </label>
+            <label>
+              <input type="radio" name="sortDir" value="desc"
+                     th:checked="${currentSortDir == 'desc' or currentSortDir == null}"
+                     th:attr="hx-get=@{/series}"
+                     hx-target="#series-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-series"> Descendente
+            </label>
+          </div>
+        </form>
+        <div id="loading-indicator-series" class="htmx-indicator">Cargando...</div>
       </div>
 
       <!-- Contenidos para gente -->
       <div th:if="${currentPage == 'gente'}">
-        <h4>Gente Sidebar</h4>
-        <ul>
-          <li
-            th:each="i : ${#numbers.sequence(1, 10)}"
-            th:text="'Gente ' + ${i}"></li>
-        </ul>
+        <h4>Personas</h4>
+   
       </div>
 
       <!-- Contenidos para listas -->

@@ -11,6 +11,7 @@ import com.jesusgc.WatchList.repository.PlataformaRepository;
 import com.jesusgc.WatchList.repository.PersonaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +37,12 @@ public class SerieService {
         this.personaRepository = personaRepository;
     }
 
+    public List<Serie> findAll(Sort sort) {
+        return serieRepository.findAll(sort);
+    }
+
     public List<Serie> findAll() {
-        return serieRepository.findAll();
+        return serieRepository.findAll(Sort.by(Sort.Direction.DESC, "puntuacion")); 
     }
 
     public Optional<Serie> findById(Long id) {

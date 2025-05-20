@@ -7,6 +7,7 @@
     <title>Películas - WatchList</title>
     <th:block th:fragment="pageCss">
       <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+      <link rel="stylesheet" th:href="@{/css/componentes/sidebar-filtros.css}" /> <!-- CSS para el sidebar de filtros -->
     </th:block>
   </head>
   <body>
@@ -14,44 +15,62 @@
       <div class="content-container">
         <h1 class="page-title">Películas</h1>
 
-        <div th:if="${peliculas == null or #lists.isEmpty(peliculas)}">
-          <p style="text-align: center">
-            No hay películas para mostrar en este momento.
-          </p>
-        </div>
+        <!-- Contenedor para la lista de películas que HTMX actualizará -->
+        <!-- El contenido inicial se renderiza aquí, y también es el target de HTMX -->
+        <div id="peliculas-list-container" hx-swap-oob="true"> <!-- hx-swap-oob si el controller devuelve el div con el id -->
+            <div th:if="${peliculas == null or #lists.isEmpty(peliculas)}" class="empty-list-mensaje">
+              <p>
+                No hay películas para mostrar con los criterios actuales.
+              </p>
+            </div>
 
-        <div
-          class="card-grid"
-          th:if="${peliculas != null and not #lists.isEmpty(peliculas)}">
-          <div class="content-card" th:each="pelicula : ${peliculas}">
-            <a
-              th:href="@{/peliculas/{id}(id=${pelicula.id})}"
-              class="content-card-link"
-              th:title="${pelicula.titulo}">
-              <div class="content-card-poster-container">
-                <img
-                  th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
-                  th:src="${pelicula.urlImagen}"
-                  th:alt="${pelicula.titulo}"
-                  class="content-card-poster"
-                  loading="lazy" />
-                <div
-                  th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
-                  class="content-card-poster-placeholder">
-                  <span>Sin Póster</span>
-                </div>
+            <div
+              class="card-grid"
+              th:if="${peliculas != null and not #lists.isEmpty(peliculas)}">
+              <!-- Tarjeta de Película (reutilizable) -->
+              <div class="content-card" th:each="pelicula : ${peliculas}">
+                <a
+                  th:href="@{/peliculas/{id}(id=${pelicula.id})}"
+                  class="content-card-link"
+                  th:title="${pelicula.titulo}">
+                  <div class="content-card-poster-container">
+                    <div
+                      class="poster-rating-badge"
+                      th:if="${pelicula.puntuacion != null}">
+                      <span
+                        class="rating-number"
+                        th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}"
+                        >0.0</span
+                      >
+                    </div>
+                    <img
+                      loading="lazy"
+                      th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+                      th:src="${pelicula.urlImagen}"
+                      th:alt="${pelicula.titulo}"
+                      class="content-card-poster" />
+                    <div
+                      th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+                      class="content-card-poster-placeholder">
+                      <span>Sin Póster</span>
+                    </div>
+                  </div>
+                  <div class="content-card-info">
+                    <h3 class="content-card-title" th:text="${pelicula.titulo}">
+                      Título de la Película
+                    </h3>
+                    <p
+                      class="content-card-year"
+                      th:if="${pelicula.anioEstreno != null}"
+                      th:text="${pelicula.anioEstreno}">
+                      Año
+                    </p>
+                  </div>
+                </a>
               </div>
-              <div class="content-card-info">
-                <h3 class="content-card-title" th:text="${pelicula.titulo}">
-                  Título de la Película
-                </h3>
-                <p class="content-card-year" th:text="${pelicula.anioEstreno}">
-                  Año
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
+            </div>
+        </div> <!-- Fin de #peliculas-list-container -->
+
       </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>

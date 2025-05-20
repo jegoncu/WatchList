@@ -11,6 +11,7 @@ import com.jesusgc.WatchList.repository.PlataformaRepository;
 import com.jesusgc.WatchList.repository.PersonaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort; // Añadir import
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,10 @@ public class PeliculaService {
 
     public List<Pelicula> findAll() {
         return peliculaRepository.findAll();
+    }
+
+    public List<Pelicula> findAll(Sort sort) {
+        return peliculaRepository.findAll(sort);
     }
 
     public Optional<Pelicula> findById(Long id) {
