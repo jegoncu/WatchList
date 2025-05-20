@@ -335,9 +335,12 @@
             <button type="submit" class="btn btn-green">Enviar Comentario</button> 
           </form>
         </div>
+        <!-- ****** FIN: Formulario para Añadir Nuevo Comentario ****** -->
         <div th:unless="${session.usuarioId != null}" class="info-section comentario-login-mensaje">
-            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest.requestURI})}">iniciar sesión</a> para dejar un comentario.</p>
+            <!-- Modificación aquí para manejar #httpServletRequest nulo -->
+            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest != null ? #httpServletRequest.requestURI : '/'})}">iniciar sesión</a> para dejar un comentario.</p>
         </div>
+        <!-- ****** FIN: Formulario para Añadir Nuevo Comentario ****** -->
       </div>
       <div th:if="${pelicula == null}" class="content-container">
         <p class="mensaje-no-encontrado"> 

@@ -373,7 +373,7 @@
           </form>
         </div>
         <div th:unless="${session.usuarioId != null}" class="info-section comentario-login-mensaje">
-            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest.requestURI})}">iniciar sesión</a> para dejar un comentario.</p>
+            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest != null ? #httpServletRequest.requestURI : '/series'})}">iniciar sesión</a> para dejar un comentario.</p>
         </div>
         <!-- ****** FIN: Formulario para Añadir Nuevo Comentario ****** -->
 

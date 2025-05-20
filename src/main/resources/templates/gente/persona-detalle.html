@@ -60,7 +60,7 @@
             <div class="card-grid"> 
               <div class="content-card" th:each="credito : ${persona.participaciones.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección') and media != null]}"> 
                 <a
-                  th:href="@{${credito.media.tipo == 'pelicula' ? '/peliculas' : '/serie'} + '/' + ${credito.media.id}}"
+                  th:href="@{${#strings.equalsIgnoreCase(credito.media.getMediaType(), 'pelicula') ? '/peliculas' : '/series'} + '/' + ${credito.media.id}}"
                   class="content-card-link" 
                   th:title="${credito.media.titulo}">
                   <div class="content-card-poster-container"> 
@@ -94,7 +94,7 @@
             <div class="card-grid"> 
               <div class="content-card" th:each="credito : ${persona.participaciones.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and media != null]}"> 
                 <a
-                  th:href="@{${credito.media.tipo == 'pelicula' ? '/peliculas' : '/serie'} + '/' + ${credito.media.id}}"
+                  th:href="@{${#strings.equalsIgnoreCase(credito.media.getMediaType(), 'pelicula') ? '/peliculas' : '/series'} + '/' + ${credito.media.id}}"
                   class="content-card-link" 
                   th:title="${credito.media.titulo}">
                   <div class="content-card-poster-container"> 
