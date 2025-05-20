@@ -20,7 +20,8 @@
                      hx-target="#peliculas-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"> Título
+                     hx-indicator="#loading-indicator-peliculas"/> 
+              <span>Título</span> 
             </label>
             <label>
               <input type="radio" name="sortBy" value="anioEstreno"
@@ -29,7 +30,8 @@
                      hx-target="#peliculas-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"> Año
+                     hx-indicator="#loading-indicator-peliculas"/>
+              <span>Año</span>
             </label>
             <label>
               <input type="radio" name="sortBy" value="puntuacion"
@@ -38,7 +40,8 @@
                      hx-target="#peliculas-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"> Puntuación
+                     hx-indicator="#loading-indicator-peliculas"/>
+              <span>Puntuación</span>
             </label>
           </div>
 
@@ -51,7 +54,8 @@
                      hx-target="#peliculas-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"> Ascendente
+                     hx-indicator="#loading-indicator-peliculas"/>
+              <span>Ascendente</span>
             </label>
             <label>
               <input type="radio" name="sortDir" value="desc"
@@ -60,7 +64,8 @@
                      hx-target="#peliculas-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"> Descendente
+                     hx-indicator="#loading-indicator-peliculas"/>
+              <span>Descendente</span>
             </label>
           </div>
         </form>
@@ -75,12 +80,13 @@
           <div class="form-group-sidebar">
             <label>
               <input type="radio" name="sortBy" value="titulo"
-                     th:checked="${currentSortBy == 'titulo'}"
+                     th:checked="${currentSortBy == 'titulo' or currentSortBy == null}"
                      th:attr="hx-get=@{/series}"
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Título
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Título</span>
             </label>
             <label>
               <input type="radio" name="sortBy" value="anioEstreno"
@@ -89,16 +95,18 @@
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Año
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Año</span> 
             </label>
             <label>
               <input type="radio" name="sortBy" value="puntuacion"
-                     th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}"
+                     th:checked="${currentSortBy == 'puntuacion'}"
                      th:attr="hx-get=@{/series}"
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Puntuación
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Puntuación</span> 
             </label>
             <label>
               <input type="radio" name="sortBy" value="nTemporadas"
@@ -107,7 +115,8 @@
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Temporadas
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Temporadas</span>
             </label>
           </div>
 
@@ -115,21 +124,23 @@
           <div class="form-group-sidebar">
             <label>
               <input type="radio" name="sortDir" value="asc"
-                     th:checked="${currentSortDir == 'asc'}"
+                     th:checked="${currentSortDir == 'asc' or currentSortDir == null}"
                      th:attr="hx-get=@{/series}"
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Ascendente
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Ascendente</span>
             </label>
             <label>
               <input type="radio" name="sortDir" value="desc"
-                     th:checked="${currentSortDir == 'desc' or currentSortDir == null}"
+                     th:checked="${currentSortDir == 'desc'}"
                      th:attr="hx-get=@{/series}"
                      hx-target="#series-list-container"
                      hx-include="[name='sortBy'],[name='sortDir']"
                      hx-push-url="true"
-                     hx-indicator="#loading-indicator-series"> Descendente
+                     hx-indicator="#loading-indicator-series"/>
+              <span>Descendente</span>
             </label>
           </div>
         </form>
