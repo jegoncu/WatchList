@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional; // Asegúrate de tener esta importación
 
 @Controller
 public class ListasController {
@@ -103,22 +104,72 @@ public class ListasController {
     }
 
     @GetMapping("/listas/{id}")
-    public String mostrarDetalleLista(@PathVariable("id") Long listaId, Model model, HttpSession session) {
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) {
-            return "redirect:/login";
+    public String mostrarDetalleLista(@PathVariable("id") Long listaId, Model model, HttpSession session, RedirectAttributes redirectAttributes) { // Añadido RedirectAttributes
+        Optional<Lista> listaOptional = listaService.findById(listaId);
+
+        if (listaOptional.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Lista no encontrada.");
+            return "redirect:/listas"; // Redirige a la lista de listas públicas o a una página de error general
         }
-        try {
-            Usuario usuarioLogueado = usuarioService.findById(usuarioId);
-            Lista lista = listaService.obtenerListaPorIdYUsuario(listaId, usuarioLogueado);
-            model.addAttribute("lista", lista);
-            model.addAttribute("tituloPagina", "Detalle de Lista: " + lista.getTitulo());
+
+        Lista lista = listaOptional.get();
+        Long usuarioIdSesion = (Long) session.getAttribute("usuarioId");
+        boolean esPropietario = false;
+
+        // Verificar si la lista es privada
+        if (!lista.getEsPublica()) {
+            if (usuarioIdSesion == null) {
+                // Usuario no logueado intentando acceder a lista privada
+                redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión para ver esta lista privada.");
+                return "redirect:/login?redirectUrl=/listas/" + listaId; // Guardar la URL para redirigir después del login
+            }
+            // Usuario logueado, verificar si es el propietario
+            try {
+                Usuario usuarioLogueado = usuarioService.findById(usuarioIdSesion);
+                if (lista.getUsuario() != null && lista.getUsuario().getId().equals(usuarioLogueado.getId())) {
+                    esPropietario = true;
+                } else {
+                    // Usuario logueado pero no es el propietario de la lista privada
+                    redirectAttributes.addFlashAttribute("error", "No tienes permiso para ver esta lista privada.");
+                    return "redirect:/listas"; // O a /mis-listas si tiene más sentido
+                }
+            } catch (IllegalArgumentException e) {
+                // Error al buscar el usuario (ej. sesión inválida pero con ID)
+                redirectAttributes.addFlashAttribute("error", "Error de autenticación. Por favor, inicia sesión de nuevo.");
+                session.invalidate();
+                return "redirect:/login";
+            }
+        } else { // La lista es pública
+            if (usuarioIdSesion != null && lista.getUsuario() != null && lista.getUsuario().getId().equals(usuarioIdSesion)) {
+                esPropietario = true; // El usuario logueado es el propietario de esta lista pública
+            }
+            // Si es pública y el usuario no está logueado, o está logueado y no es el propietario,
+            // simplemente se muestra. esPropietario ya está en false o se actualizó.
+        }
+
+        // Si llegamos aquí, el usuario tiene permiso para ver la lista
+        model.addAttribute("lista", lista);
+        model.addAttribute("tituloPagina", "Detalle: " + lista.getTitulo()); // Título más específico
+        model.addAttribute("esPropietario", esPropietario);
+
+        // Determinar currentPage
+        if (esPropietario) {
             model.addAttribute("currentPage", "misListas");
-            return "listas/lista-detalle";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "redirect:/mis-listas?error=listaNoAccesible";
+        } else {
+            // Para una lista pública vista por otro usuario o un anónimo
+            model.addAttribute("currentPage", "listasPublicas");
         }
+        
+        // Añadir mensajes flash si vienen de otra redirección (ej. después de agregar/quitar item)
+        if (redirectAttributes.getFlashAttributes().containsKey("mensajeExito")) {
+            model.addAttribute("mensajeExito", redirectAttributes.getFlashAttributes().get("mensajeExito"));
+        }
+        if (redirectAttributes.getFlashAttributes().containsKey("error")) {
+            model.addAttribute("error", redirectAttributes.getFlashAttributes().get("error"));
+        }
+
+
+        return "listas/lista-detalle";
     }
 
     @PostMapping("/listas/{id}/eliminar")
@@ -146,21 +197,23 @@ public class ListasController {
             RedirectAttributes redirectAttributes) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
-            return "redirect:/login";
+            // Si un usuario no logueado intenta agregar a una lista (no debería ser posible desde la UI)
+            redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión para modificar listas.");
+            return "redirect:/login?redirectUrl=/listas/" + listaId;
         }
 
         try {
             Usuario usuarioLogueado = usuarioService.findById(usuarioId);
+            // El servicio agregarMediaALista ya verifica si el usuario es propietario
             listaService.agregarMediaALista(listaId, mediaId, usuarioLogueado);
             redirectAttributes.addFlashAttribute("mensajeExito", "Ítem añadido a la lista exitosamente.");
-            return "redirect:/listas/" + listaId;
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/listas/" + listaId;
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error inesperado al añadir el ítem a la lista.");
-            return "redirect:/listas/" + listaId;
+            // logger.error("Error al agregar media a lista", e); // Si tuvieras un logger
         }
+        return "redirect:/listas/" + listaId; // Siempre redirige de vuelta al detalle de la lista
     }
 
     @PostMapping("/listas/{listaId}/media/{mediaId}/quitar")
@@ -170,18 +223,21 @@ public class ListasController {
             RedirectAttributes redirectAttributes) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
-            return "redirect:/login";
+            redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión para modificar listas.");
+            return "redirect:/login?redirectUrl=/listas/" + listaId;
         }
 
         try {
             Usuario usuarioLogueado = usuarioService.findById(usuarioId);
+            // El servicio quitarMediaDeLista ya verifica si el usuario es propietario
             listaService.quitarMediaDeLista(listaId, mediaId, usuarioLogueado);
             redirectAttributes.addFlashAttribute("mensajeExito", "Ítem quitado de la lista exitosamente.");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error inesperado al quitar el ítem de la lista.");
+            // logger.error("Error al quitar media de lista", e); // Si tuvieras un logger
         }
-        return "redirect:/listas/" + listaId;
+        return "redirect:/listas/" + listaId; // Siempre redirige de vuelta al detalle de la lista
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ListaService {
@@ -46,6 +47,11 @@ public class ListaService {
         return listaRepository.findByIdAndUsuario(listaId, usuario)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Lista no encontrada (ID: " + listaId + ") o no pertenece al usuario " + usuario.getEmail()));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Lista> findById(Long listaId) {
+        return listaRepository.findById(listaId);
     }
 
     @Transactional

@@ -10,11 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ListaRepository extends JpaRepository<Lista, Long> {
-
     List<Lista> findByUsuario(Usuario usuario);
-
-    Optional<Lista> findByIdAndUsuario(Long id, Usuario usuario);
-
     List<Lista> findByEsPublicaTrue();
-
+    Optional<Lista> findByIdAndUsuario(Long id, Usuario usuario);
 }

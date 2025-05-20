@@ -57,6 +57,7 @@
             </div>
           </a>
           <form class="remove-item-form"
+                th:if="${esPropietario}"
                 th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}" 
                 method="post" 
                 onsubmit="return confirm('¿Estás seguro de que quieres quitar este ítem de la lista?');">
@@ -66,7 +67,8 @@
       </div>
 
       <div class="list-actions mt-4">
-        <a th:href="@{/mis-listas}" class="btn btn-grey">Volver a Mis Listas</a>
+        <a th:if="${currentPage == 'misListas'}" th:href="@{/mis-listas}" class="btn btn-grey">Volver a Mis Listas</a>
+        <a th:if="${currentPage == 'listasPublicas'}" th:href="@{/listas}" class="btn btn-grey">Volver a Listas Públicas</a>
       </div>
     </section>
 
