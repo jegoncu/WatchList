@@ -3,6 +3,7 @@ package com.jesusgc.WatchList.controller;
 import com.jesusgc.WatchList.model.Usuario;
 import com.jesusgc.WatchList.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Usuario usuario, BindingResult result, Model model) {
+    public String registrarUsuario(@Valid @ModelAttribute Usuario usuario, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("usuario", usuario);
             return "auth/registro";
