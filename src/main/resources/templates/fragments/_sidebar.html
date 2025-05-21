@@ -6,72 +6,6 @@
   </head>
   <body>
     <div th:fragment="sidebar" class="sidebar">
-
-      <!-- Contenidos para peliculas -->
-      <div th:if="${currentPage == 'peliculas'}">
-        <h4>Películas</h4>
-        <form id="sort-form-peliculas" class="sidebar-form">
-          <h5>Ordenar por:</h5>
-          <div class="form-group-sidebar">
-            <label>
-              <input type="radio" name="sortBy" value="titulo"
-                     th:checked="${currentSortBy == 'titulo'}"
-                     th:attr="hx-get=@{/peliculas}" 
-                     hx-target="#peliculas-list-container"
-                     hx-include="[name='sortBy'],[name='sortDir']"
-                     hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"/> 
-              <span>Título</span> 
-            </label>
-            <label>
-              <input type="radio" name="sortBy" value="anioEstreno"
-                     th:checked="${currentSortBy == 'anioEstreno'}"
-                     th:attr="hx-get=@{/peliculas}" 
-                     hx-target="#peliculas-list-container"
-                     hx-include="[name='sortBy'],[name='sortDir']"
-                     hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"/>
-              <span>Año</span>
-            </label>
-            <label>
-              <input type="radio" name="sortBy" value="puntuacion"
-                     th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}"
-                     th:attr="hx-get=@{/peliculas}" 
-                     hx-target="#peliculas-list-container"
-                     hx-include="[name='sortBy'],[name='sortDir']"
-                     hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"/>
-              <span>Puntuación</span>
-            </label>
-          </div>
-
-          <h5>Dirección:</h5>
-          <div class="form-group-sidebar">
-            <label>
-              <input type="radio" name="sortDir" value="asc"
-                     th:checked="${currentSortDir == 'asc'}"
-                     th:attr="hx-get=@{/peliculas}" 
-                     hx-target="#peliculas-list-container"
-                     hx-include="[name='sortBy'],[name='sortDir']"
-                     hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"/>
-              <span>Ascendente</span>
-            </label>
-            <label>
-              <input type="radio" name="sortDir" value="desc"
-                     th:checked="${currentSortDir == 'desc' or currentSortDir == null}"
-                     th:attr="hx-get=@{/peliculas}" 
-                     hx-target="#peliculas-list-container"
-                     hx-include="[name='sortBy'],[name='sortDir']"
-                     hx-push-url="true"
-                     hx-indicator="#loading-indicator-peliculas"/>
-              <span>Descendente</span>
-            </label>
-          </div>
-        </form>
-        <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
-      </div>
-
       <!-- Contenidos para series -->
       <div th:if="${currentPage == 'series'}">
         <h4>Series</h4>
@@ -147,7 +81,143 @@
         <div id="loading-indicator-series" class="htmx-indicator">Cargando...</div>
       </div>
 
-      <!-- Contenidos para gente -->
+      <div th:if="${currentPage == 'peliculas'}">
+        <h4>Películas</h4>
+        <form id="filter-sort-form-peliculas" class="sidebar-form">
+          <h5>Ordenar por:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortBy" value="titulo"
+                     th:checked="${currentSortBy == 'titulo'}" />
+              <span>Título</span>
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="anioEstreno"
+                     th:checked="${currentSortBy == 'anioEstreno'}" />
+              <span>Año Estreno</span>
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="puntuacion"
+                     th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
+              <span>Puntuación</span>
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="duracionMin"
+                     th:checked="${currentSortBy == 'duracionMin'}" />
+              <span>Duración</span>
+            </label>
+          </div>
+          <h5>Dirección:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortDir" value="asc"
+                     th:checked="${currentSortDir == 'asc' or currentSortDir == null}" />
+              <span>Ascendente</span>
+            </label>
+            <label>
+              <input type="radio" name="sortDir" value="desc"
+                     th:checked="${currentSortDir == 'desc'}" />
+              <span>Descendente</span>
+            </label>
+          </div>
+
+
+          <hr class="sidebar-divider">
+          <h5>Filtrar por:</h5>
+
+          <div class="form-group-sidebar filter-group">
+            <h6>Género(s):</h6>
+            <div class="checkbox-list genero-tag-list" th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
+              <th:block th:each="genero : ${allGeneros}">
+                <div class="genero-tag-item"> 
+                  <input type="checkbox"
+                         th:id="'filter-genero-' + ${genero.id}"
+                         name="generoIds"
+                         th:value="${genero.id}"
+                         th:checked="${selectedGeneroIds != null and #lists.contains(selectedGeneroIds, genero.id)}"
+                         class="visually-hidden-checkbox" />
+                  <label th:for="'filter-genero-' + ${genero.id}"
+                         class="genero-tag-label"
+                         th:text="${genero.nombre}">Nombre Género</label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
+          </div>
+
+          <div class="form-group-sidebar filter-group">
+            <h6>Plataforma(s):</h6>
+            <div class="checkbox-list plataforma-logo-list" th:if="${allPlataformas != null and not #lists.isEmpty(allPlataformas)}">
+              <th:block th:each="plataforma : ${allPlataformas}">
+                <div class="plataforma-logo-item">
+                  <input type="checkbox"
+                         th:id="'filter-plataforma-' + ${plataforma.id}"
+                         name="plataformaIds"
+                         th:value="${plataforma.id}"
+                         th:checked="${selectedPlataformaIds != null and #lists.contains(selectedPlataformaIds, plataforma.id)}"
+                         class="visually-hidden-checkbox" />
+                  <label th:for="'filter-plataforma-' + ${plataforma.id}"
+                         class="plataforma-logo-label">
+                    <img th:if="${plataforma.logo != null && !#strings.isEmpty(plataforma.logo)}"
+                         th:src="@{${plataforma.logo}}" 
+                         th:alt="${plataforma.nombre}"
+                         class="plataforma-logo-img" />
+                    <span th:if="${plataforma.logo == null || #strings.isEmpty(plataforma.logo)}"
+                          th:text="${plataforma.nombre}"
+                          class="plataforma-logo-fallback-text"></span> 
+                  </label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas disponibles.</p>
+          </div>
+
+          <div class="form-group-sidebar filter-group">
+            <h6>Año de Estreno:</h6>
+            <div class="slider-container">
+              <label for="anioMin">Desde:</label>
+              <input type="range" id="anioMin" name="anioMin"
+                     th:min="${minAnioVal}" th:max="${maxAnioVal}" th:value="${currentAnioMin != null ? currentAnioMin : minAnioVal}"
+                     oninput="updateSliderValue(this, 'anioMinVal'); validateAnioRange('anioMin', 'anioMax');" />
+              <span id="anioMinVal" th:text="${currentAnioMin != null ? currentAnioMin : minAnioVal}"></span>
+            </div>
+            <div class="slider-container">
+              <label for="anioMax">Hasta:</label>
+              <input type="range" id="anioMax" name="anioMax"
+                     th:min="${minAnioVal}" th:max="${maxAnioVal}" th:value="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"
+                     oninput="updateSliderValue(this, 'anioMaxVal'); validateAnioRange('anioMin', 'anioMax');" />
+              <span id="anioMaxVal" th:text="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"></span>
+            </div>
+          </div>
+
+          <div class="form-group-sidebar filter-group">
+            <h6>Puntuación Mínima:</h6>
+            <div class="slider-container">
+              <input type="range" id="puntuacionMin" name="puntuacionMin" min="0" max="10" step="0.1"
+                     th:value="${currentPuntuacionMin != null ? currentPuntuacionMin : 0.0}"
+                     oninput="updateSliderValue(this, 'puntuacionMinVal');" />
+              <span id="puntuacionMinVal" th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
+            </div>
+          </div>
+
+          <div class="form-actions-sidebar">
+            <button type="button" class="btn btn-primary"
+                    th:attr="hx-get=@{/peliculas}"
+                    hx-target="#peliculas-list-container"
+                    hx-include="#filter-sort-form-peliculas"
+                    hx-push-url="true"
+                    hx-indicator="#loading-indicator-peliculas">
+              Aplicar Filtros
+            </button>
+            <button type="button" class="btn btn-secondary"
+                    onclick="resetPeliculasFiltersAndSort();">
+              Limpiar Filtros
+            </button>
+          </div>
+        </form>
+        <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
+      </div>
+
       <div th:if="${currentPage == 'gente'}">
         <h4>Personas</h4>
         <form id="sort-form-gente" class="sidebar-form">
@@ -243,6 +313,69 @@
             th:text="'Mis Listas ' + ${i}"></li>
         </ul>
       </div>
-    </div>
+    </div> <!-- Cierre de th:fragment="sidebar" -->
+
+    <script th:fragment="sidebar-scripts">
+      function updateSliderValue(slider, outputId) {
+        document.getElementById(outputId).textContent = slider.value;
+      }
+
+      function validateAnioRange(minId, maxId) {
+        const minSlider = document.getElementById(minId);
+        const maxSlider = document.getElementById(maxId);
+        const minValSpan = document.getElementById(minId + 'Val');
+        const maxValSpan = document.getElementById(maxId + 'Val');
+
+        if (parseInt(minSlider.value) > parseInt(maxSlider.value)) {
+          if (event.target.id === minId) { 
+            maxSlider.value = minSlider.value;
+            maxValSpan.textContent = minSlider.value;
+          } else { 
+            minSlider.value = maxSlider.value;
+            minValSpan.textContent = maxSlider.value;
+          }
+        }
+      }
+
+      function resetPeliculasFiltersAndSort() {
+        const form = document.getElementById('filter-sort-form-peliculas');
+        if (form) {
+          form.querySelectorAll('input[name="generoIds"]').forEach(cb => cb.checked = false);
+          form.querySelectorAll('input[name="plataformaIds"]').forEach(cb => cb.checked = false);
+          const anioMinSlider = form.querySelector('#anioMin');
+          const anioMinValSpan = form.querySelector('#anioMinVal');
+          const defaultMinAnio = anioMinSlider.getAttribute('min'); 
+          anioMinSlider.value = defaultMinAnio;
+          anioMinValSpan.textContent = defaultMinAnio;
+
+          const anioMaxSlider = form.querySelector('#anioMax');
+          const anioMaxValSpan = form.querySelector('#anioMaxVal');
+          const defaultMaxAnio = anioMaxSlider.getAttribute('max'); 
+          anioMaxSlider.value = defaultMaxAnio;
+          anioMaxValSpan.textContent = defaultMaxAnio;
+          
+          const puntuacionMinSlider = form.querySelector('#puntuacionMin');
+          const puntuacionMinValSpan = form.querySelector('#puntuacionMinVal');
+          puntuacionMinSlider.value = 0.0;
+          puntuacionMinValSpan.textContent = '0.0';
+
+          const applyButton = form.querySelector('button[hx-get]');
+          if (applyButton) {
+            htmx.trigger(applyButton, "click"); 
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const anioMinSlider = document.getElementById('anioMin');
+        if (anioMinSlider) updateSliderValue(anioMinSlider, 'anioMinVal');
+        
+        const anioMaxSlider = document.getElementById('anioMax');
+        if (anioMaxSlider) updateSliderValue(anioMaxSlider, 'anioMaxVal');
+
+        const puntuacionMinSlider = document.getElementById('puntuacionMin');
+        if (puntuacionMinSlider) updateSliderValue(puntuacionMinSlider, 'puntuacionMinVal');
+      });
+    </script>
   </body>
 </html>

@@ -8,7 +8,11 @@ import com.jesusgc.WatchList.service.PeliculaService;
 import com.jesusgc.WatchList.service.UsuarioService;
 import com.jesusgc.WatchList.service.ListaService;
 import com.jesusgc.WatchList.service.ComentarioService;
+import com.jesusgc.WatchList.service.GeneroService;
+import com.jesusgc.WatchList.service.PlataformaService; 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.data.domain.Sort;
-import jakarta.servlet.http.HttpServletRequest; 
 
+import java.time.Year; 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,36 +36,70 @@ public class PeliculasController {
     private final UsuarioService usuarioService;
     private final ListaService listaService;
     private final ComentarioService comentarioService;
+    private final GeneroService generoService; 
+    private final PlataformaService plataformaService; 
+
+    private static final List<String> ALLOWED_SORT_PROPERTIES_PELICULA = Arrays.asList("titulo", "anioEstreno", "puntuacion", "duracionMin");
 
     public PeliculasController(PeliculaService peliculaService, UsuarioService usuarioService,
-            ListaService listaService, ComentarioService comentarioService) {
+            ListaService listaService, ComentarioService comentarioService, GeneroService generoService, PlataformaService plataformaService) {
         this.peliculaService = peliculaService;
         this.usuarioService = usuarioService;
         this.listaService = listaService;
         this.comentarioService = comentarioService;
+        this.generoService = generoService;
+        this.plataformaService = plataformaService;
     }
 
     @GetMapping("/peliculas")
     public String mostrarPeliculas(Model model,
                                    @RequestParam(defaultValue = "puntuacion") String sortBy,
                                    @RequestParam(defaultValue = "desc") String sortDir,
-                                   HttpServletRequest request) {
-        model.addAttribute("currentPage", "peliculas");
+                                   @RequestParam(required = false) List<Long> generoIds,
+                                   @RequestParam(required = false) List<Long> plataformaIds,
+                                   @RequestParam(required = false) Integer anioMin,
+                                   @RequestParam(required = false) Integer anioMax,
+                                   @RequestParam(required = false) Float puntuacionMin,
+                                   HttpServletRequest request,
+                                   HttpSession session) {
 
-        Sort.Direction direction = sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        model.addAttribute("usuarioLogueado", usuarioLogueado);
 
-        List<Pelicula> peliculas = peliculaService.findAll(sort); 
+        String sortProperty = ALLOWED_SORT_PROPERTIES_PELICULA.contains(sortBy) ? sortBy : "puntuacion";
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDir) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, sortProperty);
+
+        Integer currentAnioMin = (anioMin == null) ? 1895 : anioMin;
+        Integer currentAnioMax = (anioMax == null) ? Year.now().getValue() : anioMax;
+        Float currentPuntuacionMin = (puntuacionMin == null) ? 0.0f : puntuacionMin;
+
+        List<Pelicula> peliculas = peliculaService.findPeliculasByCriteria(
+                generoIds, plataformaIds, currentAnioMin, currentAnioMax, currentPuntuacionMin, sort
+        );
+
         model.addAttribute("peliculas", peliculas);
-        model.addAttribute("currentSortBy", sortBy);
-        model.addAttribute("currentSortDir", sortDir);
+        model.addAttribute("currentPage", "peliculas");
+        model.addAttribute("currentSortBy", sortProperty);
+        model.addAttribute("currentSortDir", direction.name().toLowerCase());
+        model.addAttribute("pageTitle", "Películas");
+
+        model.addAttribute("allGeneros", generoService.findAll());
+        model.addAttribute("allPlataformas", plataformaService.findAll());
+        model.addAttribute("selectedGeneroIds", generoIds); 
+        model.addAttribute("selectedPlataformaIds", plataformaIds); 
+        model.addAttribute("currentAnioMin", currentAnioMin); 
+        model.addAttribute("currentAnioMax", currentAnioMax); 
+        model.addAttribute("currentPuntuacionMin", currentPuntuacionMin); 
+        model.addAttribute("minAnioVal", 1895);
+        model.addAttribute("maxAnioVal", Year.now().getValue()); 
 
         String hxRequestHeader = request.getHeader("HX-Request");
         if (hxRequestHeader != null && hxRequestHeader.equals("true")) {
-            return "peliculas/peliculas :: #peliculas-list-container"; 
+            return "peliculas/peliculas :: #peliculas-list-container";
         }
 
-        return "peliculas/peliculas"; 
+        return "peliculas/peliculas";
     }
 
     @GetMapping("/peliculas/{id}")
