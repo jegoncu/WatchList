@@ -344,7 +344,7 @@
         <!-- ****** INICIO: Formulario para Añadir Nuevo Comentario ****** -->
         <div th:if="${session.usuarioId != null}" class="info-section nuevo-comentario-section">
           <h2>Deja tu Comentario</h2>
-          <form th:action="@{/serie/{serieId}/comentar(serieId=${serie.id})}"
+          <form th:action="@{/series/{serieId}/comentar(serieId=${serie.id})}" 
                 method="post"
                 th:object="${nuevoComentario}">
                 

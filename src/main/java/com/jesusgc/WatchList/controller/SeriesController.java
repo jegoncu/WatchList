@@ -104,7 +104,7 @@ public class SeriesController {
         }
     }
 
-    @PostMapping("/serie/{serieId}/comentar")
+    @PostMapping("/series/{serieId}/comentar") 
     public String guardarComentarioSerie(@PathVariable Long serieId,
             @RequestParam String texto,
             @RequestParam int puntuacion,
@@ -130,13 +130,13 @@ public class SeriesController {
                         "El texto del comentario no puede estar vacío.");
                 redirectAttributes.addFlashAttribute("textoPrevio", texto);
                 redirectAttributes.addFlashAttribute("puntuacionPrevia", puntuacion);
-                return "redirect:/serie/" + serieId;
+                return "redirect:/series/" + serieId; 
             }
             if (puntuacion < 1 || puntuacion > 5) {
                 redirectAttributes.addFlashAttribute("errorComentario", "La puntuación debe estar entre 1 y 5.");
                 redirectAttributes.addFlashAttribute("textoPrevio", texto);
                 redirectAttributes.addFlashAttribute("puntuacionPrevia", puntuacion);
-                return "redirect:/serie/" + serieId;
+                return "redirect:/series/" + serieId; 
             }
 
             comentarioService.guardarComentario(serie, texto, puntuacion, usuarioId);
@@ -153,6 +153,6 @@ public class SeriesController {
             redirectAttributes.addFlashAttribute("puntuacionPrevia", puntuacion);
         }
 
-        return "redirect:/serie/" + serieId;
+        return "redirect:/series/" + serieId;
     }
 }
