@@ -2,6 +2,7 @@ package com.jesusgc.WatchList.service;
 
 import com.jesusgc.WatchList.model.Persona;
 import com.jesusgc.WatchList.repository.PersonaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,10 @@ public class PersonaService {
 
     public List<Persona> findAll() {
         return personaRepository.findAll();
+    }
+
+    public List<Persona> findAll(Sort sort) {
+        return personaRepository.findAll(sort);
     }
 
     public Optional<Persona> findById(Long id) {

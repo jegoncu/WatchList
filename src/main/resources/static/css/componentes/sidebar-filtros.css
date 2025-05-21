@@ -74,9 +74,6 @@
     background-color: var(--color-grey-5);
 }
 
-
-
-
 .htmx-indicator {
     display: none; 
     padding: 5px;

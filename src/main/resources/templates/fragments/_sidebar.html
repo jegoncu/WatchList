@@ -150,7 +150,56 @@
       <!-- Contenidos para gente -->
       <div th:if="${currentPage == 'gente'}">
         <h4>Personas</h4>
-   
+        <form id="sort-form-gente" class="sidebar-form">
+          <h5>Ordenar por:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortBy" value="nombre"
+                     th:checked="${currentSortBy == 'nombre' or currentSortBy == null}"
+                     th:attr="hx-get=@{/gente}"
+                     hx-target="#personas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-gente"/>
+              <span>Nombre</span>
+            </label>
+            <label>
+              <input type="radio" name="sortBy" value="fechaNac"
+                     th:checked="${currentSortBy == 'fechaNac'}"
+                     th:attr="hx-get=@{/gente}"
+                     hx-target="#personas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-gente"/>
+              <span>Fecha Nacimiento</span>
+            </label>
+          </div>
+
+          <h5>Dirección:</h5>
+          <div class="form-group-sidebar">
+            <label>
+              <input type="radio" name="sortDir" value="asc"
+                     th:checked="${currentSortDir == 'asc' or currentSortDir == null}"
+                     th:attr="hx-get=@{/gente}"
+                     hx-target="#personas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-gente"/>
+              <span>Ascendente</span>
+            </label>
+            <label>
+              <input type="radio" name="sortDir" value="desc"
+                     th:checked="${currentSortDir == 'desc'}"
+                     th:attr="hx-get=@{/gente}"
+                     hx-target="#personas-list-container"
+                     hx-include="[name='sortBy'],[name='sortDir']"
+                     hx-push-url="true"
+                     hx-indicator="#loading-indicator-gente"/>
+              <span>Descendente</span>
+            </label>
+          </div>
+        </form>
+        <div id="loading-indicator-gente" class="htmx-indicator">Cargando...</div>
       </div>
 
       <!-- Contenidos para listas -->
