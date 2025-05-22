@@ -1,30 +1,39 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
     <title>Bienvenido a WatchList</title>
     <th:block th:fragment="pageCss">
-      <style></style>
+        <style></style>
     </th:block>
-  </head>
-  <body>
-    <section>
-      <h1>Descubre Tu Próxima Película o Serie Favorita</h1>
-      <p>
-        Explora un vasto catálogo de películas y series. Crea tus listas
-        personalizadas, comparte tus opiniones y mucho más.
-      </p>
-      <div>
-        <a th:href="@{/peliculas}" class="btn btn-big btn-yellow"
-          >Explorar Catálogo</a
-        >
-        <a th:href="@{/registro}" class="btn btn-big btn-green"
-          >Regístrate Gratis</a
-        >
-      </div>
+</head>
+
+<body>
+    <section style="margin-top: 30px ; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh;">
+        <h1 style="margin: 15px; font-size: 30px; color: var(--color-yellow-2)">¡Bienvenido/a a WatchList!</h1>
+        <div style="margin: 15px; text-align: center;">
+            <p>
+                Explora nuestro catálogo de películas, series y artistas de la industria.
+            </p>
+            <p>
+                Crea tus listas personalizadas y comparte tus opiniones.
+            </p>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top:20px">
+            <a th:href="@{/login}" class="btn btn-big btn-blue">Iniciar Seión</a>
+            <a th:href="@{/registro}" class="btn btn-big btn-green">Regístrate Gratis</a>
+            <a th:href="@{/peliculas}" class="btn btn-big btn-yellow">Explorar Catálogo</a>
+            <a th:href="@{/listas}" class="btn btn-big btn-red">Ver Listas Públicas</a>
+        </div>
+        <div style="margin: 30px; text-align: center;">
+            <p style="font-size: 12px; color:darkgrey;">
+               Esta página se encuentra en desarrollo y puede que encuentras algunas cosas (o muchas)
+               que no funcionan o sin implementar
+            </p>
+        </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
-  </body>
+</body>
+
 </html>
