@@ -9,8 +9,9 @@ import com.jesusgc.WatchList.service.UsuarioService;
 import com.jesusgc.WatchList.service.ListaService;
 import com.jesusgc.WatchList.service.ComentarioService;
 import com.jesusgc.WatchList.service.GeneroService;
-import com.jesusgc.WatchList.service.PlataformaService; 
+import com.jesusgc.WatchList.service.PlataformaService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.Year; 
+import java.time.Year;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,8 +37,8 @@ public class PeliculasController {
     private final UsuarioService usuarioService;
     private final ListaService listaService;
     private final ComentarioService comentarioService;
-    private final GeneroService generoService; 
-    private final PlataformaService plataformaService; 
+    private final GeneroService generoService;
+    private final PlataformaService plataformaService;
 
     private static final List<String> ALLOWED_SORT_PROPERTIES_PELICULA = Arrays.asList("titulo", "anioEstreno", "puntuacion", "duracionMin");
 
@@ -61,10 +62,8 @@ public class PeliculasController {
                                    @RequestParam(required = false) Integer anioMax,
                                    @RequestParam(required = false) Float puntuacionMin,
                                    HttpServletRequest request,
+                                   HttpServletResponse response,
                                    HttpSession session) {
-
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-        model.addAttribute("usuarioLogueado", usuarioLogueado);
 
         String sortProperty = ALLOWED_SORT_PROPERTIES_PELICULA.contains(sortBy) ? sortBy : "puntuacion";
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDir) ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -86,16 +85,17 @@ public class PeliculasController {
 
         model.addAttribute("allGeneros", generoService.findAll());
         model.addAttribute("allPlataformas", plataformaService.findAll());
-        model.addAttribute("selectedGeneroIds", generoIds); 
-        model.addAttribute("selectedPlataformaIds", plataformaIds); 
-        model.addAttribute("currentAnioMin", currentAnioMin); 
-        model.addAttribute("currentAnioMax", currentAnioMax); 
-        model.addAttribute("currentPuntuacionMin", currentPuntuacionMin); 
+        model.addAttribute("selectedGeneroIds", generoIds);
+        model.addAttribute("selectedPlataformaIds", plataformaIds);
+        model.addAttribute("currentAnioMin", currentAnioMin);
+        model.addAttribute("currentAnioMax", currentAnioMax);
+        model.addAttribute("currentPuntuacionMin", currentPuntuacionMin);
         model.addAttribute("minAnioVal", 1895);
-        model.addAttribute("maxAnioVal", Year.now().getValue()); 
+        model.addAttribute("maxAnioVal", Year.now().getValue());
 
         String hxRequestHeader = request.getHeader("HX-Request");
         if (hxRequestHeader != null && hxRequestHeader.equals("true")) {
+            response.setHeader("HX-Push-Url", "false");
             return "peliculas/peliculas :: #peliculas-list-container";
         }
 
