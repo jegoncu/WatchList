@@ -13,8 +13,6 @@
   <body>
     <section th:fragment="section">
       <div class="content-container">
-        <h1 class="page-title">Series</h1>
-
         <!-- Contenedor para la lista de series que HTMX actualizará -->
         <div id="series-list-container"> <!-- El ID debe coincidir con hx-target -->
             <div th:if="${series == null or #lists.isEmpty(series)}" class="empty-list-mensaje">

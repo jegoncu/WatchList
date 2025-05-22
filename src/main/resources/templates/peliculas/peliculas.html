@@ -13,8 +13,6 @@
   <body>
     <section th:fragment="section">
       <div class="content-container">
-        <h1 class="page-title">Películas</h1>
-
         <!-- Contenedor para la lista de películas que HTMX actualizará -->
         <!-- El contenido inicial se renderiza aquí, y también es el target de HTMX -->
         <div id="peliculas-list-container" hx-swap-oob="true"> <!-- hx-swap-oob si el controller devuelve el div con el id -->

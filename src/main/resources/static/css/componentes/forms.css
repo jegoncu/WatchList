@@ -17,7 +17,7 @@ select {
   color: var(--color-grey-5);
 }
 
-.header-container input[type="search"] { 
+.header-container input[type="search"] {
 /* TODO: mover a layout o a un css especifico para el header */
   padding: 4px 10px;
   border: 1px solid var(--color-grey-4);
@@ -25,7 +25,7 @@ select {
 }
 
 input[type="date"] {
-  color-scheme: dark; 
+  color-scheme: dark;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -89,7 +89,7 @@ input:-webkit-autofill {
 }
 
 .plataforma-logo-list {
-  gap: 10px; 
+  gap: 10px;
 }
 
 .plataforma-logo-label {
@@ -148,20 +148,20 @@ input:-webkit-autofill {
   flex-shrink: 0;
 }
 
-#add-persona-role-button { 
+#add-persona-role-button {
   margin-top: 10px;
 }
 
 form label {
-  display: block; 
+  display: block;
   margin-bottom: 5px;
-  color: var(--color-grey-4); 
-  font-weight: 500; 
-  font-size: 0.9em; 
+  color: var(--color-grey-4);
+  font-weight: 500;
+  font-size: 0.9em;
 }
 
 .field-error {
-  color: var(--color-red-2); 
-  font-size: 0.875em; 
-  margin-top: 4px; 
+  color: var(--color-red-2);
+  font-size: 0.875em;
+  margin-top: 4px;
 }

@@ -10,13 +10,11 @@
   </head>
   <body>
     <section>
-      <h1 th:text="${tituloPagina ?: 'Listas Públicas'}">Listas Públicas</h1>
-
       <div th:if="${listas == null or listas.isEmpty()}">
         <p>Actualmente no hay listas públicas disponibles.</p>
       </div>
 
-      <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}"> 
+      <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}">
         <div class="content-card" th:each="lista : ${listas}">
           <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
             <div class="content-card-poster-container">

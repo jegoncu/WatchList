@@ -13,9 +13,7 @@
   <body>
     <section th:fragment="section">
       <div class="content-container"> 
-        <h1 class="page-title">Actores y Directores</h1>
-
-        <div id="personas-list-container"> 
+        <div id="personas-list-container">
           <div th:if="${personas == null or #lists.isEmpty(personas)}">
             <p style="text-align: center">
               No hay personas para mostrar en este momento.
@@ -53,8 +51,8 @@
               </a>
             </div>
           </div>
-        </div> 
-      </div> 
+        </div>
+      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
   </body>
