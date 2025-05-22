@@ -9,15 +9,19 @@ import com.jesusgc.WatchList.repository.SerieRepository;
 import com.jesusgc.WatchList.repository.GeneroRepository;
 import com.jesusgc.WatchList.repository.PlataformaRepository;
 import com.jesusgc.WatchList.repository.PersonaRepository;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Sort;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
 
 @Service
 public class SerieService {
@@ -42,11 +46,91 @@ public class SerieService {
     }
 
     public List<Serie> findAll() {
-        return serieRepository.findAll(Sort.by(Sort.Direction.DESC, "puntuacion")); 
+        return serieRepository.findAll(Sort.by(Sort.Direction.DESC, "puntuacion"));
     }
 
     public Optional<Serie> findById(Long id) {
         return serieRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Serie> findSeriesByCriteria(
+            List<Long> generoIds,
+            List<Long> plataformaIds,
+            Integer anioEstrenoMin,
+            Integer anioEstrenoMax,
+            Float puntuacionMin,
+            Integer nTemporadasMin,
+            Integer nTemporadasMax,
+            String estadoSerie,
+            Sort sort) {
+
+        Specification<Serie> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (generoIds != null && !generoIds.isEmpty()) {
+                Join<Serie, Genero> generoJoin = root.join("generos");
+                predicates.add(generoJoin.get("id").in(generoIds));
+                if (query != null) {
+                    query.distinct(true);
+                }
+            }
+
+            if (plataformaIds != null && !plataformaIds.isEmpty()) {
+                Join<Serie, Plataforma> plataformaJoin = root.join("plataformas");
+                predicates.add(plataformaJoin.get("id").in(plataformaIds));
+                if (query != null) {
+                    query.distinct(true);
+                }
+            }
+
+            if (anioEstrenoMin != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("anioEstreno"), anioEstrenoMin));
+            }
+
+            if (anioEstrenoMax != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("anioEstreno"), anioEstrenoMax));
+            }
+
+            if (puntuacionMin != null && puntuacionMin > 0) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("puntuacion"), puntuacionMin));
+            }
+
+            if (nTemporadasMin != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("nTemporadas"), nTemporadasMin));
+            }
+
+            if (nTemporadasMax != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("nTemporadas"), nTemporadasMax));
+            }
+
+            if (estadoSerie != null && !estadoSerie.equalsIgnoreCase("todos")) {
+                if (estadoSerie.equalsIgnoreCase("enEmision")) {
+                    predicates.add(criteriaBuilder.isNull(root.get("anioFin")));
+                } else if (estadoSerie.equalsIgnoreCase("finalizada")) {
+                    predicates.add(criteriaBuilder.isNotNull(root.get("anioFin")));
+                }
+            }
+
+            if (predicates.isEmpty()) {
+                return null;
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        boolean hasActiveFilters = (generoIds != null && !generoIds.isEmpty()) ||
+                (plataformaIds != null && !plataformaIds.isEmpty()) ||
+                (anioEstrenoMin != null) ||
+                (anioEstrenoMax != null) ||
+                (puntuacionMin != null && puntuacionMin > 0) ||
+                (nTemporadasMin != null) ||
+                (nTemporadasMax != null) ||
+                (estadoSerie != null && !estadoSerie.equalsIgnoreCase("todos"));
+
+        if (!hasActiveFilters) {
+            return serieRepository.findAll(sort);
+        }
+        return serieRepository.findAll(spec, sort);
     }
 
     @Transactional
