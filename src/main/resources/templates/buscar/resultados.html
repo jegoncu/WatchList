@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
+    <title th:text="'Resultados de búsqueda: ' + ${query}">Resultados de búsqueda - WatchList</title>
+    <th:block th:fragment="pageCss">
+        <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+        <style>
+            .search-results-container {
+                padding: 2rem;
+            }
+
+            .search-query {
+                margin-bottom: 2rem;
+                color: var(--color-grey-4);
+            }
+
+            .results-section {
+                margin-bottom: 3rem;
+            }
+
+            .results-section h2 {
+                margin-bottom: 1rem;
+                color: var(--color-yellow-2);
+                border-bottom: 2px solid var(--color-yellow-2);
+                padding-bottom: 0.5rem;
+            }
+
+            .no-results {
+                text-align: center;
+                color: var(--color-grey-4);
+                font-style: italic;
+                padding: 2rem;
+            }
+
+            .results-count {
+                color: var(--color-grey-4);
+                font-size: 0.9rem;
+                margin-left: 1rem;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <section th:fragment="section">
+        <div class="search-results-container">
+            <div class="search-query">
+                <h1>Resultados de búsqueda para: "<span th:text="${query}">término</span>"</h1>
+            </div>
+
+            <!-- Sección de Películas -->
+            <div class="results-section" th:if="${peliculas != null and not #lists.isEmpty(peliculas)}">
+                <h2>
+                    Películas
+                    <span class="results-count" th:text="'(' + ${#lists.size(peliculas)} + ' encontradas)'"></span>
+          </h2>
+          <div class="card-grid">
+            <div class="content-card" th:each="pelicula : ${peliculas}">
+              <a th:href="@{/peliculas/{id}(id=${pelicula.id})}" class="content-card-link" th:title="${pelicula.titulo}">
+                <div class="content-card-poster-container">
+                  <div class="poster-rating-badge" th:if="${pelicula.puntuacion != null}">
+                    <span class="rating-number" th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}">0.0</span>
+                  </div>
+                  <img
+                    loading="lazy"
+                    th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+                    th:src="${pelicula.urlImagen}"
+                    th:alt="${pelicula.titulo}"
+                    class="content-card-poster" />
+                  <div
+                    th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+                    class="content-card-poster-placeholder">
+                    <span>Sin Imagen</span>
+                  </div>
+                </div>
+                <div class="content-card-info">
+                  <h3 class="content-card-title" th:text="${pelicula.titulo}">Título</h3>
+                  <p class="content-card-year" th:if="${pelicula.anioEstreno != null}" th:text="${pelicula.anioEstreno}">Año</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Series -->
+        <div class="results-section" th:if="${series != null and not #lists.isEmpty(series)}">
+          <h2>
+            Series
+            <span class="results-count" th:text="'(' + ${#lists.size(series)} + ' encontradas)'"></span>
+          </h2>
+          <div class="card-grid">
+            <div class="content-card" th:each="serie : ${series}">
+              <a th:href="@{/series/{id}(id=${serie.id})}" class="content-card-link" th:title="${serie.titulo}">
+                <div class="content-card-poster-container">
+                  <div class="poster-rating-badge" th:if="${serie.puntuacion != null}">
+                    <span class="rating-number" th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}">0.0</span>
+                  </div>
+                  <img
+                    loading="lazy"
+                    th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
+                    th:src="${serie.urlImagen}"
+                    th:alt="${serie.titulo}"
+                    class="content-card-poster" />
+                  <div
+                    th:unless="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
+                    class="content-card-poster-placeholder">
+                    <span>Sin Imagen</span>
+                  </div>
+                </div>
+                <div class="content-card-info">
+                  <h3 class="content-card-title" th:text="${serie.titulo}">Título</h3>
+                  <p class="content-card-year" th:if="${serie.anioEstreno != null}" th:text="${serie.anioEstreno}">Año</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Personas -->
+        <div class="results-section" th:if="${personas != null and not #lists.isEmpty(personas)}">
+          <h2>
+            Personas
+            <span class="results-count" th:text="'(' + ${#lists.size(personas)} + ' encontradas)'"></span>
+          </h2>
+          <div class="card-grid">
+            <div class="content-card" th:each="persona : ${personas}">
+              <a th:href="@{/gente/{id}(id=${persona.id})}" class="content-card-link" th:title="${persona.nombre}">
+                <div class="content-card-poster-container">
+                  <img
+                    th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                    th:src="${persona.fotoUrl}"
+                    th:alt="${persona.nombre}"
+                    class="content-card-poster persona-card-poster"
+                    loading="lazy" />
+                  <div
+                    th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                    class="content-card-poster-placeholder">
+                    <span>Sin Foto</span>
+                  </div>
+                </div>
+                <div class="content-card-info persona-card-info">
+                  <h3 class="content-card-title persona-card-name" th:text="${persona.nombre}">Nombre</h3>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Listas -->
+        <div class="results-section" th:if="${listas != null and not #lists.isEmpty(listas)}">
+          <h2>
+            Listas Públicas
+            <span class="results-count" th:text="'(' + ${#lists.size(listas)} + ' encontradas)'"></span>
+          </h2>
+          <div class="card-grid">
+            <div class="content-card" th:each="lista : ${listas}">
+              <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
+                <div class="content-card-poster-container">
+                  <div class="content-card-poster-placeholder lista-placeholder">
+                    <span>📋</span>
+                  </div>
+                </div>
+                <div class="content-card-info">
+                  <h3 class="content-card-title" th:text="${lista.titulo}">Título de Lista</h3>
+                  <p class="content-card-year" th:text="'Por: ' + ${lista.usuario.nombre}">Usuario</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje cuando no hay resultados -->
+        <div th:if="${(peliculas == null or #lists.isEmpty(peliculas)) and
+                      (series == null or #lists.isEmpty(series)) and
+                      (personas == null or #lists.isEmpty(personas)) and
+                      (listas == null or #lists.isEmpty(listas))}"
+             class="no-results">
+          <h2>No se encontraron resultados para "<span th:text="${query}">término</span>"</h2>
+          <p>Intenta con otros términos de búsqueda.</p>
+        </div>
+      </div>
+    </section>
+    <th:block th:fragment="pageScript"></th:block>
+  </body>
+</html>

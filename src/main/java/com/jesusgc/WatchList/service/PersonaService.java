@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,14 @@ public class PersonaService {
             throw new IllegalArgumentException("Persona con ID " + id + " no encontrada.");
         }
         personaRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Persona> buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return personaRepository.findByNombreContainingIgnoreCase(nombre.trim());
     }
 
 }

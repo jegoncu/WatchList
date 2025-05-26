@@ -8,6 +8,7 @@ import com.jesusgc.WatchList.repository.MediaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ public class ListaService {
         Lista nuevaLista = new Lista();
         nuevaLista.setTitulo(titulo);
         nuevaLista.setEsPublica(esPublica);
-
         usuario.addLista(nuevaLista);
         return listaRepository.save(nuevaLista);
     }
@@ -59,7 +59,6 @@ public class ListaService {
         Lista lista = obtenerListaPorIdYUsuario(listaId, usuario);
         Media media = mediaRepository.findById(mediaId)
                 .orElseThrow(() -> new IllegalArgumentException("Media item no encontrado con ID: " + mediaId));
-
         lista.addMedia(media);
         return listaRepository.save(lista);
     }
@@ -69,7 +68,6 @@ public class ListaService {
         Lista lista = obtenerListaPorIdYUsuario(listaId, usuario);
         Media media = mediaRepository.findById(mediaId)
                 .orElseThrow(() -> new IllegalArgumentException("Media item no encontrado con ID: " + mediaId));
-
         lista.removeMedia(media);
         return listaRepository.save(lista);
     }
@@ -77,7 +75,14 @@ public class ListaService {
     @Transactional
     public void eliminarLista(Long listaId, Usuario usuario) {
         Lista lista = obtenerListaPorIdYUsuario(listaId, usuario);
-
         listaRepository.delete(lista);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Lista> buscarPorTitulo(String titulo) {
+        if (titulo == null || titulo.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return listaRepository.findByTituloContainingIgnoreCaseAndEsPublicaTrue(titulo.trim());
     }
 }

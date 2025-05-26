@@ -67,7 +67,7 @@ public class PeliculaService {
             if (generoIds != null && !generoIds.isEmpty()) {
                 Join<Pelicula, Genero> generoJoin = root.join("generos");
                 predicates.add(generoJoin.get("id").in(generoIds));
-                if (query != null) { 
+                if (query != null) {
                     query.distinct(true);
                 }
             }
@@ -75,7 +75,7 @@ public class PeliculaService {
             if (plataformaIds != null && !plataformaIds.isEmpty()) {
                 Join<Pelicula, Plataforma> plataformaJoin = root.join("plataformas");
                 predicates.add(plataformaJoin.get("id").in(plataformaIds));
-                if (query != null) { 
+                if (query != null) {
                     query.distinct(true);
                 }
             }
@@ -176,5 +176,13 @@ public class PeliculaService {
     @Transactional
     public void deleteById(Long id) {
         peliculaRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Pelicula> buscarPorTitulo(String titulo) {
+        if (titulo == null || titulo.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return peliculaRepository.findByTituloContainingIgnoreCase(titulo.trim());
     }
 }

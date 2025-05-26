@@ -195,4 +195,12 @@ public class SerieService {
     public void deleteById(Long id) {
         serieRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public List<Serie> buscarPorTitulo(String titulo) {
+        if (titulo == null || titulo.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return serieRepository.findByTituloContainingIgnoreCase(titulo.trim());
+    }
 }

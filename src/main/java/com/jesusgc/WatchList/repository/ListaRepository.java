@@ -13,4 +13,5 @@ public interface ListaRepository extends JpaRepository<Lista, Long> {
     List<Lista> findByUsuario(Usuario usuario);
     List<Lista> findByEsPublicaTrue();
     Optional<Lista> findByIdAndUsuario(Long id, Usuario usuario);
+    List<Lista> findByTituloContainingIgnoreCaseAndEsPublicaTrue(String titulo);
 }
