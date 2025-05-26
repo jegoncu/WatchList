@@ -22,6 +22,7 @@ public class UsuarioController {
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
         model.addAttribute("usuario", new Usuario());
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
         return "auth/registro";
     }
 
@@ -29,6 +30,7 @@ public class UsuarioController {
     public String registrarUsuario(@Valid @ModelAttribute Usuario usuario, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("usuario", usuario);
+            model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA (caso de error)
             return "auth/registro";
         }
         try {
@@ -37,6 +39,7 @@ public class UsuarioController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("usuario", usuario);
+            model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA (caso de error)
             return "auth/registro";
         }
     }
@@ -54,6 +57,7 @@ public class UsuarioController {
         if (registroExitoso != null) {
             model.addAttribute("mensaje", "¡Registro exitoso! Por favor, inicia sesión.");
         }
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
         return "auth/login";
     }
 
@@ -73,6 +77,7 @@ public class UsuarioController {
             return "redirect:/inicio";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA (caso de error)
             return "auth/login";
         }
     }
@@ -102,6 +107,7 @@ public class UsuarioController {
         }
         model.addAttribute("usuario", usuarioLogueado);
         model.addAttribute("currentPage", "perfil");
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA (opcional)
         return "usuario/perfil";
     }
 }

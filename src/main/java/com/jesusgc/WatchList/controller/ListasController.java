@@ -35,6 +35,7 @@ public class ListasController {
         model.addAttribute("listas", listasPublicas);
         model.addAttribute("tituloPagina", "Listas Públicas");
         model.addAttribute("currentPage", "listasPublicas");
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
         return "listas/listas";
     }
 
@@ -51,6 +52,7 @@ public class ListasController {
             model.addAttribute("usuario", usuarioLogueado);
             model.addAttribute("tituloPagina", "Mis Listas");
             model.addAttribute("currentPage", "misListas");
+            model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
             return "usuario/mis-listas";
         } catch (IllegalArgumentException e) {
             session.invalidate();
@@ -67,6 +69,7 @@ public class ListasController {
         model.addAttribute("lista", new Lista());
         model.addAttribute("tituloPagina", "Crear Nueva Lista");
         model.addAttribute("currentPage", "misListas");
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
         return "listas/form-lista";
     }
 
@@ -109,7 +112,7 @@ public class ListasController {
 
         if (listaOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Lista no encontrada.");
-            return "redirect:/listas"; 
+            return "redirect:/listas";
         }
 
         Lista lista = listaOptional.get();
@@ -119,7 +122,7 @@ public class ListasController {
         if (!lista.getEsPublica()) {
             if (usuarioIdSesion == null) {
                 redirectAttributes.addFlashAttribute("error", "Debes iniciar sesión para ver esta lista privada.");
-                return "redirect:/login?redirectUrl=/listas/" + listaId; 
+                return "redirect:/login?redirectUrl=/listas/" + listaId;
             }
             try {
                 Usuario usuarioLogueado = usuarioService.findById(usuarioIdSesion);
@@ -127,7 +130,7 @@ public class ListasController {
                     esPropietario = true;
                 } else {
                     redirectAttributes.addFlashAttribute("error", "No tienes permiso para ver esta lista privada.");
-                    return "redirect:/listas"; 
+                    return "redirect:/listas";
                 }
             } catch (IllegalArgumentException e) {
 
@@ -135,22 +138,23 @@ public class ListasController {
                 session.invalidate();
                 return "redirect:/login";
             }
-        } else { 
+        } else {
             if (usuarioIdSesion != null && lista.getUsuario() != null && lista.getUsuario().getId().equals(usuarioIdSesion)) {
-                esPropietario = true; 
+                esPropietario = true;
             }
         }
 
         model.addAttribute("lista", lista);
-        model.addAttribute("tituloPagina", "Detalle: " + lista.getTitulo()); 
+        model.addAttribute("tituloPagina", "Detalle: " + lista.getTitulo());
         model.addAttribute("esPropietario", esPropietario);
+        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
 
         if (esPropietario) {
             model.addAttribute("currentPage", "misListas");
         } else {
             model.addAttribute("currentPage", "listasPublicas");
         }
-        
+
         if (redirectAttributes.getFlashAttributes().containsKey("mensajeExito")) {
             model.addAttribute("mensajeExito", redirectAttributes.getFlashAttributes().get("mensajeExito"));
         }
@@ -200,7 +204,7 @@ public class ListasController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error inesperado al añadir el ítem a la lista.");
         }
-        return "redirect:/listas/" + listaId; 
+        return "redirect:/listas/" + listaId;
     }
 
     @PostMapping("/listas/{listaId}/media/{mediaId}/quitar")
@@ -223,6 +227,6 @@ public class ListasController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error inesperado al quitar el ítem de la lista.");
         }
-        return "redirect:/listas/" + listaId; 
+        return "redirect:/listas/" + listaId;
     }
 }
