@@ -131,6 +131,56 @@ function resetSeriesFiltersAndSort() {
     }
 }
 
+function initSidebarDropdowns() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+
+            if (targetId === 'sidebar-dropdown-1-child') {
+                const sortCriteriaElement = document.querySelector('.sidebar-dropdown-1-child');
+                const sortDirectionElement = document.querySelector('.sort-direction-container');
+
+                this.classList.toggle('collapsed');
+
+                if (sortCriteriaElement) {
+                    sortCriteriaElement.classList.toggle('collapsed');
+                }
+                if (sortDirectionElement) {
+                    sortDirectionElement.classList.toggle('collapsed');
+                }
+            } else {
+                const targetElement = document.querySelector('.' + targetId);
+                if (targetElement) {
+                    this.classList.toggle('collapsed');
+                    targetElement.classList.toggle('collapsed');
+                }
+            }
+        });
+    });
+}
+
+function initSidebarToggle() {
+    const toggleButton = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+
+    if (toggleButton && sidebar && mainContent) {
+        toggleButton.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            this.classList.toggle('sidebar-collapsed');
+            const icon = this.querySelector('.sidebar-toggle-icon');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.textContent = '▶';
+            } else {
+                icon.textContent = '☰';
+            }
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     ['peliculaAnioMin', 'peliculaAnioMax', 'peliculaPuntuacionMin'].forEach(id => {
         const slider = document.getElementById(id);
@@ -143,4 +193,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const slider = document.getElementById(id);
         if (slider) updateSliderValue(slider, id + 'Val');
     });
+
+    initSidebarDropdowns();
+
+    initSidebarToggle();
 });

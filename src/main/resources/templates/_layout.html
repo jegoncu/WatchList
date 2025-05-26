@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
-  th:fragment="html(title, section, pageCss, pageScript)">
-  <head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="html(title, section, pageCss, pageScript)">
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="/js/htmx.min.js" defer></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <title th:replace="${title}">WatchList</title>
     <th:block th:replace="${pageCss}" />
-  </head>
-  <body>
+</head>
+
+<body>
     <header th:replace="~{fragments/_header}"></header>
-    <main
-      class="main-container"
-      th:classappend="${hideSidebar != null and hideSidebar == true ? 'main-container-no-sidebar' : ''}">
-      <aside
-        class="sidebar-container"
-        th:if="${hideSidebar == null or hideSidebar == false}">
-        <th:block th:replace="~{fragments/_sidebar}"></th:block>
-      </aside>
-      <section
-        class="content-container"
-        th:classappend="${hideSidebar != null and hideSidebar == true ? 'content-container-no-sidebar' : ''}">
-        <th:block th:replace="${section}" />
-      </section>
+    <main class="main-container"
+        th:classappend="${hideSidebar != null and hideSidebar == true ? 'main-container-no-sidebar' : ''}">
+
+        <button id="sidebar-toggle" class="sidebar-toggle-btn" th:if="${hideSidebar == null or hideSidebar == false}">
+            <span class="sidebar-toggle-icon">☰</span>
+        </button>
+
+        <aside id="sidebar" class="sidebar-container" th:if="${hideSidebar == null or hideSidebar == false}">
+            <th:block th:replace="~{fragments/_sidebar}"></th:block>
+        </aside>
+
+        <section id="main-content" class="content-container"
+            th:classappend="${hideSidebar != null and hideSidebar == true ? 'content-container-no-sidebar' : ''}">
+            <th:block th:replace="${section}" />
+        </section>
     </main>
     <footer th:replace="~{fragments/_footer}"></footer>
     <th:block th:replace="${pageScript}" />
     <script th:src="@{/js/dropdown.js}"></script>
-  </body>
+    <script th:src="@{/js/sidebar-scripts.js}"></script>
+</body>
+
 </html>
