@@ -1,59 +1,47 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
     <title>Actores y Directores - WatchList</title>
     <th:block th:fragment="pageCss">
-      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+        <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
     </th:block>
-  </head>
-  <body>
-    <section th:fragment="section">
-      <div class="content-container"> 
-        <div id="personas-list-container">
-          <div th:if="${personas == null or #lists.isEmpty(personas)}">
-            <p style="text-align: center">
-              No hay personas para mostrar en este momento.
-            </p>
-          </div>
+</head>
 
-          <div
-            class="card-grid"
-            th:if="${personas != null and not #lists.isEmpty(personas)}">
-            <div class="content-card" th:each="persona : ${personas}">
-              <a
-                th:href="@{/gente/{id}(id=${persona.id})}"
-                class="content-card-link"
-                th:title="${persona.nombre}">
-                <div class="content-card-poster-container">
-                  <img
-                    th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
-                    th:src="${persona.fotoUrl}"
-                    th:alt="${persona.nombre}"
-                    class="content-card-poster persona-card-poster"
-                    loading="lazy" />
-                  <div
-                    th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
-                    class="content-card-poster-placeholder">
-                    <span>Sin Foto</span>
-                  </div>
-                </div>
-                <div class="content-card-info persona-card-info">
-                  <h3
-                    class="content-card-title persona-card-name"
-                    th:text="${persona.nombre}">
-                    Nombre de la Persona
-                  </h3>
-                </div>
-              </a>
+<body>
+    <section th:fragment="section">
+        <div id="personas-list-container">
+            <div th:if="${personas == null or #lists.isEmpty(personas)}">
+                <p style="text-align: center">
+                    No hay personas para mostrar en este momento.
+                </p>
             </div>
-          </div>
+
+            <div class="card-grid" th:if="${personas != null and not #lists.isEmpty(personas)}">
+                <div class="content-card" th:each="persona : ${personas}">
+                    <a th:href="@{/gente/{id}(id=${persona.id})}" class="content-card-link"
+                        th:title="${persona.nombre}">
+                        <div class="content-card-poster-container">
+                            <img th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                                th:src="${persona.fotoUrl}" th:alt="${persona.nombre}"
+                                class="content-card-poster persona-card-poster" loading="lazy" />
+                            <div th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
+                                class="content-card-poster-placeholder">
+                                <span>Sin Foto</span>
+                            </div>
+                        </div>
+                        <div class="content-card-info persona-card-info">
+                            <h3 class="content-card-title persona-card-name" th:text="${persona.nombre}">
+                                Nombre de la Persona
+                            </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
     <th:block th:fragment="pageScript"> </th:block>
-  </body>
+</body>
+
 </html>

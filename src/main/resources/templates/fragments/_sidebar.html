@@ -342,8 +342,13 @@
 
         <div th:if="${currentPage == 'gente'}">
             <form id="sort-form-gente" class="sidebar-form">
-                <h5>Ordenar por:</h5>
-                <div class="form-group-sidebar">
+                <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
+                    data-target="sidebar-dropdown-1-child">
+                    <h4>Ordenar por:</h4>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+
+                <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
                     <label>
                         <input type="radio" name="sortBy" value="nombre"
                             th:checked="${currentSortBy == 'nombre' or currentSortBy == null}"
@@ -361,8 +366,7 @@
                     </label>
                 </div>
 
-                <h5>Dirección:</h5>
-                <div class="form-group-sidebar">
+                <div class="form-group-sidebar sidebar-group sort-direction-container">
                     <label>
                         <input type="radio" name="sortDir" value="asc"
                             th:checked="${currentSortDir == 'asc' or currentSortDir == null}" th:attr="hx-get=@{/gente}"
