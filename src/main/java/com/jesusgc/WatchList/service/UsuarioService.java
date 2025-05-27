@@ -17,10 +17,9 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario registrar(String email, String nombre, String contrasenia, boolean esPublico) {
-        return registrar(email, nombre, contrasenia, esPublico, false); // Llamar al método completo con esAdmin = false
+        return registrar(email, nombre, contrasenia, esPublico, false);
     }
 
-    // Nuevo método sobrecargado para admin
     @Transactional
     public Usuario registrar(String email, String nombre, String contrasenia, boolean esPublico, boolean esAdmin) {
         if (usuarioRepository.existsByEmail(email)) {
@@ -35,7 +34,7 @@ public class UsuarioService {
         usuario.setContrasenia(hashedPassword);
 
         usuario.setEsPublico(esPublico);
-        usuario.setEsAdmin(esAdmin); // Ahora se puede configurar desde admin
+        usuario.setEsAdmin(esAdmin);
 
         return usuarioRepository.save(usuario);
     }
@@ -89,7 +88,6 @@ public class UsuarioService {
 
         Usuario usuario = usuarioOpt.get();
 
-        // Verificar si el email ya existe para otro usuario
         if (!usuario.getEmail().equals(email) && usuarioRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("El email ya está registrado por otro usuario");
         }
@@ -99,12 +97,55 @@ public class UsuarioService {
         usuario.setEsPublico(esPublico);
         usuario.setEsAdmin(esAdmin);
 
-        // Solo actualizar contraseña si se proporciona una nueva
         if (nuevaContrasenia != null && !nuevaContrasenia.trim().isEmpty()) {
             String hashedPassword = BCrypt.hashpw(nuevaContrasenia, BCrypt.gensalt());
             usuario.setContrasenia(hashedPassword);
         }
 
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public Usuario actualizarPerfil(Long usuarioId, String nombre, String email,
+                                   String contrasenaActual, String nuevaContrasena,
+                                   String confirmarContrasena, Boolean esPublico) {
+
+        Usuario usuario = findById(usuarioId);
+
+        if (!BCrypt.checkpw(contrasenaActual, usuario.getContrasenia())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+
+        if (!usuario.getEmail().equals(email) && usuarioRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("El email ya está registrado por otro usuario");
+        }
+
+        if (nuevaContrasena != null && !nuevaContrasena.trim().isEmpty()) {
+            if (nuevaContrasena.length() < 6) {
+                throw new IllegalArgumentException("La nueva contraseña debe tener al menos 6 caracteres");
+            }
+            if (!nuevaContrasena.equals(confirmarContrasena)) {
+                throw new IllegalArgumentException("Las contraseñas no coinciden");
+            }
+            String hashedPassword = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
+            usuario.setContrasenia(hashedPassword);
+        }
+
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setEsPublico(esPublico);
+
+        return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void eliminarCuentaPropia(Long usuarioId, String contrasenaConfirmacion) {
+        Usuario usuario = findById(usuarioId);
+
+        if (!BCrypt.checkpw(contrasenaConfirmacion, usuario.getContrasenia())) {
+            throw new IllegalArgumentException("Contraseña incorrecta");
+        }
+
+        usuarioRepository.delete(usuario);
     }
 }

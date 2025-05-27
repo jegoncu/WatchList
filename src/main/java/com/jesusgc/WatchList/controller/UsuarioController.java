@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UsuarioController {
@@ -107,7 +108,93 @@ public class UsuarioController {
         }
         model.addAttribute("usuario", usuarioLogueado);
         model.addAttribute("currentPage", "perfil");
-        model.addAttribute("hideSidebar", true); 
+        model.addAttribute("hideSidebar", true);
         return "usuario/perfil";
+    }
+
+    @GetMapping("/perfil/editar")
+    public String mostrarFormularioEditarPerfil(HttpSession session, Model model) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        // Obtener datos actualizados del usuario desde la base de datos
+        Usuario usuario = usuarioService.findById(usuarioLogueado.getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("currentPage", "perfil");
+        model.addAttribute("hideSidebar", true);
+        return "usuario/editar-perfil";
+    }
+
+    @PostMapping("/perfil/editar")
+    public String actualizarPerfil(
+            @Valid @ModelAttribute Usuario usuarioForm,
+            BindingResult result,
+            @RequestParam("contrasenaActual") String contrasenaActual,
+            @RequestParam(value = "nuevaContrasena", required = false) String nuevaContrasena,
+            @RequestParam(value = "confirmarContrasena", required = false) String confirmarContrasena,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("usuario", usuarioForm);
+            model.addAttribute("currentPage", "perfil");
+            model.addAttribute("hideSidebar", true);
+            return "usuario/editar-perfil";
+        }
+
+        try {
+            Usuario usuarioActualizado = usuarioService.actualizarPerfil(
+                usuarioLogueado.getId(),
+                usuarioForm.getNombre(),
+                usuarioForm.getEmail(),
+                contrasenaActual,
+                nuevaContrasena,
+                confirmarContrasena,
+                usuarioForm.getEsPublico()
+            );
+
+            // Actualizar el usuario en la sesión
+            session.setAttribute("usuarioLogueado", usuarioActualizado);
+            session.setAttribute("usuarioNombre", usuarioActualizado.getNombre());
+
+            redirectAttributes.addFlashAttribute("successMessage", "Perfil actualizado correctamente.");
+            return "redirect:/perfil";
+
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("usuario", usuarioForm);
+            model.addAttribute("currentPage", "perfil");
+            model.addAttribute("hideSidebar", true);
+            return "usuario/editar-perfil";
+        }
+    }
+
+    @PostMapping("/perfil/eliminar")
+    public String eliminarCuenta(HttpSession session, RedirectAttributes redirectAttributes) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            usuarioService.deleteById(usuarioLogueado.getId());
+            session.invalidate(); // Cerrar sesión
+            redirectAttributes.addFlashAttribute("successMessage",
+                "Tu cuenta ha sido eliminada correctamente. Lamentamos verte partir.");
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                "Error al eliminar la cuenta: " + e.getMessage());
+            return "redirect:/perfil";
+        }
     }
 }
