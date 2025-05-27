@@ -1,69 +1,109 @@
 .btn {
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  text-decoration: none;
-  margin: 4px 2px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  line-height: 1.5;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    margin: 4px 2px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+        border-color 0.2s ease-in-out;
 }
 
 .btn-big {
-  padding: 10px 20px;
-  font-size: 1rem;
+    padding: 10px 20px;
+    font-size: 1rem;
 }
 
 .btn-small {
-  padding: 5px 10px;
-  font-size: 0.875rem;
+    padding: 5px 10px;
+    font-size: 0.875rem;
 }
 
 .btn-yellow {
-  background-color: var(--color-yellow-2);
-  color: var(--color-grey-1);
+    background-color: var(--color-yellow-2);
+    color: var(--color-grey-1);
 }
+
 .btn-yellow:hover {
-  background-color: var(--color-yellow-1);
-  color: var(--color-grey-1);
+    background-color: var(--color-yellow-1);
+    color: var(--color-grey-1);
 }
 
 .btn-blue {
-  background-color: var(--color-blue-2);
-  color: var(--color-grey-1);
+    background-color: var(--color-blue-2);
+    color: var(--color-grey-1);
 }
+
 .btn-blue:hover {
-  background-color: var(--color-blue-1);
-  color: var(--color-grey-1);
+    background-color: var(--color-blue-1);
+    color: var(--color-grey-1);
 }
 
 .btn-red {
-  background-color: var(--color-red-2);
-  color: var(--color-grey-1);
+    background-color: var(--color-red-2);
+    color: var(--color-grey-1);
 }
+
 .btn-red:hover {
-  background-color: var(--color-red-1);
-  color: var(--color-grey-1);
+    background-color: var(--color-red-1);
+    color: var(--color-grey-1);
 }
 
 .btn-green {
-  background-color: var(--color-green-2);
-  color: var(--color-grey-1);
+    background-color: var(--color-green-2);
+    color: var(--color-grey-1);
 }
+
 .btn-green:hover {
-  background-color: var(--color-green-1);
-  color: var(--color-grey-1);
+    background-color: var(--color-green-1);
+    color: var(--color-grey-1);
 }
 
 .btn-grey {
-  background-color: var(--color-grey-4);
-  color: var(--color-grey-1);
+    background-color: var(--color-grey-4);
+    color: var(--color-grey-1);
 }
+
 .btn-grey:hover {
-  background-color: var(--color-grey-3);
-  color: var(--color-grey-1);
+    background-color: var(--color-grey-3);
+    color: var(--color-grey-1);
+}
+
+.comentario-acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-eliminar-comentario {
+    background: none;
+    border: none;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+    opacity: 0.6;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.btn-eliminar-comentario:hover {
+    opacity: 1;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.comentario-usuario-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

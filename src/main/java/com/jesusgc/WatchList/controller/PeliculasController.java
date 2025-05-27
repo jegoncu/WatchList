@@ -40,10 +40,12 @@ public class PeliculasController {
     private final GeneroService generoService;
     private final PlataformaService plataformaService;
 
-    private static final List<String> ALLOWED_SORT_PROPERTIES_PELICULA = Arrays.asList("titulo", "anioEstreno", "puntuacion", "duracionMin");
+    private static final List<String> ALLOWED_SORT_PROPERTIES_PELICULA = Arrays.asList("titulo", "anioEstreno",
+            "puntuacion", "duracionMin");
 
     public PeliculasController(PeliculaService peliculaService, UsuarioService usuarioService,
-            ListaService listaService, ComentarioService comentarioService, GeneroService generoService, PlataformaService plataformaService) {
+            ListaService listaService, ComentarioService comentarioService, GeneroService generoService,
+            PlataformaService plataformaService) {
         this.peliculaService = peliculaService;
         this.usuarioService = usuarioService;
         this.listaService = listaService;
@@ -54,16 +56,16 @@ public class PeliculasController {
 
     @GetMapping("/peliculas")
     public String mostrarPeliculas(Model model,
-                                   @RequestParam(defaultValue = "puntuacion") String sortBy,
-                                   @RequestParam(defaultValue = "desc") String sortDir,
-                                   @RequestParam(required = false) List<Long> generoIds,
-                                   @RequestParam(required = false) List<Long> plataformaIds,
-                                   @RequestParam(required = false) Integer anioMin,
-                                   @RequestParam(required = false) Integer anioMax,
-                                   @RequestParam(required = false) Float puntuacionMin,
-                                   HttpServletRequest request,
-                                   HttpServletResponse response,
-                                   HttpSession session) {
+            @RequestParam(defaultValue = "puntuacion") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir,
+            @RequestParam(required = false) List<Long> generoIds,
+            @RequestParam(required = false) List<Long> plataformaIds,
+            @RequestParam(required = false) Integer anioMin,
+            @RequestParam(required = false) Integer anioMax,
+            @RequestParam(required = false) Float puntuacionMin,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session) {
 
         String sortProperty = ALLOWED_SORT_PROPERTIES_PELICULA.contains(sortBy) ? sortBy : "puntuacion";
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDir) ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -74,8 +76,7 @@ public class PeliculasController {
         Float currentPuntuacionMin = (puntuacionMin == null) ? 0.0f : puntuacionMin;
 
         List<Pelicula> peliculas = peliculaService.findPeliculasByCriteria(
-                generoIds, plataformaIds, currentAnioMin, currentAnioMax, currentPuntuacionMin, sort
-        );
+                generoIds, plataformaIds, currentAnioMin, currentAnioMax, currentPuntuacionMin, sort);
 
         model.addAttribute("peliculas", peliculas);
         model.addAttribute("currentPage", "peliculas");
@@ -185,6 +186,29 @@ public class PeliculasController {
                     "Error inesperado al guardar el comentario. Inténtalo de nuevo más tarde.");
             redirectAttributes.addFlashAttribute("textoPrevio", texto);
             redirectAttributes.addFlashAttribute("puntuacionPrevia", puntuacion);
+        }
+
+        return "redirect:/peliculas/" + peliculaId;
+    }
+
+    @PostMapping("/peliculas/{id}/comentarios/{comentarioId}/eliminar")
+    public String eliminarComentarioPelicula(
+            @PathVariable("id") Long peliculaId,
+            @PathVariable("comentarioId") Long comentarioId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes estar logueado para eliminar comentarios.");
+            return "redirect:/peliculas/" + peliculaId;
+        }
+
+        try {
+            comentarioService.eliminarComentario(comentarioId, usuario);
+            redirectAttributes.addFlashAttribute("successMessage", "Comentario eliminado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el comentario: " + e.getMessage());
         }
 
         return "redirect:/peliculas/" + peliculaId;

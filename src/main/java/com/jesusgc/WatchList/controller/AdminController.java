@@ -3,11 +3,15 @@ package com.jesusgc.WatchList.controller;
 import com.jesusgc.WatchList.model.Pelicula;
 import com.jesusgc.WatchList.model.Persona;
 import com.jesusgc.WatchList.model.Serie;
+import com.jesusgc.WatchList.model.Lista;
+import com.jesusgc.WatchList.model.Usuario;
 import com.jesusgc.WatchList.service.PeliculaService;
 import com.jesusgc.WatchList.service.GeneroService;
 import com.jesusgc.WatchList.service.PlataformaService;
 import com.jesusgc.WatchList.service.PersonaService;
 import com.jesusgc.WatchList.service.SerieService;
+import com.jesusgc.WatchList.service.ListaService;
+import com.jesusgc.WatchList.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,18 +39,24 @@ public class AdminController {
     private final PlataformaService plataformaService;
     private final PersonaService personaService;
     private final SerieService serieService;
+    private final ListaService listaService;
+    private final UsuarioService usuarioService;
 
     public AdminController(
             PeliculaService peliculaService,
             GeneroService generoService,
             PlataformaService plataformaService,
             PersonaService personaService,
-            SerieService serieService) {
+            SerieService serieService,
+            ListaService listaService,
+            UsuarioService usuarioService) {
         this.peliculaService = peliculaService;
         this.generoService = generoService;
         this.plataformaService = plataformaService;
         this.personaService = personaService;
         this.serieService = serieService;
+        this.listaService = listaService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
@@ -271,18 +282,203 @@ public class AdminController {
 
     @GetMapping("/listas")
     public String listarListasAdmin(Model model) {
+        List<Lista> todasLasListas = listaService.findAll();
+        model.addAttribute("listas", todasLasListas);
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Listas");
-        model.addAttribute("message", "Página de gestión de Listas en construcción.");
-        return "admin/placeholder-list";
+        return "admin/listas/lista-listas";
+    }
+
+    @GetMapping("/listas/nueva")
+    public String mostrarFormularioNuevaLista(Model model) {
+        model.addAttribute("lista", new Lista());
+        model.addAttribute("allUsuarios", usuarioService.findAll());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Crear Nueva Lista");
+        model.addAttribute("formAction", "/admin/listas/nueva");
+        return "admin/listas/form-lista";
+    }
+
+    @PostMapping("/listas/nueva")
+    public String procesarNuevaLista(@Valid @ModelAttribute("lista") Lista lista,
+            BindingResult result,
+            @RequestParam("usuarioId") Long usuarioId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("allUsuarios", usuarioService.findAll());
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Crear Nueva Lista");
+            model.addAttribute("formAction", "/admin/listas/nueva");
+            return "admin/listas/form-lista";
+        }
+
+        try {
+            Usuario usuario = usuarioService.findById(usuarioId);
+            if (usuario == null) {
+                throw new IllegalArgumentException("Usuario no encontrado");
+            }
+            listaService.crearLista(lista.getTitulo(), lista.getEsPublica(), usuario);
+            redirectAttributes.addFlashAttribute("successMessage", "Lista creada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear la lista: " + e.getMessage());
+        }
+
+        return "redirect:/admin/listas";
+    }
+
+    @GetMapping("/listas/editar/{id}")
+    public String mostrarFormularioEditarLista(@PathVariable("id") Long id, Model model,
+            RedirectAttributes redirectAttributes) {
+        Optional<Lista> listaOpt = listaService.findById(id);
+        if (listaOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lista no encontrada.");
+            return "redirect:/admin/listas";
+        }
+
+        model.addAttribute("lista", listaOpt.get());
+        model.addAttribute("allUsuarios", usuarioService.findAll());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Editar Lista");
+        model.addAttribute("formAction", "/admin/listas/editar/" + id);
+        return "admin/listas/form-lista";
+    }
+
+    @PostMapping("/listas/editar/{id}")
+    public String procesarEditarLista(@PathVariable("id") Long id,
+            @Valid @ModelAttribute("lista") Lista listaForm,
+            BindingResult result,
+            @RequestParam("usuarioId") Long usuarioId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("allUsuarios", usuarioService.findAll());
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Editar Lista");
+            model.addAttribute("formAction", "/admin/listas/editar/" + id);
+            return "admin/listas/form-lista";
+        }
+
+        try {
+            Usuario usuario = usuarioService.findById(usuarioId);
+            if (usuario == null) {
+                throw new IllegalArgumentException("Usuario no encontrado");
+            }
+            listaService.updateLista(id, listaForm.getTitulo(), listaForm.getEsPublica(), usuario);
+            redirectAttributes.addFlashAttribute("successMessage", "Lista actualizada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar la lista: " + e.getMessage());
+        }
+
+        return "redirect:/admin/listas";
+    }
+
+    @PostMapping("/listas/eliminar/{id}")
+    public String eliminarLista(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            listaService.deleteById(id); // Necesitaremos añadir este método al servicio
+            redirectAttributes.addFlashAttribute("successMessage", "Lista eliminada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la lista: " + e.getMessage());
+        }
+        return "redirect:/admin/listas";
     }
 
     @GetMapping("/usuarios")
     public String listarUsuariosAdmin(Model model) {
+        List<Usuario> todosLosUsuarios = usuarioService.findAll();
+        model.addAttribute("usuarios", todosLosUsuarios);
         model.addAttribute("currentPage", "admin");
         model.addAttribute("pageTitle", "Gestionar Usuarios");
-        model.addAttribute("message", "Página de gestión de Usuarios en construcción.");
-        return "admin/placeholder-list";
+        return "admin/usuarios/lista-usuarios";
+    }
+
+    @GetMapping("/usuarios/nuevo")
+    public String mostrarFormularioNuevoUsuario(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Crear Nuevo Usuario");
+        model.addAttribute("formAction", "/admin/usuarios/nuevo");
+        return "admin/usuarios/form-usuario";
+    }
+
+    @PostMapping("/usuarios/nuevo")
+    public String procesarNuevoUsuario(@Valid @ModelAttribute("usuario") Usuario usuario,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Crear Nuevo Usuario");
+            model.addAttribute("formAction", "/admin/usuarios/nuevo");
+            return "admin/usuarios/form-usuario";
+        }
+
+        try {
+            usuarioService.registrar(usuario.getEmail(), usuario.getNombre(),
+                               usuario.getContrasenia(), usuario.getEsPublico(), usuario.getEsAdmin());
+            redirectAttributes.addFlashAttribute("successMessage", "Usuario creado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el usuario: " + e.getMessage());
+        }
+
+        return "redirect:/admin/usuarios";
+    }
+
+    @GetMapping("/usuarios/editar/{id}")
+    public String mostrarFormularioEditarUsuario(@PathVariable("id") Long id, Model model,
+            RedirectAttributes redirectAttributes) {
+        Optional<Usuario> usuarioOpt = usuarioService.findByIdOptional(id); // Necesitaremos añadir este método
+        if (usuarioOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado.");
+            return "redirect:/admin/usuarios";
+        }
+
+        model.addAttribute("usuario", usuarioOpt.get());
+        model.addAttribute("currentPage", "admin");
+        model.addAttribute("pageTitle", "Editar Usuario");
+        model.addAttribute("formAction", "/admin/usuarios/editar/" + id);
+        return "admin/usuarios/form-usuario";
+    }
+
+    @PostMapping("/usuarios/editar/{id}")
+    public String procesarEditarUsuario(@PathVariable("id") Long id,
+            @Valid @ModelAttribute("usuario") Usuario usuarioForm,
+            BindingResult result,
+            @RequestParam(value = "nuevaContrasenia", required = false) String nuevaContrasenia,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("currentPage", "admin");
+            model.addAttribute("pageTitle", "Editar Usuario");
+            model.addAttribute("formAction", "/admin/usuarios/editar/" + id);
+            return "admin/usuarios/form-usuario";
+        }
+
+        try {
+            usuarioService.updateUsuario(id, usuarioForm.getNombre(), usuarioForm.getEmail(),
+                                   nuevaContrasenia, usuarioForm.getEsPublico(), usuarioForm.getEsAdmin());
+            redirectAttributes.addFlashAttribute("successMessage", "Usuario actualizado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar el usuario: " + e.getMessage());
+        }
+
+        return "redirect:/admin/usuarios";
+    }
+
+    @PostMapping("/usuarios/eliminar/{id}")
+    public String eliminarUsuario(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            usuarioService.deleteById(id); // Necesitaremos añadir este método
+            redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el usuario: " + e.getMessage());
+        }
+        return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/series")

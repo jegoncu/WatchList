@@ -199,4 +199,27 @@ public class SeriesController {
         }
         return "redirect:/series/" + serieId;
     }
+
+    @PostMapping("/series/{id}/comentarios/{comentarioId}/eliminar")
+    public String eliminarComentarioSerie(
+            @PathVariable("id") Long serieId,
+            @PathVariable("comentarioId") Long comentarioId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes estar logueado para eliminar comentarios.");
+            return "redirect:/series/" + serieId;
+        }
+
+        try {
+            comentarioService.eliminarComentario(comentarioId, usuario);
+            redirectAttributes.addFlashAttribute("successMessage", "Comentario eliminado correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el comentario: " + e.getMessage());
+        }
+
+        return "redirect:/series/" + serieId;
+    }
 }

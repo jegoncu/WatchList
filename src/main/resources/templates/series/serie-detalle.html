@@ -1,56 +1,40 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
     <title th:text="${pageTitle ?: 'Detalle de Serie - WatchList'}">
-      Detalle de Serie
+        Detalle de Serie
     </title>
     <th:block th:fragment="pageCss">
-      <link
-        rel="stylesheet"
-        th:href="@{/css/componentes/serie-detalle.css}" /> 
-      <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
-      <link rel="stylesheet" th:href="@{/css/componentes/comentarios.css}" /> 
+        <link rel="stylesheet" th:href="@{/css/componentes/serie-detalle.css}" />
+        <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+        <link rel="stylesheet" th:href="@{/css/componentes/comentarios.css}" />
     </th:block>
-  </head>
-  <body>
-    <section th:fragment="section">
-      <div
-        class="content-container serie-detalle-container" 
-        th:if="${serie != null}">
-        <div class="pelicula-detalle-header">
-          <h1 th:text="${serie.titulo}" class="page-title">
-            Título de la Serie
-          </h1>
-          <span
-            class="pelicula-detalle-anio"
-            th:if="${serie.anioEstreno != null}">
-            <span th:text="${serie.anioEstreno}">Año de Estreno</span>
-            <span
-              th:if="${serie.anioFin != null}"
-              th:text="' - ' + ${serie.anioFin}"></span>
-            <span
-              th:if="${serie.anioFin == null}"
-              th:text="' - Presente'"></span>
-          </span>
-          <div
-            th:if="${serie.nTemporadas != null}"
-            class="serie-detalle-temporadas">
-            <span
-              th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})"></span>
-          </div>
-        </div>
+</head>
 
-        <div class="pelicula-detalle-main-content">
-          <div class="pelicula-detalle-poster-container">
-            <div
-              class="poster-rating-badge"
-              th:if="${serie.puntuacion != null}">
-              <span
-                class="rating-number"
-                th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}"
+<body>
+    <section th:fragment="section">
+        <div class="content-container serie-detalle-container" th:if="${serie != null}">
+            <div class="pelicula-detalle-header">
+                <h1 th:text="${serie.titulo}" class="page-title">
+                    Título de la Serie
+                </h1>
+                <span class="pelicula-detalle-anio" th:if="${serie.anioEstreno != null}">
+                    <span th:text="${serie.anioEstreno}">Año de Estreno</span>
+                    <span th:if="${serie.anioFin != null}" th:text="' - ' + ${serie.anioFin}"></span>
+                    <span th:if="${serie.anioFin == null}" th:text="' - Presente'"></span>
+                </span>
+                <div th:if="${serie.nTemporadas != null}" class="serie-detalle-temporadas">
+                    <span
+                        th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})"></span>
+                </div>
+            </div>
+
+            <div class="pelicula-detalle-main-content">
+                <div class="pelicula-detalle-poster-container">
+                    <div class="poster-rating-badge" th:if="${serie.puntuacion != null}">
+                        <span class="rating-number" th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}"
                 >0.0</span
               >
             </div>
@@ -324,17 +308,29 @@
           </div>
           <ul th:unless="${#lists.isEmpty(comentarios)}" class="comentarios-list">
             <li th:each="comentario : ${comentarios}" class="comentario-item">
-              <div class="comentario-header">
-                <strong th:text="${comentario.usuario.nombre}" class="comentario-usuario">Usuario</strong>
-                <span class="comentario-fecha" th:text="${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}">Fecha</span>
-              </div>
-              <div class="comentario-puntuacion">
-                <span th:each="i : ${#numbers.sequence(1, 5)}"
-                      class="star"
-                      th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
-                <span class="sr-only" th:text="${comentario.puntuacion} + '/5'"></span>
-              </div>
-              <p th:text="${comentario.texto}" class="comentario-texto"></p>
+                <div class="comentario-header">
+                    <div class="comentario-usuario-info">
+                        <strong th:text="${comentario.usuario.nombre}" class="comentario-usuario">Usuario</strong>
+                        <span class="comentario-fecha" th:text="${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}">Fecha</span>
+                    </div>
+                    <div class="comentario-acciones" th:if="${session.usuarioId != null and session.usuarioId == comentario.usuario.id}">
+                        <form th:action="@{/series/{id}/comentarios/{comentarioId}/eliminar(id=${serie.id}, comentarioId=${comentario.id})}"
+                              method="post"
+                              style="display: inline;"
+                              onsubmit="return confirm('¿Estás seguro de que quieres eliminar este comentario?');">
+                            <button type="submit" class="btn-eliminar-comentario" title="Eliminar comentario">
+                                🗑️
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="comentario-puntuacion">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                          class="star"
+                          th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
+                    <span class="sr-only" th:text="${comentario.puntuacion} + '/5'"></span>
+                </div>
+                <p th:text="${comentario.texto}" class="comentario-texto"></p>
             </li>
           </ul>
         </div>
@@ -344,12 +340,12 @@
         <!-- ****** INICIO: Formulario para Añadir Nuevo Comentario ****** -->
         <div th:if="${session.usuarioId != null}" class="info-section nuevo-comentario-section">
           <h2>Deja tu Comentario</h2>
-          <form th:action="@{/series/{serieId}/comentar(serieId=${serie.id})}" 
+          <form th:action="@{/series/{serieId}/comentar(serieId=${serie.id})}"
                 method="post"
                 th:object="${nuevoComentario}">
-                
+
             <div>
-              <label for="comentarioTextoSerie">Tu opinión:</label> 
+              <label for="comentarioTextoSerie">Tu opinión:</label>
               <textarea id="comentarioTextoSerie" th:field="*{texto}" rows="4" required="required" th:value="${textoPrevio ?: ''}"></textarea>
               <div th:if="${#fields.hasErrors('texto')}" class="field-error">
                   <p th:each="err : ${#fields.errors('texto')}" th:text="${err}"></p>
@@ -357,7 +353,7 @@
             </div>
 
             <div class="form-rating-group">
-              <label for="starSerie1">Puntuación (1-5):</label> 
+              <label for="starSerie1">Puntuación (1-5):</label>
               <div class="rating-stars">
                   <input type="radio" id="starSerie5" name="puntuacion" value="5" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 5}"/><label for="starSerie5" title="5 estrellas">&#9733;</label>
                   <input type="radio" id="starSerie4" name="puntuacion" value="4" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 4}"/><label for="starSerie4" title="4 estrellas">&#9733;</label>

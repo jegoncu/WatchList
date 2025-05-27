@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
+    <title th:text="${pageTitle ?: 'Gestionar Lista'}">
+        Gestionar Lista - WatchList
+    </title>
+    <th:block th:fragment="pageCss"> </th:block>
+</head>
+
+<body>
+    <section th:fragment="section">
+        <div class="form-header">
+            <h2 th:text="${pageTitle ?: 'Gestionar Lista'}" style="margin: 0">
+                Gestionar Lista
+            </h2>
+            <a th:href="@{/admin/listas}" class="btn btn-small btn-grey">
+                Volver a Listas
+            </a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <form th:action="${formAction}" method="post" th:object="${lista}" class="admin-form">
+
+            <!-- Título de la Lista -->
+            <div class="form-group">
+                <label for="titulo">Título de la Lista *</label>
+                <input type="text" id="titulo" th:field="*{titulo}" class="form-control"
+                    placeholder="Ingresa el título de la lista" required />
+                <div th:if="${#fields.hasErrors('titulo')}" class="error-message">
+                    <span th:errors="*{titulo}"></span>
+                </div>
+            </div>
+
+            <!-- Propietario de la Lista -->
+            <div class="form-group">
+          <label for="usuarioId">Propietario de la Lista *</label>
+          <select id="usuarioId" name="usuarioId" class="form-control" required>
+            <option value="">Selecciona un usuario</option>
+            <option
+              th:each="usuario : ${allUsuarios}"
+              th:value="${usuario.id}"
+              th:text="${usuario.nombre + ' (' + usuario.email + ')'}"
+              th:selected="${lista.usuario != null and lista.usuario.id == usuario.id}">
+              Usuario
+            </option>
+          </select>
+        </div>
+
+        <!-- Visibilidad -->
+        <div class="form-group">
+          <label>Visibilidad *</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input
+                type="radio"
+                th:field="*{esPublica}"
+                value="true"
+                th:checked="${lista.esPublica == true}" />
+              <span>Pública</span>
+              <small>La lista será visible para todos los usuarios</small>
+            </label>
+            <label class="radio-label">
+              <input
+                type="radio"
+                th:field="*{esPublica}"
+                value="false"
+                th:checked="${lista.esPublica == false}" />
+              <span>Privada</span>
+              <small>Solo el propietario podrá ver la lista</small>
+            </label>
+          </div>
+          <div th:if="${#fields.hasErrors('esPublica')}" class="error-message">
+            <span th:errors="*{esPublica}"></span>
+          </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <span th:if="${lista.id == null}">Crear Lista</span>
+            <span th:if="${lista.id != null}">Actualizar Lista</span>
+          </button>
+          <a th:href="@{/admin/listas}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </section>
+    <th:block th:fragment="pageScript"></th:block>
+  </body>
+</html>

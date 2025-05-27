@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ComentarioService {
@@ -42,5 +43,22 @@ public class ComentarioService {
 
     public List<Comentario> obtenerComentariosPorMediaId(Long mediaId) {
         return comentarioRepository.findByMediaIdOrderByFechaDesc(mediaId);
+    }
+
+    @Transactional
+    public void eliminarComentario(Long comentarioId, Usuario usuario) {
+        Optional<Comentario> comentarioOpt = comentarioRepository.findById(comentarioId);
+
+        if (comentarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Comentario no encontrado");
+        }
+
+        Comentario comentario = comentarioOpt.get();
+
+        if (!comentario.getUsuario().getId().equals(usuario.getId())) {
+            throw new IllegalArgumentException("No tienes permisos para eliminar este comentario");
+        }
+
+        comentarioRepository.delete(comentario);
     }
 }

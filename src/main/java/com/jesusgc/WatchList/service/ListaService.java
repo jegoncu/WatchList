@@ -85,4 +85,32 @@ public class ListaService {
         }
         return listaRepository.findByTituloContainingIgnoreCaseAndEsPublicaTrue(titulo.trim());
     }
+
+    @Transactional(readOnly = true)
+    public List<Lista> findAll() {
+        return listaRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        if (!listaRepository.existsById(id)) {
+            throw new IllegalArgumentException("Lista no encontrada con ID: " + id);
+        }
+        listaRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Lista updateLista(Long id, String titulo, Boolean esPublica, Usuario usuario) {
+        Optional<Lista> listaOpt = listaRepository.findById(id);
+        if (listaOpt.isEmpty()) {
+            throw new IllegalArgumentException("Lista no encontrada con ID: " + id);
+        }
+
+        Lista lista = listaOpt.get();
+        lista.setTitulo(titulo);
+        lista.setEsPublica(esPublica);
+        lista.setUsuario(usuario);
+
+        return listaRepository.save(lista);
+    }
 }
