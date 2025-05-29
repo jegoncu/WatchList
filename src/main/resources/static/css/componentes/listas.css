@@ -1,3 +1,27 @@
 .listas-titulo {
   margin-bottom: 10px;
 }
+
+.lista-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-grey-2), var(--color-grey-3));
+  color: var(--color-grey-4);
+  text-align: center;
+  padding: 1rem;
+  height: 100%;
+}
+
+.lista-placeholder span {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.lista-placeholder p {
+  font-size: 0.8rem;
+  margin: 0;
+  word-break: break-word;
+  line-height: 1.2;
+}

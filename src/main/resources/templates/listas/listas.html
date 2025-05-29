@@ -41,11 +41,14 @@
           <div class="content-card-poster-container">
             <img
               th:if="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
-              th:src="${lista.medias[0].urlImagen}" th:alt="${lista.titulo}" class="content-card-poster" />
+              th:src="${lista.medias[0].urlImagen}" th:alt="${lista.titulo}" class="content-card-poster"
+              loading="lazy" />
+
             <div
               th:unless="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
-              class="content-card-poster-placeholder">
-              <span th:text="${lista.titulo}">Título Lista</span>
+              class="content-card-poster-placeholder lista-placeholder">
+              <span></span>
+              <p th:text="${lista.titulo}">Título Lista</p>
             </div>
           </div>
           <div class="content-card-info">
@@ -88,6 +91,7 @@
           });
         }
       });
+      // TODO sacar a js dedicado
     </script>
   </th:block>
 </body>
