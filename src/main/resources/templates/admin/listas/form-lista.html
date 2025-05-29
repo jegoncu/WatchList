@@ -80,11 +80,11 @@
 
         <!-- Botones de Acción -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-small btn-green">
             <span th:if="${lista.id == null}">Crear Lista</span>
             <span th:if="${lista.id != null}">Actualizar Lista</span>
           </button>
-          <a th:href="@{/admin/listas}" class="btn btn-secondary">Cancelar</a>
+          <a th:href="@{/admin/listas}" class="btn btn-small btn-red">Cancelar</a>
         </div>
       </form>
     </section>

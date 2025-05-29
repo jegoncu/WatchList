@@ -125,21 +125,23 @@ public class PeliculaService {
 
     @Transactional
     public Pelicula updatePeliculaWithRelations(Long id, Pelicula peliculaForm, List<Long> generoIds,
-                                                List<Long> plataformaIds, Map<Long, String> personaRoles) {
-        Pelicula peliculaExistente = peliculaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
+                                        List<Long> plataformaIds, Map<Long, String> personaRoles) {
 
-        peliculaExistente.setTitulo(peliculaForm.getTitulo());
-        peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
-        peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
-        peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
-        peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
-        peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
-        peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
+    Pelicula peliculaExistente = peliculaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
 
-        updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles);
-        return peliculaRepository.save(peliculaExistente);
-    }
+    peliculaExistente.setTitulo(peliculaForm.getTitulo());
+    peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
+    peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
+    peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
+    peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
+    peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
+    peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
+
+    updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles);
+
+    return peliculaRepository.save(peliculaExistente);
+}
 
     private void updateRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
                                  Map<Long, String> personaRoles) {

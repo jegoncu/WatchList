@@ -131,13 +131,15 @@ public class AdminController {
     @GetMapping("/peliculas/editar/{id}")
     public String mostrarFormularioEditarPelicula(@PathVariable("id") Long id, Model model,
             RedirectAttributes redirectAttributes) {
-        Pelicula pelicula = peliculaService.findById(id)
-                .orElse(null);
 
-        if (pelicula == null) {
+        Optional<Pelicula> peliculaOpt = peliculaService.findById(id);
+
+        if (peliculaOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Película no encontrada.");
             return "redirect:/admin/peliculas";
         }
+
+        Pelicula pelicula = peliculaOpt.get();
 
         model.addAttribute("pelicula", pelicula);
         model.addAttribute("allGeneros", generoService.findAll());
@@ -161,16 +163,6 @@ public class AdminController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        Map<Long, String> personaRolesMap = new HashMap<>();
-        if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
-            for (int i = 0; i < persona_ids.size(); i++) {
-                if (persona_ids.get(i) != null && persona_roles.get(i) != null
-                        && !persona_roles.get(i).trim().isEmpty()) {
-                    personaRolesMap.put(persona_ids.get(i), persona_roles.get(i));
-                }
-            }
-        }
-
         if (result.hasErrors()) {
             model.addAttribute("allGeneros", generoService.findAll());
             model.addAttribute("allPlataformas", plataformaService.findAll());
@@ -182,9 +174,28 @@ public class AdminController {
             return "admin/peliculas/form-pelicula";
         }
 
-        peliculaService.updatePeliculaWithRelations(id, peliculaForm, generoIds, plataformaIds, personaRolesMap);
-        redirectAttributes.addFlashAttribute("successMessage", "Película actualizada correctamente.");
-        return "redirect:/admin/peliculas";
+        Map<Long, String> personaRolesMap = new HashMap<>();
+        if (persona_ids != null && persona_roles != null) {
+            int minSize = Math.min(persona_ids.size(), persona_roles.size());
+            for (int i = 0; i < minSize; i++) {
+                Long personaId = persona_ids.get(i);
+                String rol = persona_roles.get(i);
+
+                if (personaId != null && rol != null && !rol.trim().isEmpty()) {
+                    personaRolesMap.put(personaId, rol.trim());
+                }
+            }
+        }
+
+        try {
+            peliculaService.updatePeliculaWithRelations(id, peliculaForm, generoIds, plataformaIds, personaRolesMap);
+            redirectAttributes.addFlashAttribute("successMessage", "Película actualizada correctamente.");
+            return "redirect:/admin/peliculas";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar la película: " + e.getMessage());
+            return "redirect:/admin/peliculas/editar/" + id;
+        }
     }
 
     @PostMapping("/peliculas/eliminar/{id}")
