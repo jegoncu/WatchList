@@ -1,160 +1,195 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
 <head>
-    <title th:text="${pageTitle ?: 'Detalle de Película - WatchList'}">
-        Detalle de Película
-    </title>
-    <th:block th:fragment="pageCss">
-        <link rel="stylesheet" th:href="@{/css/componentes/pelicula-detalle.css}" />
-        <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
-        <link rel="stylesheet" th:href="@{/css/componentes/comentarios.css}" />
-    </th:block>
+  <title th:text="${pageTitle ?: 'Detalle de Película - WatchList'}">
+    Detalle de Película
+  </title>
+  <th:block th:fragment="pageCss">
+    <link rel="stylesheet" th:href="@{/css/componentes/pelicula-detalle.css}" />
+    <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
+    <link rel="stylesheet" th:href="@{/css/componentes/comentarios.css}" />
+  </th:block>
 </head>
 
 <body>
-    <section th:fragment="section">
-        <div class="content-container pelicula-detalle-container" th:if="${pelicula != null}">
-            <div class="pelicula-detalle-header">
-                <h1 th:text="${pelicula.titulo}" class="page-title">
-                    Título de la Película
-                </h1>
-                <span class="pelicula-detalle-anio" th:if="${pelicula.anioEstreno != null}"
-                    th:text="${pelicula.anioEstreno}">
-                    Año de Estreno
-                </span>
-            </div>
-
-            <div class="pelicula-detalle-main-content">
-                <div class="pelicula-detalle-poster-container">
-                    <div class="poster-rating-badge" th:if="${pelicula.puntuacion != null}">
-                        <span class="rating-number" th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}"
-                >0.0</span
-              >
-            </div>
-
-            <img
-              th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
-              th:src="${pelicula.urlImagen}"
-              th:alt="${pelicula.titulo}"
-              class="pelicula-detalle-poster" />
-            <div
-              th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
-              class="pelicula-detalle-poster-placeholder">
+  <section th:fragment="section">
+    <div class="content-container pelicula-detalle-container" th:if="${pelicula != null}">
+      <div class="fila" id="fila-1">
+        <div>
+          <h1 th:text="${pelicula.titulo}">
+            Título de la Película
+          </h1>
+        </div>
+        <button type="button" class="btn btn-red btn-small" onclick="history.back();">Atrás</button>
+      </div>
+      <div class="fila" id="fila-2">
+        <div class="columna" id="columna-2-1">
+          <div class="columna" id="columna-2-1-1">
+            <img class="poster" th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
+              th:src="${pelicula.urlImagen}" th:alt="${pelicula.titulo}" />
+            <div th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}">
               <span>Sin Póster</span>
             </div>
           </div>
-
-          <div class="pelicula-detalle-info">
-            <div
-              class="info-section"
-              th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
-              <h2>Dirección</h2>
-              <p>
-                <span
-                  th:each="credito, iterStat : ${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
-                  <a
-                    th:href="@{/gente/{id}(id=${credito.persona.id})}"
-                    class="director-link"
-                    th:text="${credito.persona.nombre}"
-                    >Nombre Director</a
-                  ><th:block th:if="${!iterStat.last}">, </th:block>
-                </span>
-              </p>
-            </div>
-
-            <div
-              class="info-section"
-              th:if="${not #lists.isEmpty(pelicula.generos)}">
-              <h2>Géneros</h2>
-              <p class="tag-list">
-                <span
-                  th:each="genero : ${pelicula.generos}"
-                  class="tag"
-                  th:text="${genero.nombre}"
-                  >Género</span
-                >
-              </p>
-            </div>
-
-            <div
-              class="info-section"
-              th:if="${not #lists.isEmpty(pelicula.plataformas)}">
-              <h2>Disponible en</h2>
-              <p class="plataforma-icons-list">
-                <span
-                  th:each="plataforma : ${pelicula.plataformas}"
-                  class="plataforma-icon">
-                  <img
-                    th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
-                    th:src="@{${plataforma.logo}}"
-                    th:alt="${plataforma.nombre}"
-                    th:title="${plataforma.nombre}"
-                    class="plataforma-logo-img" />
+          <div class="columna" id="columna-2-1-2">
+            <div class="pelicula-info">
+              <div class="info-item" th:if="${pelicula.anioEstreno != null}">
+                <h2>Fecha de Estreno:</h2>
+                <span th:text="${pelicula.anioEstreno}">Año</span>
+              </div>
+              <div class="info-item"
+                th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')])}">
+                <h2>Dirección:</h2>
+                <p>
                   <span
-                    th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}"
-                    th:text="${plataforma.nombre}"
+                    th:each="credito, iterStat : ${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+                    <a th:href="@{/gente/{id}(id=${credito.persona.id})}" th:text="${credito.persona.nombre}">Nombre
+                      Director</a>
+                    <th:block th:if="${iterStat != null and !iterStat.last}">, </th:block>
+                  </span>
+                </p>
+              </div>
+              <div class="info-item" th:if="${pelicula.duracionMin != null}">
+                <h2>Duración:</h2>
+                <span th:text="${pelicula.duracionMin + ' min.'}">Duración</span>
+              </div>
+              <div class="info-item" th:if="${pelicula.puntuacion != null}">
+                <h2>Puntuación:</h2>
+                <span th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}">Puntuación</span>
+              </div>
+              <div class="info-item" th:if="${not #lists.isEmpty(pelicula.generos)}">
+                <h2>Género/s:</h2>
+                <span>
+                  <span th:each="genero : ${pelicula.generos}" th:text="${genero.nombre}">Género</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="columna" id="columna-2-2">
+          <div class="pelicula-info">
+            <div class="info-item" th:if="${pelicula.sinopsis != null and not #strings.isEmpty(pelicula.sinopsis)}">
+              <h2>Sinopsis</h2>
+              <p th:text="${pelicula.sinopsis}">Descripción de la película...</p>
+            </div>
+            <div class="info-item " th:if="${not #lists.isEmpty(pelicula.plataformas)}">
+              <h2>Disponible en</h2>
+              <div class="plataformas">
+                <span class="plataforma" th:each="plataforma : ${pelicula.plataformas}">
+                  <img th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}" th:src="@{${plataforma.logo}}"
+                    th:alt="${plataforma.nombre}" th:title="${plataforma.nombre}" class="plataforma-logo-img" />
+                  <span th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}" th:text="${plataforma.nombre}"
                     class="plataforma-logo-fallback-text"></span>
                 </span>
-              </p>
+              </div>
             </div>
+            <div th:if="${session.usuarioId != null and misListas != null}" class="add-to-list-section info-section">
+              <h2>Añadir a Mis Listas</h2>
+              <div th:if="${misListas.isEmpty()}" class="mt-2">
+                <p>
+                  No tienes listas creadas.
+                  <a th:href="@{/listas/nueva}" class="btn btn-small btn-blue">Crea una lista primero</a>
+                </p>
+              </div>
+              <form th:unless="${misListas.isEmpty()}"
+                th:action="@{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${pelicula.id}, listaId='__LISTA_ID__')}"
+                method="post" id="addToListFormPelicula">
+                <div class="form-group">
+                  <select id="listaSeleccionadaPelicula" name="listaId" required>
+                    <option value="" disabled selected>
+                      Selecciona una lista...
+                    </option>
+                    <option th:each="lista : ${misListas}" th:value="${lista.id}" th:text="${lista.titulo}">
+                      Nombre de la Lista
+                    </option>
+                  </select>
+                  <button type="submit" class="btn btn-small btn-green">
+                    Añadir a Lista
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- TODO mover a js dedicado -->
+            <script th:inline="javascript" class="dynamic-script">
+              const formPelicula = document.getElementById(
+                "addToListFormPelicula"
+              );
+
+              if (formPelicula) {
+                const selectPelicula = document.getElementById(
+                  "listaSeleccionadaPelicula"
+                );
+
+                if (!selectPelicula) {
+                  console.error(
+                    "CRITICAL: Elemento select con ID 'listaSeleccionadaPelicula' no encontrado."
+                  );
+                } else {
+                  formPelicula.addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    const selectedValue = selectPelicula.value;
+
+                    if (selectedValue && selectedValue !== "") {
+                      let originalAction = formPelicula.getAttribute("action");
+
+                      const placeholder = "LISTA_ID";
+
+                      if (originalAction.includes(placeholder)) {
+                        let newAction = originalAction.replace(
+                          placeholder,
+                          selectedValue
+                        );
+
+                        formPelicula.setAttribute("action", newAction);
+                        formPelicula.submit();
+                      } else {
+                        console.error(
+                          "CRITICAL: Placeholder '" +
+                          placeholder +
+                          "' not found in original action URL:",
+                          originalAction
+                        );
+                        alert(
+                          "Error de configuración del formulario. No se pudo actualizar la URL."
+                        );
+                      }
+                    } else {
+                      alert("Por favor, selecciona una lista.");
+                    }
+                  });
+                }
+              } else {
+              }
+            </script>
           </div>
         </div>
-
-        <div
-          class="info-section pelicula-detalle-sinopsis"
-          th:if="${pelicula.sinopsis != null and not #strings.isEmpty(pelicula.sinopsis)}">
-          <h2>Sinopsis</h2>
-          <p th:text="${pelicula.sinopsis}">Descripción de la película...</p>
-        </div>
-        <div
-          class="info-section pelicula-detalle-trailer"
-          th:if="${pelicula.urlTrailer != null and not #strings.isEmpty(pelicula.urlTrailer)}">
-          <h2>Trailer</h2>
-          <div class="trailer-container">
-            <iframe
-              th:src="${#strings.replace(pelicula.urlTrailer, 'watch?v=', 'embed/')}"
-              frameborder="0"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-
-        <div
-          class="info-section pelicula-detalle-cast"
+      </div>
+      <div class="fila" id="fila-3">
+        <div class="reparto"
           th:if="${not #lists.isEmpty(pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
           <h2>Reparto Principal</h2>
-
-          <div class="card-grid actores-grid">
-            <div
-              class="content-card actor-card"
+          <div class="card-grid-small">
+            <div class="content-card"
               th:each="credito : ${pelicula.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}">
-              <a
-                th:href="@{/gente/{id}(id=${credito.persona.id})}"
-                class="content-card-link"
+              <a th:href="@{/gente/{id}(id=${credito.persona.id})}" class="content-card-link"
                 th:title="${credito.persona.nombre}">
                 <div class="content-card-poster-container">
-                  <img
-                    th:if="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
-                    th:src="${credito.persona.fotoUrl}"
-                    th:alt="${credito.persona.nombre}"
-                    class="content-card-poster persona-card-poster"
-                    loading="lazy" />
-                  <div
-                    th:unless="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
+                  <img th:if="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
+                    th:src="${credito.persona.fotoUrl}" th:alt="${credito.persona.nombre}"
+                    class="content-card-poster persona-card-poster" loading="lazy" />
+                  <div th:unless="${credito.persona.fotoUrl != null and not #strings.isEmpty(credito.persona.fotoUrl)}"
                     class="content-card-poster-placeholder">
                     <span>Sin Foto</span>
                   </div>
                 </div>
-                <div class="content-card-info actor-card-info">
-                  <h3
-                    class="content-card-title"
-                    th:text="${credito.persona.nombre}">
+                <div class="content-card-info">
+                  <h3 class="content-card-title" th:text="${credito.persona.nombre}">
                     Nombre del Actor
                   </h3>
-                  <p
-                    class="content-card-character"
+                  <p class="content-card-character"
                     th:if="${credito.personaje != null and not #strings.isEmpty(credito.personaje)}"
                     th:text="${credito.personaje}">
                     Personaje
@@ -164,188 +199,142 @@
             </div>
           </div>
         </div>
-
-        <div
-          th:if="${session.usuarioId != null and misListas != null}"
-          class="add-to-list-section info-section">
-          <h2>Añadir a Mis Listas</h2>
-
-          <div th:if="${misListas.isEmpty()}" class="mt-2">
-            <p>
-              No tienes listas creadas.
-              <a
-                th:href="@{/listas/nueva}"
-                class="btn btn-sm btn-outline-primary"
-                >Crea una lista primero</a
-              >.
-            </p>
-          </div>
-
-          <form
-            th:unless="${misListas.isEmpty()}"
-            th:action="@{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${pelicula.id}, listaId='__LISTA_ID__')}"
-            method="post"
-            id="addToListFormPelicula"
-            class="form-inline mt-2">
-            <div class="form-group mr-2 mb-2">
-              <label for="listaSeleccionadaPelicula" class="sr-only"
-                >Selecciona una lista:</label
-              >
-              <select
-                id="listaSeleccionadaPelicula"
-                name="listaId"
-                class="form-control form-control-sm"
-                required>
-                <option value="" disabled selected>
-                  Selecciona una lista...
-                </option>
-                <option
-                  th:each="lista : ${misListas}"
-                  th:value="${lista.id}"
-                  th:text="${lista.titulo}">
-                  Nombre de la Lista
-                </option>
-              </select>
+      </div>
+      <div class="fila" id="fila-4">
+        <div class="columna" id="columna-4-1">
+          <div th:if="${pelicula.urlTrailer != null and not #strings.isEmpty(pelicula.urlTrailer)}">
+            <h2>Trailer</h2>
+            <div class="trailer-container">
+              <iframe th:src="${#strings.replace(pelicula.urlTrailer, 'watch?v=', 'embed/')}" frameborder="0"
+                allowfullscreen="allowfullscreen">
+              </iframe>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm mb-2">
-              Añadir a Lista
-            </button>
-          </form>
-          <!-- TODO mover a js dedicado -->
-          <script th:inline="javascript" class="dynamic-script">
-            const formPelicula = document.getElementById(
-              "addToListFormPelicula"
-            );
-
-            if (formPelicula) {
-              const selectPelicula = document.getElementById(
-                "listaSeleccionadaPelicula"
-              );
-
-              if (!selectPelicula) {
-                console.error(
-                  "CRITICAL: Elemento select con ID 'listaSeleccionadaPelicula' no encontrado."
-                );
-              } else {
-                formPelicula.addEventListener("submit", function (event) {
-                  event.preventDefault();
-
-                  const selectedValue = selectPelicula.value;
-
-                  if (selectedValue && selectedValue !== "") {
-                    let originalAction = formPelicula.getAttribute("action");
-
-                    const placeholder = "LISTA_ID";
-
-                    if (originalAction.includes(placeholder)) {
-                      let newAction = originalAction.replace(
-                        placeholder,
-                        selectedValue
-                      );
-
-                      formPelicula.setAttribute("action", newAction);
-                      formPelicula.submit();
-                    } else {
-                      console.error(
-                        "CRITICAL: Placeholder '" +
-                          placeholder +
-                          "' not found in original action URL:",
-                        originalAction
-                      );
-                      alert(
-                        "Error de configuración del formulario. No se pudo actualizar la URL."
-                      );
-                    }
-                  } else {
-                    alert("Por favor, selecciona una lista.");
-                  }
-                });
-              }
-            } else {
-            }
-          </script>
+          </div>
         </div>
-
-        <div class="info-section comentarios-section">
-          <h2>Comentarios</h2>
-          <div th:if="${exitoComentario}" class="comentario-mensaje comentario-mensaje-exito">
-            <span th:text="${exitoComentario}"></span>
-          </div>
-          <div th:if="${errorComentario}" class="comentario-mensaje comentario-mensaje-error">
-            <span th:text="${errorComentario}"></span>
-          </div>
-
-          <div th:if="${#lists.isEmpty(comentarios)}" class="comentarios-vacio-mensaje">
-            <p>Aún no hay comentarios para esta película. ¡Sé el primero!</p>
-          </div>
-          <ul th:unless="${#lists.isEmpty(comentarios)}" class="comentarios-list">
-            <li th:each="comentario : ${comentarios}" class="comentario-item">
-              <div class="comentario-header">
-                <div class="comentario-usuario-info">
-                  <strong th:text="${comentario.usuario.nombre}" class="comentario-usuario">Usuario</strong>
-                  <span class="comentario-fecha" th:text="${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}">Fecha</span>
-                </div>
-                <div class="comentario-acciones" th:if="${session.usuarioId != null and session.usuarioId == comentario.usuario.id}">
-                  <form th:action="@{/peliculas/{id}/comentarios/{comentarioId}/eliminar(id=${pelicula.id}, comentarioId=${comentario.id})}"
-                        method="post"
-                        style="display: inline;"
-                        onsubmit="return confirm('¿Estás seguro de que quieres eliminar este comentario?');">
-                    <button type="submit" class="btn-eliminar-comentario" title="Eliminar comentario">
-                      🗑️
-                    </button>
-                  </form>
-                </div>
+        <div class="columna" id="columna-4-2">
+          <div>
+            <div class="comentarios-header">
+              <h2>Reseñas</h2>
+              <div th:if="${exitoComentario}" class="comentario-mensaje comentario-mensaje-exito">
+                <span th:text="${exitoComentario}"></span>
               </div>
-              <div class="comentario-puntuacion">
-                <span th:each="i : ${#numbers.sequence(1, 5)}"
-                      class="star"
-                      th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
-                <span class="sr-only" th:text="${comentario.puntuacion} + '/5'"></span>
+              <div th:if="${errorComentario}" class="comentario-mensaje comentario-mensaje-error">
+                <span th:text="${errorComentario}"></span>
               </div>
-              <p th:text="${comentario.texto}" class="comentario-texto"></p>
-            </li>
-          </ul>
-        </div>
-        <div th:if="${session.usuarioId != null}" class="info-section nuevo-comentario-section">
-          <h2>Deja tu Comentario</h2>
-          <form th:action="@{/peliculas/{peliculaId}/comentar(peliculaId=${pelicula.id})}"
-                method="post"
-                th:object="${nuevoComentario}">
-
-            <div>
-              <label for="comentarioTexto">Tu opinión:</label>
-              <textarea id="comentarioTexto" th:field="*{texto}" rows="4" required="required" th:value="${textoPrevio ?: ''}"></textarea>
-              <div th:if="${#fields.hasErrors('texto')}" class="field-error">
+              <div th:if="${session.usuarioId != null}">
+                <button type="button" class="btn btn-yellow btn-small"
+                  onclick="document.getElementById('nuevoComentarioWrapper').style.display='block'; this.style.display='none';">
+                  Añadir Reseña
+                </button>
+              </div>
+            </div>
+            <div th:if="${#lists.isEmpty(comentarios)}" class="comentarios-vacio-mensaje">
+              <p>Aún no hay reseñas para esta película. ¡Sé el primero!</p>
+            </div>
+            <ul th:unless="${#lists.isEmpty(comentarios)}" class="comentarios-list">
+              <li th:each="comentario : ${comentarios}" class="comentario-item">
+                <div class="comentario-header">
+                  <div class="comentario-usuario-info">
+                    <div class="comentario-usuario-datos">
+                      <strong th:text="${comentario.usuario.nombre}" class="comentario-usuario">Usuario</strong>
+                      <span class="comentario-fecha"
+                        th:text="${#temporals.format(comentario.fecha, 'dd MMM yyyy, HH:mm')}">Fecha</span>
+                    </div>
+                    <div class="comentario-puntuacion">
+                      <span th:each="i : ${#numbers.sequence(1, 5)}" class="star"
+                        th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
+                    </div>
+                  </div>
+                  <div class="comentario-acciones"
+                    th:if="${session.usuarioId != null and session.usuarioId == comentario.usuario.id}">
+                    <form
+                      th:action="@{/peliculas/{id}/comentarios/{comentarioId}/eliminar(id=${pelicula.id}, comentarioId=${comentario.id})}"
+                      method="post" class="form-accion-inline"
+                      onsubmit="return confirm('¿Estás seguro de que quieres eliminar este comentario?');">
+                      <button type="submit" class="btn-eliminar-comentario" title="Eliminar comentario">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                          fill="var(--color-red-2)" class="icon icon-tabler icons-tabler-filled icon-tabler-xbox-x">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path
+                            d="M12 2c5.523 0 10 4.477 10 10s-4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10m3.6 5.2a1 1 0 0 0 -1.4 .2l-2.2 2.933l-2.2 -2.933a1 1 0 1 0 -1.6 1.2l2.55 3.4l-2.55 3.4a1 1 0 1 0 1.6 1.2l2.2 -2.933l2.2 2.933a1 1 0 0 0 1.6 -1.2l-2.55 -3.4l2.55 -3.4a1 1 0 0 0 -.2 -1.4" />
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <p th:text="${comentario.texto}" class="comentario-texto"></p>
+              </li>
+            </ul>
+          </div>
+          <div id="nuevoComentarioWrapper" th:if="${session.usuarioId != null}" style="display:none;">
+            <h2>Deja tu Reseña</h2>
+            <form th:action="@{/peliculas/{peliculaId}/comentar(peliculaId=${pelicula.id})}" method="post"
+              th:object="${nuevoComentario}">
+              <div>
+                <label for="comentarioTexto">Tu opinión:</label>
+                <textarea id="comentarioTexto" th:field="*{texto}" rows="4" required="required"
+                  th:value="${textoPrevio ?: ''}"></textarea>
+                <div th:if="${#fields.hasErrors('texto')}" class="field-error">
                   <p th:each="err : ${#fields.errors('texto')}" th:text="${err}"></p>
+                </div>
               </div>
-            </div>
-            <div class="form-rating-group">
-              <label for="star1">Puntuación (1-5):</label>
-              <div class="rating-stars">
-                  <input type="radio" id="star5" name="puntuacion" value="5" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 5}" required="required"/><label for="star5" title="5 estrellas">&#9733;</label>
-                  <input type="radio" id="star4" name="puntuacion" value="4" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 4}"/><label for="star4" title="4 estrellas">&#9733;</label>
-                  <input type="radio" id="star3" name="puntuacion" value="3" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 3}"/><label for="star3" title="3 estrellas">&#9733;</label>
-                  <input type="radio" id="star2" name="puntuacion" value="2" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 2}"/><label for="star2" title="2 estrellas">&#9733;</label>
-                  <input type="radio" id="star1" name="puntuacion" value="1" th:field="*{puntuacion}" th:checked="${puntuacionPrevia == 1 ?: (nuevoComentario.puntuacion == null)}"/><label for="star1" title="1 estrella">&#9733;</label>
-              </div>
-              <div th:if="${#fields.hasErrors('puntuacion')}" class="field-error">
+              <div class="form-field">
+                <label for="star1">Puntuación (1-5):</label>
+                <div class="rating-stars">
+                  <input type="radio" id="star5" name="puntuacion" value="5" th:field="*{puntuacion}"
+                    th:checked="${puntuacionPrevia == 5}" required="required" /><label for="star5"
+                    title="5 estrellas">&#9733;</label>
+                  <input type="radio" id="star4" name="puntuacion" value="4" th:field="*{puntuacion}"
+                    th:checked="${puntuacionPrevia == 4}" /><label for="star4" title="4 estrellas">&#9733;</label>
+                  <input type="radio" id="star3" name="puntuacion" value="3" th:field="*{puntuacion}"
+                    th:checked="${puntuacionPrevia == 3}" /><label for="star3" title="3 estrellas">&#9733;</label>
+                  <input type="radio" id="star2" name="puntuacion" value="2" th:field="*{puntuacion}"
+                    th:checked="${puntuacionPrevia == 2}" /><label for="star2" title="2 estrellas">&#9733;</label>
+                  <input type="radio" id="star1" name="puntuacion" value="1" th:field="*{puntuacion}"
+                    th:checked="${puntuacionPrevia == 1 ?: (nuevoComentario.puntuacion == null)}" /><label for="star1"
+                    title="1 estrella">&#9733;</label>
+                </div>
+                <div th:if="${#fields.hasErrors('puntuacion')}" class="field-error">
                   <p th:each="err : ${#fields.errors('puntuacion')}" th:text="${err}"></p>
+                </div>
               </div>
-            </div>
-            <button type="submit" class="btn btn-green">Enviar Comentario</button>
-          </form>
-        </div>
-        <div th:unless="${session.usuarioId != null}" class="info-section comentario-login-mensaje">
-            <p>Debes <a th:href="@{/login(redirectUrl=${#httpServletRequest != null ? #httpServletRequest.requestURI : '/'})}">iniciar sesión</a> para dejar un comentario.</p>
+              <button type="submit" class="btn btn-small btn-green">Enviar Reseña</button>
+            </form>
+          </div>
+          <div th:unless="${session.usuarioId != null}">
+            <p>Debes <a
+                th:href="@{/login(redirectUrl=${#httpServletRequest != null ? #httpServletRequest.requestURI : '/'})}">iniciar
+                sesión</a> para dejar una reseña.</p>
+          </div>
         </div>
       </div>
-      <div th:if="${pelicula == null}" class="content-container">
-        <p class="mensaje-no-encontrado">
-          Película no encontrada.
-        </p>
-      </div>
-    </section>
-    <th:block th:fragment="pageScript">
-    </th:block>
-  </body>
+    </div>
+    <div th:if="${pelicula == null}" class="content-container">
+      <p class="mensaje-no-encontrado">
+        Película no encontrada.
+      </p>
+    </div>
+  </section>
+  <th:block th:fragment="pageScript">
+    <script>
+      // Script para manejar la acción del formulario de añadir a lista
+      const addToListFormPelicula = document.getElementById('addToListFormPelicula');
+      if (addToListFormPelicula) {
+        const listaSeleccionadaPelicula = document.getElementById('listaSeleccionadaPelicula');
+        addToListFormPelicula.addEventListener('submit', function (event) {
+          const selectedListaId = listaSeleccionadaPelicula.value;
+          if (selectedListaId) {
+            let actionUrl = addToListFormPelicula.getAttribute('action');
+            actionUrl = actionUrl.replace('__LISTA_ID__', selectedListaId);
+            addToListFormPelicula.setAttribute('action', actionUrl);
+          } else {
+            event.preventDefault(); // Prevenir envío si no hay lista seleccionada (aunque 'required' debería manejarlo)
+            alert('Por favor, selecciona una lista.');
+          }
+        });
+      }
+    </script>
+  </th:block>
+</body>
+
 </html>
