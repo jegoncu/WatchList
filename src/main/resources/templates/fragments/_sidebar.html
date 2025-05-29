@@ -2,414 +2,417 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Fragmento Sidebar</title>
+  <meta charset="UTF-8" />
+  <title>Fragmento Sidebar</title>
 </head>
 
 <body>
-    <div th:fragment="sidebar" class="sidebar">
-        <!-- Contenidos para series -->
-        <div th:if="${currentPage == 'series'}">
-            <form id="filter-sort-form-series" class="sidebar-form">
-                <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
-                    data-target="sidebar-dropdown-1-child">
-                    <h4>Ordenar por:</h4>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
+  <div th:fragment="sidebar" class="sidebar">
+    <!-- Contenidos para series -->
+    <div th:if="${currentPage == 'series'}">
+      <form id="filter-sort-form-series" class="sidebar-form">
+        <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
+          data-target="sidebar-dropdown-1-child">
+          <h4>Ordenar por:</h4>
+          <span class="dropdown-arrow">▼</span>
+        </div>
 
-                <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
-                    <!-- Criterios de ordenación -->
-                    <label>
-                        <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
-                        <span>Título</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="anioEstreno"
-                            th:checked="${currentSortBy == 'anioEstreno'}" />
-                        <span>Año Estreno</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="puntuacion"
-                            th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
-                        <span>Puntuación</span>
-                    </label>
+        <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
+          <!-- Criterios de ordenación -->
+          <label>
+            <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
+            <span>Título</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="anioEstreno" th:checked="${currentSortBy == 'anioEstreno'}" />
+            <span>Año Estreno</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="puntuacion"
+              th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
+            <span>Puntuación</span>
+          </label>
 
-                    <label>
-                        <input type="radio" name="sortBy" value="nTemporadas"
-                            th:checked="${currentSortBy == 'nTemporadas'}" />
-                        <span>Temporadas</span>
-                    </label>
-                </div>
-                <div class="form-group-sidebar sidebar-group sort-direction-container">
-                    <label>
-                        <input type="radio" name="sortDir" value="asc" th:checked="${currentSortDir == 'asc'}" />
-                        <span>Ascendente</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortDir" value="desc"
-                            th:checked="${currentSortDir == 'desc' or currentSortDir == null}" />
-                        <span>Descendente</span>
-                    </label>
-                </div>
+          <label>
+            <input type="radio" name="sortBy" value="nTemporadas" th:checked="${currentSortBy == 'nTemporadas'}" />
+            <span>Temporadas</span>
+          </label>
+        </div>
+        <div class="form-group-sidebar sidebar-group sort-direction-container">
+          <label>
+            <input type="radio" name="sortDir" value="asc" th:checked="${currentSortDir == 'asc'}" />
+            <span>Ascendente</span>
+          </label>
+          <label>
+            <input type="radio" name="sortDir" value="desc"
+              th:checked="${currentSortDir == 'desc' or currentSortDir == null}" />
+            <span>Descendente</span>
+          </label>
+        </div>
 
-                <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
-                    data-target="sidebar-dropdown-2-child">
-                    <h4>Filtrar por:</h4>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
+        <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
+          data-target="sidebar-dropdown-2-child">
+          <h4>Filtrar por:</h4>
+          <span class="dropdown-arrow">▼</span>
+        </div>
 
-                <div class="sidebar-dropdown-2-child dropdown-content">
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Género(s):</div>
-                        <div class="checkbox-list genero-tag-list"
-                            th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
-                            <th:block th:each="genero : ${allGeneros}">
-                                <div class="genero-tag-item">
-                                    <input type="checkbox" th:id="'serie-filter-genero-' + ${genero.id}"
-                                        name="generoIds" th:value="${genero.id}" th:checked="${selectedGeneroIds != null and #lists.contains(selectedGeneroIds,
+        <div class="sidebar-dropdown-2-child dropdown-content">
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Género(s):</div>
+            <div class="checkbox-list genero-tag-list" th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
+              <th:block th:each="genero : ${allGeneros}">
+                <div class="genero-tag-item">
+                  <input type="checkbox" th:id="'serie-filter-genero-' + ${genero.id}" name="generoIds"
+                    th:value="${genero.id}" th:checked="${selectedGeneroIds != null and #lists.contains(selectedGeneroIds,
                                     genero.id)}" class="visually-hidden-checkbox" />
-                                    <label th:for="'serie-filter-genero-' + ${genero.id}" class="genero-tag-label"
-                                        th:text="${genero.nombre}">Nombre Género</label>
-                                </div>
-                            </th:block>
-                        </div>
-                        <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
-                    </div>
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Plataforma(s):</div>
-                        <div class="checkbox-list plataforma-logo-list "
-                            th:if="${allPlataformas != null and not #lists.isEmpty(allPlataformas)}">
-                            <th:block th:each="plataforma : ${allPlataformas}">
-                                <div class="plataforma-logo-item">
-                                    <input type="checkbox" th:id="'serie-filter-plataforma-' + ${plataforma.id}"
-                                        name="plataformaIds" th:value="${plataforma.id}" th:checked="${selectedPlataformaIds != null and #lists.contains(selectedPlataformaIds,
+                  <label th:for="'serie-filter-genero-' + ${genero.id}" class="genero-tag-label"
+                    th:text="${genero.nombre}">Nombre Género</label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
+          </div>
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Plataforma(s):</div>
+            <div class="checkbox-list plataforma-logo-list "
+              th:if="${allPlataformas != null and not #lists.isEmpty(allPlataformas)}">
+              <th:block th:each="plataforma : ${allPlataformas}">
+                <div class="plataforma-logo-item">
+                  <input type="checkbox" th:id="'serie-filter-plataforma-' + ${plataforma.id}" name="plataformaIds"
+                    th:value="${plataforma.id}" th:checked="${selectedPlataformaIds != null and #lists.contains(selectedPlataformaIds,
                                     plataforma.id)}" class="visually-hidden-checkbox" />
-                                    <label th:for="'serie-filter-plataforma-' + ${plataforma.id}"
-                                        class="plataforma-logo-label">
-                                        <img th:if="${plataforma.logo != null && !#strings.isEmpty(plataforma.logo)}"
-                                            th:src="@{${plataforma.logo}}" th:alt="${plataforma.nombre}"
-                                            class="plataforma-logo-img" />
-                                        <span th:if="${plataforma.logo == null || #strings.isEmpty(plataforma.logo)}"
-                                            th:text="${plataforma.nombre}" class="plataforma-logo-fallback-text"></span>
-                                    </label>
-                                </div>
-                            </th:block>
-                        </div>
-                        <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas
-                            disponibles.</p>
-                    </div>
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Año de Estreno:</div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="serieAnioEstrenoMin">Desde:</label>
-                                <input type="range" id="serieAnioEstrenoMin" name="anioEstrenoMin"
-                                    th:min="${minAnioVal}" th:max="${maxAnioVal}"
-                                    th:value="${currentAnioEstrenoMin != null ? currentAnioEstrenoMin : minAnioVal}"
-                                    oninput="updateSliderValue(this, 'serieAnioEstrenoMinVal'); validateAnioRange('serieAnioEstrenoMin', 'serieAnioEstrenoMax');" />
-                                <span id="serieAnioEstrenoMinVal"
-                                    th:text="${currentAnioEstrenoMin != null ? currentAnioEstrenoMin : minAnioVal}"></span>
-                            </div>
-                        </div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="serieAnioEstrenoMax">Hasta:</label>
-                                <input type="range" id="serieAnioEstrenoMax" name="anioEstrenoMax"
-                                    th:min="${minAnioVal}" th:max="${maxAnioVal}"
-                                    th:value="${currentAnioEstrenoMax != null ? currentAnioEstrenoMax : maxAnioVal}"
-                                    oninput="updateSliderValue(this, 'serieAnioEstrenoMaxVal'); validateAnioRange('serieAnioEstrenoMin', 'serieAnioEstrenoMax');" />
-                                <span id="serieAnioEstrenoMaxVal"
-                                    th:text="${currentAnioEstrenoMax != null ? currentAnioEstrenoMax : maxAnioVal}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Puntuación Mínima:</div>
-                        <div class="slider-container slider-label">
-                            <input type="range" id="seriePuntuacionMin" name="puntuacionMin" min="0" max="10" step="0.1"
-                                th:value="${currentPuntuacionMin != null ? currentPuntuacionMin : 0.0}"
-                                oninput="updateSliderValue(this, 'seriePuntuacionMinVal');" />
-                            <span id="seriePuntuacionMinVal"
-                                th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
-                        </div>
-                    </div>
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Número de temporadas:</div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="serieNTemporadasMin">Mínimo:</label>
-                                <input type="range" id="serieNTemporadasMin" name="nTemporadasMin"
-                                    th:min="${minNTemporadasVal}" th:max="${maxNTemporadasVal}"
-                                    th:value="${currentNTemporadasMin != null ? currentNTemporadasMin : minNTemporadasVal}"
-                                    oninput="updateSliderValue(this, 'serieNTemporadasMinVal');
+                  <label th:for="'serie-filter-plataforma-' + ${plataforma.id}" class="plataforma-logo-label">
+                    <img th:if="${plataforma.logo != null && !#strings.isEmpty(plataforma.logo)}"
+                      th:src="@{${plataforma.logo}}" th:alt="${plataforma.nombre}" class="plataforma-logo-img" />
+                    <span th:if="${plataforma.logo == null || #strings.isEmpty(plataforma.logo)}"
+                      th:text="${plataforma.nombre}" class="plataforma-logo-fallback-text"></span>
+                  </label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas
+              disponibles.</p>
+          </div>
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Año de Estreno:</div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="serieAnioEstrenoMin">Desde:</label>
+                <input type="range" id="serieAnioEstrenoMin" name="anioEstrenoMin" th:min="${minAnioVal}"
+                  th:max="${maxAnioVal}"
+                  th:value="${currentAnioEstrenoMin != null ? currentAnioEstrenoMin : minAnioVal}"
+                  oninput="updateSliderValue(this, 'serieAnioEstrenoMinVal'); validateAnioRange('serieAnioEstrenoMin', 'serieAnioEstrenoMax');" />
+                <span id="serieAnioEstrenoMinVal"
+                  th:text="${currentAnioEstrenoMin != null ? currentAnioEstrenoMin : minAnioVal}"></span>
+              </div>
+            </div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="serieAnioEstrenoMax">Hasta:</label>
+                <input type="range" id="serieAnioEstrenoMax" name="anioEstrenoMax" th:min="${minAnioVal}"
+                  th:max="${maxAnioVal}"
+                  th:value="${currentAnioEstrenoMax != null ? currentAnioEstrenoMax : maxAnioVal}"
+                  oninput="updateSliderValue(this, 'serieAnioEstrenoMaxVal'); validateAnioRange('serieAnioEstrenoMin', 'serieAnioEstrenoMax');" />
+                <span id="serieAnioEstrenoMaxVal"
+                  th:text="${currentAnioEstrenoMax != null ? currentAnioEstrenoMax : maxAnioVal}"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Puntuación Mínima:</div>
+            <div class="slider-container slider-label">
+              <input type="range" id="seriePuntuacionMin" name="puntuacionMin" min="0" max="10" step="0.1"
+                th:value="${currentPuntuacionMin != null ? currentPuntuacionMin : 0.0}"
+                oninput="updateSliderValue(this, 'seriePuntuacionMinVal');" />
+              <span id="seriePuntuacionMinVal"
+                th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
+            </div>
+          </div>
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Número de temporadas:</div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="serieNTemporadasMin">Mínimo:</label>
+                <input type="range" id="serieNTemporadasMin" name="nTemporadasMin" th:min="${minNTemporadasVal}"
+                  th:max="${maxNTemporadasVal}"
+                  th:value="${currentNTemporadasMin != null ? currentNTemporadasMin : minNTemporadasVal}" oninput="updateSliderValue(this, 'serieNTemporadasMinVal');
                                 validateNTemporadasRange('serieNTemporadasMin', 'serieNTemporadasMax');" />
-                                <span id="serieNTemporadasMinVal"
-                                    th:text="${currentNTemporadasMin != null ? currentNTemporadasMin : minNTemporadasVal}"></span>
-                            </div>
-                        </div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="serieNTemporadasMax">Máximo:</label>
-                                <input type="range" id="serieNTemporadasMax" name="nTemporadasMax"
-                                    th:min="${minNTemporadasVal}" th:max="${maxNTemporadasVal}"
-                                    th:value="${currentNTemporadasMax != null ? currentNTemporadasMax : maxNTemporadasVal}"
-                                    oninput="updateSliderValue(this, 'serieNTemporadasMaxVal');
+                <span id="serieNTemporadasMinVal"
+                  th:text="${currentNTemporadasMin != null ? currentNTemporadasMin : minNTemporadasVal}"></span>
+              </div>
+            </div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="serieNTemporadasMax">Máximo:</label>
+                <input type="range" id="serieNTemporadasMax" name="nTemporadasMax" th:min="${minNTemporadasVal}"
+                  th:max="${maxNTemporadasVal}"
+                  th:value="${currentNTemporadasMax != null ? currentNTemporadasMax : maxNTemporadasVal}" oninput="updateSliderValue(this, 'serieNTemporadasMaxVal');
                                 validateNTemporadasRange('serieNTemporadasMin', 'serieNTemporadasMax');" />
-                                <span id="serieNTemporadasMaxVal"
-                                    th:text="${currentNTemporadasMax != null ? currentNTemporadasMax : maxNTemporadasVal}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Estado:</div>
-                        <label>
-                            <input type="radio" name="estadoSerie" value="todos"
-                                th:checked="${currentEstadoSerie == 'todos' or currentEstadoSerie == null}" />
-                            <span>Todas</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="estadoSerie" value="enEmision"
-                                th:checked="${currentEstadoSerie == 'enEmision'}" />
-                            <span>En Emisión</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="estadoSerie" value="finalizada"
-                                th:checked="${currentEstadoSerie == 'finalizada'}" />
-                            <span>Finalizada</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-actions-sidebar sidebar-group">
-                    <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/series}"
-                        hx-target="#series-list-container" hx-include="#filter-sort-form-series" hx-push-url="true"
-                        hx-indicator="#loading-indicator-series">
-
-                        Aplicar Filtros
-                    </button>
-                    <button type="button" class="btn btn-small btn-red" onclick="resetSeriesFiltersAndSort();">
-
-                        Limpiar Filtros
-                    </button>
-                </div>
-
-            </form>
-            <div id="loading-indicator-series" class="htmx-indicator">Cargando...</div>
+                <span id="serieNTemporadasMaxVal"
+                  th:text="${currentNTemporadasMax != null ? currentNTemporadasMax : maxNTemporadasVal}"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Estado:</div>
+            <label>
+              <input type="radio" name="estadoSerie" value="todos"
+                th:checked="${currentEstadoSerie == 'todos' or currentEstadoSerie == null}" />
+              <span>Todas</span>
+            </label>
+            <label>
+              <input type="radio" name="estadoSerie" value="enEmision"
+                th:checked="${currentEstadoSerie == 'enEmision'}" />
+              <span>En Emisión</span>
+            </label>
+            <label>
+              <input type="radio" name="estadoSerie" value="finalizada"
+                th:checked="${currentEstadoSerie == 'finalizada'}" />
+              <span>Finalizada</span>
+            </label>
+          </div>
         </div>
 
-        <!-- Contenidos para películas -->
-        <div th:if="${currentPage == 'peliculas'}">
-            <form id="filter-sort-form-peliculas" class="sidebar-form">
-                <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
-                    data-target="sidebar-dropdown-1-child">
-                    <h4>Ordenar por:</h4>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
+        <div class="form-actions-sidebar sidebar-group">
+          <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/series}"
+            hx-target="#series-list-container" hx-include="#filter-sort-form-series" hx-push-url="true"
+            hx-indicator="#loading-indicator-series">
 
-                <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
-                    <!-- Criterios de ordenación -->
-                    <label>
-                        <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
-                        <span>Título</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="anioEstreno"
-                            th:checked="${currentSortBy == 'anioEstreno'}" />
-                        <span>Año Estreno</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="puntuacion"
-                            th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
-                        <span>Puntuación</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="duracionMin"
-                            th:checked="${currentSortBy == 'duracionMin'}" />
-                        <span>Duración</span>
-                    </label>
-                </div>
-                <div class="form-group-sidebar sidebar-group sort-direction-container">
-                    <label>
-                        <input type="radio" name="sortDir" value="asc"
-                            th:checked="${currentSortDir == 'asc' or currentSortDir == null}" />
-                        <span>Ascendente</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortDir" value="desc" th:checked="${currentSortDir == 'desc'}" />
-                        <span>Descendente</span>
-                    </label>
-                </div>
+            Aplicar Filtros
+          </button>
+          <button type="button" class="btn btn-small btn-red" onclick="resetSeriesFiltersAndSort();">
 
-                <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
-                    data-target="sidebar-dropdown-2-child">
-                    <h4>Filtrar por:</h4>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
-
-                <div class="sidebar-dropdown-2-child dropdown-content">
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Género(s):</div>
-                        <div class="checkbox-list genero-tag-list"
-                            th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
-                            <th:block th:each="genero : ${allGeneros}">
-                                <div class="genero-tag-item">
-                                    <input type="checkbox" th:id="'pelicula-filter-genero-' + ${genero.id}"
-                                        name="generoIds" th:value="${genero.id}" th:checked="${selectedGeneroIds != null and #lists.contains(selectedGeneroIds,
-                                    genero.id)}" class="visually-hidden-checkbox" />
-                                    <label th:for="'pelicula-filter-genero-' + ${genero.id}" class="genero-tag-label"
-                                        th:text="${genero.nombre}">Nombre Género</label>
-                                </div>
-                            </th:block>
-                        </div>
-                        <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
-                    </div>
-
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Plataforma(s):</div>
-                        <div class="checkbox-list plataforma-logo-list "
-                            th:if="${allPlataformas != null and not #lists.isEmpty(allPlataformas)}">
-                            <th:block th:each="plataforma : ${allPlataformas}">
-                                <div class="plataforma-logo-item">
-                                    <input type="checkbox" th:id="'pelicula-filter-plataforma-' + ${plataforma.id}"
-                                        name="plataformaIds" th:value="${plataforma.id}" th:checked="${selectedPlataformaIds != null and #lists.contains(selectedPlataformaIds,
-                                    plataforma.id)}" class="visually-hidden-checkbox" />
-                                    <label th:for="'pelicula-filter-plataforma-' + ${plataforma.id}"
-                                        class="plataforma-logo-label">
-                                        <img th:if="${plataforma.logo != null && !#strings.isEmpty(plataforma.logo)}"
-                                            th:src="@{${plataforma.logo}}" th:alt="${plataforma.nombre}"
-                                            class="plataforma-logo-img" />
-                                        <span th:if="${plataforma.logo == null || #strings.isEmpty(plataforma.logo)}"
-                                            th:text="${plataforma.nombre}" class="plataforma-logo-fallback-text"></span>
-                                    </label>
-                                </div>
-                            </th:block>
-                        </div>
-                        <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas
-                            disponibles.</p>
-                    </div>
-
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Año de Estreno:</div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="peliculaAnioMin">Desde:</label>
-                                <input type="range" id="peliculaAnioMin" name="anioMin" th:min="${minAnioVal}"
-                                    th:max="${maxAnioVal}"
-                                    th:value="${currentAnioMin != null ? currentAnioMin : minAnioVal}"
-                                    oninput="updateSliderValue(this, 'peliculaAnioMinVal'); validateAnioRange('peliculaAnioMin', 'peliculaAnioMax');" />
-                                <span id="peliculaAnioMinVal"
-                                    th:text="${currentAnioMin != null ? currentAnioMin : minAnioVal}"></span>
-                            </div>
-                        </div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <label for="peliculaAnioMax">Hasta:</label>
-                                <input type="range" id="peliculaAnioMax" name="anioMax" th:min="${minAnioVal}"
-                                    th:max="${maxAnioVal}"
-                                    th:value="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"
-                                    oninput="updateSliderValue(this, 'peliculaAnioMaxVal'); validateAnioRange('peliculaAnioMin', 'peliculaAnioMax');" />
-                                <span id="peliculaAnioMaxVal"
-                                    th:text="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group-sidebar filter-group sidebar-group">
-                        <div class="sidebar-group-title">Puntuación Mínima:</div>
-                        <div class="slider-container slider-label">
-                            <input type="range" id="peliculaPuntuacionMin" name="puntuacionMin" min="0" max="10"
-                                step="0.1" th:value="${currentPuntuacionMin != null ? currentPuntuacionMin : 0.0}"
-                                oninput="updateSliderValue(this, 'peliculaPuntuacionMinVal');" />
-                            <span id="peliculaPuntuacionMinVal"
-                                th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-actions-sidebar sidebar-group">
-                        <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/peliculas}"
-                            hx-target="#peliculas-list-container" hx-include="#filter-sort-form-peliculas"
-                            hx-push-url="true" hx-indicator="#loading-indicator-peliculas">
-                            Aplicar Filtros
-                        </button>
-                        <button type="button" class="btn btn-small btn-red" onclick="resetPeliculasFiltersAndSort();">
-                            Limpiar Filtros
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
+            Limpiar Filtros
+          </button>
         </div>
 
-        <div th:if="${currentPage == 'gente'}">
-            <form id="sort-form-gente" class="sidebar-form">
-                <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
-                    data-target="sidebar-dropdown-1-child">
-                    <h4>Ordenar por:</h4>
-                    <span class="dropdown-arrow">▼</span>
-                </div>
-
-                <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
-                    <label>
-                        <input type="radio" name="sortBy" value="nombre"
-                            th:checked="${currentSortBy == 'nombre' or currentSortBy == null}"
-                            th:attr="hx-get=@{/gente}" hx-target="#personas-list-container"
-                            hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
-                            hx-indicator="#loading-indicator-gente" />
-                        <span>Nombre</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortBy" value="fechaNac" th:checked="${currentSortBy == 'fechaNac'}"
-                            th:attr="hx-get=@{/gente}" hx-target="#personas-list-container"
-                            hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
-                            hx-indicator="#loading-indicator-gente" />
-                        <span>Fecha Nacimiento</span>
-                    </label>
-                </div>
-
-                <div class="form-group-sidebar sidebar-group sort-direction-container">
-                    <label>
-                        <input type="radio" name="sortDir" value="asc"
-                            th:checked="${currentSortDir == 'asc' or currentSortDir == null}" th:attr="hx-get=@{/gente}"
-                            hx-target="#personas-list-container" hx-include="[name='sortBy'],[name='sortDir']"
-                            hx-push-url="true" hx-indicator="#loading-indicator-gente" />
-                        <span>Ascendente</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="sortDir" value="desc" th:checked="${currentSortDir == 'desc'}"
-                            th:attr="hx-get=@{/gente}" hx-target="#personas-list-container"
-                            hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
-                            hx-indicator="#loading-indicator-gente" />
-                        <span>Descendente</span>
-                    </label>
-                </div>
-            </form>
-            <div id="loading-indicator-gente" class="htmx-indicator">Cargando...</div>
-        </div>
-
-        <!-- Contenidos para listas -->
-        <div th:if="${currentPage == 'listas'}">
-        </div>
-
-        <!-- Contenidos para admin -->
-        <div th:if="${currentPage == 'admin'}">
-            <h4>Panel de Administración</h4>
-            <ul>
-                <li><a th:href="@{/admin/peliculas}">Películas</a></li>
-                <li><a th:href="@{/admin/series}">Series</a></li>
-                <li><a th:href="@{/admin/gente}">Gente</a></li>
-                <li><a th:href="@{/admin/listas}">Listas</a></li>
-                <li><a th:href="@{/admin/usuarios}">Usuarios</a></li>
-            </ul>
-        </div>
-
-        <!-- Contenidos para perfil -->
-        <div th:if="${currentPage == 'perfil'}">
-        </div>
-
-        <!-- Contenidos para mis listas -->
-        <div th:if="${currentPage == 'mis-listas'}">
-        </div>
+      </form>
+      <div id="loading-indicator-series" class="htmx-indicator">Cargando...</div>
     </div>
+
+    <!-- Contenidos para películas -->
+    <div th:if="${currentPage == 'peliculas'}">
+      <form id="filter-sort-form-peliculas" class="sidebar-form">
+        <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
+          data-target="sidebar-dropdown-1-child">
+          <h4>Ordenar por:</h4>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
+          <!-- Criterios de ordenación -->
+          <label>
+            <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
+            <span>Título</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="anioEstreno" th:checked="${currentSortBy == 'anioEstreno'}" />
+            <span>Año Estreno</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="puntuacion"
+              th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
+            <span>Puntuación</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="duracionMin" th:checked="${currentSortBy == 'duracionMin'}" />
+            <span>Duración</span>
+          </label>
+        </div>
+        <div class="form-group-sidebar sidebar-group sort-direction-container">
+          <label>
+            <input type="radio" name="sortDir" value="asc"
+              th:checked="${currentSortDir == 'asc' or currentSortDir == null}" />
+            <span>Ascendente</span>
+          </label>
+          <label>
+            <input type="radio" name="sortDir" value="desc" th:checked="${currentSortDir == 'desc'}" />
+            <span>Descendente</span>
+          </label>
+        </div>
+
+        <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
+          data-target="sidebar-dropdown-2-child">
+          <h4>Filtrar por:</h4>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <div class="sidebar-dropdown-2-child dropdown-content">
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Género(s):</div>
+            <div class="checkbox-list genero-tag-list" th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
+              <th:block th:each="genero : ${allGeneros}">
+                <div class="genero-tag-item">
+                  <input type="checkbox" th:id="'pelicula-filter-genero-' + ${genero.id}" name="generoIds"
+                    th:value="${genero.id}" th:checked="${selectedGeneroIds != null and #lists.contains(selectedGeneroIds,
+                                    genero.id)}" class="visually-hidden-checkbox" />
+                  <label th:for="'pelicula-filter-genero-' + ${genero.id}" class="genero-tag-label"
+                    th:text="${genero.nombre}">Nombre Género</label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
+          </div>
+
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Plataforma(s):</div>
+            <div class="checkbox-list plataforma-logo-list "
+              th:if="${allPlataformas != null and not #lists.isEmpty(allPlataformas)}">
+              <th:block th:each="plataforma : ${allPlataformas}">
+                <div class="plataforma-logo-item">
+                  <input type="checkbox" th:id="'pelicula-filter-plataforma-' + ${plataforma.id}" name="plataformaIds"
+                    th:value="${plataforma.id}" th:checked="${selectedPlataformaIds != null and #lists.contains(selectedPlataformaIds,
+                                    plataforma.id)}" class="visually-hidden-checkbox" />
+                  <label th:for="'pelicula-filter-plataforma-' + ${plataforma.id}" class="plataforma-logo-label">
+                    <img th:if="${plataforma.logo != null && !#strings.isEmpty(plataforma.logo)}"
+                      th:src="@{${plataforma.logo}}" th:alt="${plataforma.nombre}" class="plataforma-logo-img" />
+                    <span th:if="${plataforma.logo == null || #strings.isEmpty(plataforma.logo)}"
+                      th:text="${plataforma.nombre}" class="plataforma-logo-fallback-text"></span>
+                  </label>
+                </div>
+              </th:block>
+            </div>
+            <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas
+              disponibles.</p>
+          </div>
+
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Año de Estreno:</div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="peliculaAnioMin">Desde:</label>
+                <input type="range" id="peliculaAnioMin" name="anioMin" th:min="${minAnioVal}" th:max="${maxAnioVal}"
+                  th:value="${currentAnioMin != null ? currentAnioMin : minAnioVal}"
+                  oninput="updateSliderValue(this, 'peliculaAnioMinVal'); validateAnioRange('peliculaAnioMin', 'peliculaAnioMax');" />
+                <span id="peliculaAnioMinVal" th:text="${currentAnioMin != null ? currentAnioMin : minAnioVal}"></span>
+              </div>
+            </div>
+            <div class="slider-container">
+              <div class="slider-label">
+                <label for="peliculaAnioMax">Hasta:</label>
+                <input type="range" id="peliculaAnioMax" name="anioMax" th:min="${minAnioVal}" th:max="${maxAnioVal}"
+                  th:value="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"
+                  oninput="updateSliderValue(this, 'peliculaAnioMaxVal'); validateAnioRange('peliculaAnioMin', 'peliculaAnioMax');" />
+                <span id="peliculaAnioMaxVal" th:text="${currentAnioMax != null ? currentAnioMax : maxAnioVal}"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-sidebar filter-group sidebar-group">
+            <div class="sidebar-group-title">Puntuación Mínima:</div>
+            <div class="slider-container slider-label">
+              <input type="range" id="peliculaPuntuacionMin" name="puntuacionMin" min="0" max="10" step="0.1"
+                th:value="${currentPuntuacionMin != null ? currentPuntuacionMin : 0.0}"
+                oninput="updateSliderValue(this, 'peliculaPuntuacionMinVal');" />
+              <span id="peliculaPuntuacionMinVal"
+                th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
+            </div>
+          </div>
+
+          <div class="form-actions-sidebar sidebar-group">
+            <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/peliculas}"
+              hx-target="#peliculas-list-container" hx-include="#filter-sort-form-peliculas" hx-push-url="true"
+              hx-indicator="#loading-indicator-peliculas">
+              Aplicar Filtros
+            </button>
+            <button type="button" class="btn btn-small btn-red" onclick="resetPeliculasFiltersAndSort();">
+              Limpiar Filtros
+            </button>
+          </div>
+        </div>
+      </form>
+      <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
+    </div>
+
+    <div th:if="${currentPage == 'gente'}">
+      <form id="sort-form-gente" class="sidebar-form">
+        <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
+          data-target="sidebar-dropdown-1-child">
+          <h4>Ordenar por:</h4>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
+          <label>
+            <input type="radio" name="sortBy" value="nombre"
+              th:checked="${currentSortBy == 'nombre' or currentSortBy == null}" th:attr="hx-get=@{/gente}"
+              hx-target="#personas-list-container" hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
+              hx-indicator="#loading-indicator-gente" />
+            <span>Nombre</span>
+          </label>
+          <label>
+            <input type="radio" name="sortBy" value="fechaNac" th:checked="${currentSortBy == 'fechaNac'}"
+              th:attr="hx-get=@{/gente}" hx-target="#personas-list-container"
+              hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
+              hx-indicator="#loading-indicator-gente" />
+            <span>Fecha Nacimiento</span>
+          </label>
+        </div>
+
+        <div class="form-group-sidebar sidebar-group sort-direction-container">
+          <label>
+            <input type="radio" name="sortDir" value="asc"
+              th:checked="${currentSortDir == 'asc' or currentSortDir == null}" th:attr="hx-get=@{/gente}"
+              hx-target="#personas-list-container" hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
+              hx-indicator="#loading-indicator-gente" />
+            <span>Ascendente</span>
+          </label>
+          <label>
+            <input type="radio" name="sortDir" value="desc" th:checked="${currentSortDir == 'desc'}"
+              th:attr="hx-get=@{/gente}" hx-target="#personas-list-container"
+              hx-include="[name='sortBy'],[name='sortDir']" hx-push-url="true"
+              hx-indicator="#loading-indicator-gente" />
+            <span>Descendente</span>
+          </label>
+        </div>
+      </form>
+      <div id="loading-indicator-gente" class="htmx-indicator">Cargando...</div>
+    </div>
+
+    <!-- Contenidos para listas -->
+    <div th:if="${currentPage == 'listas'}">
+    </div>
+
+    <!-- Contenidos para admin -->
+    <div th:if="${currentPage == 'admin'}">
+      <div class="sidebar-group">
+        <h4>Panel de Administración</h4>
+      </div>
+      <div class="sidebar-group">
+        <a th:href="@{/admin/peliculas}">
+          <span>Películas</span>
+        </a>
+      </div>
+      <div class="sidebar-group">
+        <a th:href="@{/admin/series}">
+          <span>Series</span>
+        </a>
+      </div>
+      <div class="sidebar-group">
+        <a th:href="@{/admin/gente}">
+          <span>Gente</span>
+        </a>
+      </div>
+      <div class="sidebar-group">
+        <a th:href="@{/admin/listas}">
+          <span>Listas</span>
+        </a>
+      </div>
+      <div class="sidebar-group">
+        <a th:href="@{/admin/usuarios}">
+          <span>Usuarios</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Contenidos para perfil -->
+    <div th:if="${currentPage == 'perfil'}">
+    </div>
+
+    <!-- Contenidos para mis listas -->
+    <div th:if="${currentPage == 'mis-listas'}">
+    </div>
+  </div>
 
 </body>
 
