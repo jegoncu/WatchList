@@ -10,11 +10,18 @@
   </head>
   <body>
     <section>
-      <div class="page-header">
-        <h1 th:text="${lista.titulo}">Título de la Lista</h1>
+      <div class="lista-header">
         <div>
-            <span th:if="${lista.esPublica}" class="badge badge-info">Pública</span>
-            <span th:unless="${lista.esPublica}" class="badge badge-secondary">Privada</span>
+          <div>
+            <h1 th:text="${lista.titulo}">Título de la Lista</h1>
+          </div>
+          <div>
+              <span th:text="${lista.usuario.nombre}">Nombre Usuario</span>
+          </div>
+        </div>
+        <div>
+            <span th:if="${lista.esPublica}" class="btn btn-small btn-green">Pública</span>
+            <span th:unless="${lista.esPublica}" class="btn btn-small btn-red">Privada</span>
         </div>
       </div>
 
@@ -25,7 +32,6 @@
         <p th:text="${error}"></p>
       </div>
 
-      <hr />
       <h2>Contenido de la Lista</h2>
 
       <div th:if="${lista.medias == null or lista.medias.isEmpty()}">
@@ -43,7 +49,7 @@
                 th:if="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
                 th:src="${media.urlImagen}"
                 th:alt="${media.titulo}"
-                class="content-card-poster" 
+                class="content-card-poster"
                 loading="lazy" />
               <div
                 th:unless="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
@@ -58,17 +64,17 @@
           </a>
           <form class="remove-item-form"
                 th:if="${esPropietario}"
-                th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}" 
-                method="post" 
+                th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}"
+                method="post"
                 onsubmit="return confirm('¿Estás seguro de que quieres quitar este ítem de la lista?');">
             <button type="submit" class="remove-item-btn" title="Quitar de la lista">&times;</button>
           </form>
         </div>
       </div>
 
-      <div class="list-actions mt-4">
-        <a th:if="${currentPage == 'misListas'}" th:href="@{/mis-listas}" class="btn btn-grey">Volver a Mis Listas</a>
-        <a th:if="${currentPage == 'listasPublicas'}" th:href="@{/listas}" class="btn btn-grey">Volver a Listas Públicas</a>
+      <div class="list-actions">
+        <a th:if="${currentPage == 'misListas'}" th:href="@{/mis-listas}" class="btn btn-small btn-grey">Volver a Mis Listas</a>
+        <a th:if="${currentPage == 'listasPublicas'}" th:href="@{/listas}" class="btn btn-small btn-grey">Volver a Listas Públicas</a>
       </div>
     </section>
 

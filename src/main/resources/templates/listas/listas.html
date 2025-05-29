@@ -1,42 +1,48 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${tituloPagina ?: 'Listas Públicas'} + ' - WatchList'">Listas Públicas - WatchList</title>
-    <th:block th:fragment="pageCss">
-    </th:block>
-  </head>
-  <body>
-    <section>
-      <div th:if="${listas == null or listas.isEmpty()}">
-        <p>Actualmente no hay listas públicas disponibles.</p>
-      </div>
 
-      <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}">
-        <div class="content-card" th:each="lista : ${listas}">
-          <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
-            <div class="content-card-poster-container">
-              <div class="content-card-poster-placeholder">
-                <span th:text="${lista.titulo}">Título Lista</span>
-              </div>
+<head>
+  <title th:text="${tituloPagina ?: 'Listas Públicas'} + ' - WatchList'">Listas Públicas - WatchList</title>
+  <th:block th:fragment="pageCss">
+  </th:block>
+</head>
+
+<body>
+  <section>
+    <div th:if="${listas == null or listas.isEmpty()}">
+      <p>Actualmente no hay listas públicas disponibles.</p>
+    </div>
+
+    <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}">
+      <div class="content-card" th:each="lista : ${listas}">
+        <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
+          <div class="content-card-poster-container">
+            <img
+              th:if="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
+              th:src="${lista.medias[0].urlImagen}" th:alt="${lista.titulo}" class="content-card-poster" />
+            <div
+              th:unless="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
+              class="content-card-poster-placeholder">
+              <span th:text="${lista.titulo}">Título Lista</span>
             </div>
-            <div class="content-card-info">
-              <h3 class="content-card-title" th:text="${lista.titulo}">Título de la Lista</h3>
-              <div class="content-card-details">
-                <p th:if="${lista.usuario != null}">
-                  Por: <span th:text="${lista.usuario.nombre}">Usuario</span>
-                </p>
-                <p>
-                  <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
-                </p>
-              </div>
+          </div>
+          <div class="content-card-info">
+            <h3 class="content-card-title" th:text="${lista.titulo}">Título de la Lista</h3>
+            <div class="content-card-details">
+              <p th:if="${lista.usuario != null}">
+                Por: <span th:text="${lista.usuario.nombre}">Usuario</span>
+              </p>
+              <p>
+                <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
+              </p>
             </div>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
-  </body>
+    </div>
+  </section>
+  <th:block th:fragment="pageScript"> </th:block>
+</body>
+
 </html>
