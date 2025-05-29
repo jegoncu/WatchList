@@ -1,83 +1,90 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${lista.titulo} + ' - WatchList'">Detalle de Lista - WatchList</title>
-    <th:block th:fragment="pageCss">
-    </th:block>
-  </head>
-  <body>
-    <section>
-      <div class="lista-header">
+
+<head>
+  <title th:text="${lista.titulo} + ' - WatchList'">Detalle de Lista - WatchList</title>
+  <th:block th:fragment="pageCss">
+  </th:block>
+</head>
+
+<body>
+  <section>
+    <div class="lista-header">
+      <div>
         <div>
-          <div>
-            <h1 th:text="${lista.titulo}">Título de la Lista</h1>
-          </div>
-          <div>
-              <span th:text="${lista.usuario.nombre}">Nombre Usuario</span>
-          </div>
+          <h1 th:text="${lista.titulo}">Título de la Lista</h1>
         </div>
         <div>
-            <span th:if="${lista.esPublica}" class="btn btn-small btn-green">Pública</span>
-            <span th:unless="${lista.esPublica}" class="btn btn-small btn-red">Privada</span>
-        </div>
-      </div>
-
-      <div th:if="${mensajeExito}" class="alert alert-success mt-2" role="alert">
-        <p th:text="${mensajeExito}"></p>
-      </div>
-      <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
-        <p th:text="${error}"></p>
-      </div>
-
-      <h2>Contenido de la Lista</h2>
-
-      <div th:if="${lista.medias == null or lista.medias.isEmpty()}">
-        <p>Esta lista aún no tiene películas ni series.</p>
-        <p>
-          Puedes añadir contenido navegando a la página de una película o serie y
-          seleccionando "Añadir a lista".
-        </p>
-      </div>
-      <div class="card-grid" th:if="${lista.medias != null and not lista.medias.isEmpty()}">
-        <div class="content-card" th:each="media : ${lista.medias}">
-          <a th:href="${media.mediaType == 'pelicula' ? '/peliculas/' + media.id : '/series/' + media.id}" class="content-card-link" th:title="${media.titulo}">
-            <div class="content-card-poster-container">
-              <img
-                th:if="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
-                th:src="${media.urlImagen}"
-                th:alt="${media.titulo}"
-                class="content-card-poster"
-                loading="lazy" />
-              <div
-                th:unless="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
-                class="content-card-poster-placeholder">
-                <span>Sin Póster</span>
-              </div>
-            </div>
-            <div class="content-card-info">
-              <h3 class="content-card-title" th:text="${media.titulo}">Título Media</h3>
-              <p class="content-card-year" th:if="${media.anioEstreno != null}" th:text="${media.anioEstreno}">Año</p>
-            </div>
+          <span th:text="${lista.usuario.nombre}">Nombre Usuario</span>
+          <a th:if="${esPropietario}" th:href="@{/listas/{id}/editar(id=${lista.id})}" class="btn btn-small btn-yellow">
+            Editar Lista
           </a>
-          <form class="remove-item-form"
-                th:if="${esPropietario}"
-                th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}"
-                method="post"
-                onsubmit="return confirm('¿Estás seguro de que quieres quitar este ítem de la lista?');">
-            <button type="submit" class="remove-item-btn" title="Quitar de la lista">&times;</button>
+          <form th:if="${esPropietario}" style="display: inline-block;"
+            th:action="@{/listas/{id}/eliminar(id=${lista.id})}" method="post"
+            onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta lista? Esta acción no se puede deshacer.');">
+            <button type="submit" class="btn btn-small btn-red">Eliminar Lista</button>
           </form>
         </div>
       </div>
-
-      <div class="list-actions">
-        <a th:if="${currentPage == 'misListas'}" th:href="@{/mis-listas}" class="btn btn-small btn-grey">Volver a Mis Listas</a>
-        <a th:if="${currentPage == 'listasPublicas'}" th:href="@{/listas}" class="btn btn-small btn-grey">Volver a Listas Públicas</a>
+      <div>
+        <span th:if="${lista.esPublica}" class="btn btn-small btn-green">Pública</span>
+        <span th:unless="${lista.esPublica}" class="btn btn-small btn-red">Privada</span>
       </div>
-    </section>
+    </div>
 
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+    <div th:if="${mensajeExito}" class="alert alert-success mt-2" role="alert">
+      <p th:text="${mensajeExito}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
+      <p th:text="${error}"></p>
+    </div>
+
+    <h2>Contenido de la Lista</h2>
+
+    <div th:if="${lista.medias == null or lista.medias.isEmpty()}">
+      <p>Esta lista aún no tiene películas ni series.</p>
+      <p>
+        Puedes añadir contenido navegando a la página de una película o serie y
+        seleccionando "Añadir a lista".
+      </p>
+    </div>
+    <div class="card-grid" th:if="${lista.medias != null and not lista.medias.isEmpty()}">
+      <div class="content-card" th:each="media : ${lista.medias}">
+        <a th:href="${media.mediaType == 'pelicula' ? '/peliculas/' + media.id : '/series/' + media.id}"
+          class="content-card-link" th:title="${media.titulo}">
+          <div class="content-card-poster-container">
+            <img th:if="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
+              th:src="${media.urlImagen}" th:alt="${media.titulo}" class="content-card-poster" loading="lazy" />
+            <div th:unless="${media.urlImagen != null and not #strings.isEmpty(media.urlImagen)}"
+              class="content-card-poster-placeholder">
+              <span>Sin Póster</span>
+            </div>
+          </div>
+          <div class="content-card-info">
+            <h3 class="content-card-title" th:text="${media.titulo}">Título Media</h3>
+            <p class="content-card-year" th:if="${media.anioEstreno != null}" th:text="${media.anioEstreno}">Año</p>
+          </div>
+        </a>
+        <form class="remove-item-form" th:if="${esPropietario}"
+          th:action="@{/listas/{listaId}/media/{mediaId}/quitar(listaId=${lista.id}, mediaId=${media.id})}"
+          method="post" onsubmit="return confirm('¿Estás seguro de que quieres quitar este ítem de la lista?');">
+          <button type="submit" class="remove-item-btn" title="Quitar de la lista">&times;</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="list-actions">
+      <a th:if="${currentPage == 'misListas'}" th:href="@{/listas(filtro='mis-listas')}" class="btn btn-small btn-grey">
+        Volver a Mis Listas
+      </a>
+      <a th:if="${currentPage == 'listasPublicas'}" th:href="@{/listas}" class="btn btn-small btn-grey">
+        Volver a Listas Públicas
+      </a>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

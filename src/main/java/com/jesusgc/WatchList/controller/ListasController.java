@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -30,34 +31,37 @@ public class ListasController {
     }
 
     @GetMapping("/listas")
-    public String mostrarListasPublicas(Model model) {
-        List<Lista> listasPublicas = listaService.obtenerListasPublicas();
-        model.addAttribute("listas", listasPublicas);
-        model.addAttribute("tituloPagina", "Listas Públicas");
-        model.addAttribute("currentPage", "listasPublicas");
-        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
-        return "listas/listas";
-    }
+    public String mostrarListasPublicas(@RequestParam(value = "filtro", required = false) String filtro,
+                                       Model model, HttpSession session) {
+        List<Lista> listas;
+        String tituloPagina;
 
-    @GetMapping("/mis-listas")
-    public String mostrarMisListas(Model model, HttpSession session) {
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) {
-            return "redirect:/login";
+        if ("mis-listas".equals(filtro)) {
+            Long usuarioId = (Long) session.getAttribute("usuarioId");
+            if (usuarioId != null) {
+                try {
+                    Usuario usuarioLogueado = usuarioService.findById(usuarioId);
+                    listas = listaService.obtenerListasPorUsuario(usuarioLogueado);
+                    tituloPagina = "Mis Listas";
+                } catch (IllegalArgumentException e) {
+                    listas = listaService.obtenerListasPublicas();
+                    tituloPagina = "Listas Públicas";
+                }
+            } else {
+                listas = listaService.obtenerListasPublicas();
+                tituloPagina = "Listas Públicas";
+            }
+        } else {
+            listas = listaService.obtenerListasPublicas();
+            tituloPagina = "Listas Públicas";
         }
-        try {
-            Usuario usuarioLogueado = usuarioService.findById(usuarioId);
-            List<Lista> misListas = listaService.obtenerListasPorUsuario(usuarioLogueado);
-            model.addAttribute("listas", misListas);
-            model.addAttribute("usuario", usuarioLogueado);
-            model.addAttribute("tituloPagina", "Mis Listas");
-            model.addAttribute("currentPage", "misListas");
-            model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
-            return "usuario/mis-listas";
-        } catch (IllegalArgumentException e) {
-            session.invalidate();
-            return "redirect:/login?error=usuarioNoEncontrado";
-        }
+
+        model.addAttribute("listas", listas);
+        model.addAttribute("tituloPagina", tituloPagina);
+        model.addAttribute("currentPage", "listas");
+        model.addAttribute("hideSidebar", true);
+        model.addAttribute("filtroActual", filtro);
+        return "listas/listas";
     }
 
     @GetMapping("/listas/nueva")
@@ -69,7 +73,7 @@ public class ListasController {
         model.addAttribute("lista", new Lista());
         model.addAttribute("tituloPagina", "Crear Nueva Lista");
         model.addAttribute("currentPage", "misListas");
-        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
+        model.addAttribute("hideSidebar", true);
         return "listas/form-lista";
     }
 
@@ -94,7 +98,7 @@ public class ListasController {
             Usuario usuarioLogueado = usuarioService.findById(usuarioId);
             listaService.crearLista(lista.getTitulo(), lista.getEsPublica(), usuarioLogueado);
             redirectAttributes.addFlashAttribute("mensajeExito", "Lista creada exitosamente.");
-            return "redirect:/mis-listas";
+            return "redirect:/listas?filtro=mis-listas"; // Cambiar esta línea
         } catch (IllegalArgumentException e) {
             session.invalidate();
             redirectAttributes.addFlashAttribute("error", "Error al crear la lista. Sesión inválida.");
@@ -147,7 +151,7 @@ public class ListasController {
         model.addAttribute("lista", lista);
         model.addAttribute("tituloPagina", "Detalle: " + lista.getTitulo());
         model.addAttribute("esPropietario", esPropietario);
-        model.addAttribute("hideSidebar", true); // AÑADIR ESTA LÍNEA
+        model.addAttribute("hideSidebar", true);
 
         if (esPropietario) {
             model.addAttribute("currentPage", "misListas");
@@ -181,7 +185,7 @@ public class ListasController {
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/mis-listas";
+        return "redirect:/listas?filtro=mis-listas"; // Cambiar esta línea
     }
 
     @PostMapping("/listas/{listaId}/media/{mediaId}/agregar")
@@ -228,5 +232,85 @@ public class ListasController {
             redirectAttributes.addFlashAttribute("error", "Error inesperado al quitar el ítem de la lista.");
         }
         return "redirect:/listas/" + listaId;
+    }
+
+    @GetMapping("/listas/{id}/editar")
+    public String mostrarFormularioEditarLista(@PathVariable Long id, Model model, HttpSession session) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Optional<Lista> listaOptional = listaService.findById(id);
+            if (listaOptional.isEmpty()) {
+                return "redirect:/listas?error=Lista no encontrada";
+            }
+
+            Lista lista = listaOptional.get();
+            Usuario usuarioLogueado = usuarioService.findById(usuarioId);
+
+            // Verificar que el usuario es el propietario
+            if (!lista.getUsuario().getId().equals(usuarioLogueado.getId())) {
+                return "redirect:/listas/" + id + "?error=No tienes permisos para editar esta lista";
+            }
+
+            model.addAttribute("lista", lista);
+            model.addAttribute("currentPage", "listas");
+            model.addAttribute("tituloPagina", "Editar Lista");
+            model.addAttribute("hideSidebar", true);
+
+            return "listas/form-lista";
+
+        } catch (IllegalArgumentException e) {
+            return "redirect:/listas?error=Error al cargar la lista";
+        }
+    }
+
+    @PostMapping("/listas/{id}/editar")
+    public String procesarEditarLista(@PathVariable Long id,
+                                 @Valid @ModelAttribute("lista") Lista lista,
+                                 BindingResult result,
+                                 HttpSession session,
+                                 Model model,
+                                 RedirectAttributes redirectAttributes) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+
+        if (result.hasFieldErrors("titulo")) {
+            model.addAttribute("tituloPagina", "Editar Lista");
+            model.addAttribute("currentPage", "listas");
+            model.addAttribute("hideSidebar", true);
+            return "listas/form-lista";
+        }
+
+        try {
+            Optional<Lista> listaOptional = listaService.findById(id);
+            if (listaOptional.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Lista no encontrada");
+                return "redirect:/listas";
+            }
+
+            Lista listaExistente = listaOptional.get();
+            Usuario usuarioLogueado = usuarioService.findById(usuarioId);
+
+            // Verificar que el usuario es el propietario
+            if (!listaExistente.getUsuario().getId().equals(usuarioLogueado.getId())) {
+                redirectAttributes.addFlashAttribute("error", "No tienes permisos para editar esta lista");
+                return "redirect:/listas/" + id;
+            }
+
+            // Actualizar la lista
+            listaService.updateLista(id, lista.getTitulo(), lista.getEsPublica(), usuarioLogueado);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Lista actualizada correctamente");
+
+            return "redirect:/listas/" + id;
+
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar la lista: " + e.getMessage());
+            return "redirect:/listas/" + id;
+        }
     }
 }

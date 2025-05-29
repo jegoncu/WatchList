@@ -10,8 +10,29 @@
 
 <body>
   <section>
+    <div class="listas-titulo">
+      <h1 th:text="${tituloPagina ?: 'Listas Públicas'}">Listas Públicas</h1>
+      <div>
+        <button type="button" class="btn btn-small btn-green" id="btn-mis-listas"
+          th:if="${session.usuarioId != null and filtroActual != 'mis-listas'}">
+          Mis listas
+        </button>
+        <button type="button" class="btn btn-small btn-blue" id="btn-todas-listas"
+          th:if="${filtroActual == 'mis-listas'}">
+          Todas las listas
+        </button>
+        <button type="button" class="btn btn-small btn-yellow" id="btn-crear-lista"
+          th:if="${session.usuarioId != null and filtroActual == 'mis-listas'}">
+          Crear lista
+        </button>
+      </div>
+    </div>
+
     <div th:if="${listas == null or listas.isEmpty()}">
-      <p>Actualmente no hay listas públicas disponibles.</p>
+      <p
+        th:text="${filtroActual == 'mis-listas' ? 'No tienes listas creadas.' : 'Actualmente no hay listas públicas disponibles.'}">
+        Actualmente no hay listas públicas disponibles.
+      </p>
     </div>
 
     <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}">
@@ -42,7 +63,33 @@
       </div>
     </div>
   </section>
-  <th:block th:fragment="pageScript"> </th:block>
+  <th:block th:fragment="pageScript">
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const btnTodasListas = document.getElementById('btn-todas-listas');
+        const btnMisListas = document.getElementById('btn-mis-listas');
+        const btnCrearLista = document.getElementById('btn-crear-lista');
+
+        if (btnTodasListas) {
+          btnTodasListas.addEventListener('click', function () {
+            window.location.href = '/listas';
+          });
+        }
+
+        if (btnMisListas) {
+          btnMisListas.addEventListener('click', function () {
+            window.location.href = '/listas?filtro=mis-listas';
+          });
+        }
+
+        if (btnCrearLista) {
+          btnCrearLista.addEventListener('click', function () {
+            window.location.href = '/listas/nueva';
+          });
+        }
+      });
+    </script>
+  </th:block>
 </body>
 
 </html>

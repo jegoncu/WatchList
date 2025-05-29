@@ -1,73 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <body>
-    <header th:fragment="header">
-      <div class="header-container">
-        <a th:href="@{/}">
-          <h1>WATCHLIST</h1>
-        </a>
-        <nav class="header-nav">
-          <ul class="nav-list">
-            <li>
-              <a
-                th:href="@{/peliculas}"
-                th:classappend="${currentPage == 'peliculas' ? 'active' : ''}"
-                >Películas</a
-              >
-            </li>
-            <li>
-              <a
-                th:href="@{/series}"
-                th:classappend="${currentPage == 'series' ? 'active' : ''}"
-                >Series</a
-              >
-            </li>
-            <li>
-              <a
-                th:href="@{/gente}"
-                th:classappend="${currentPage == 'gente' ? 'active' : ''}"
-                >Gente</a
-              >
-            </li>
-            <li>
-              <a
-                th:href="@{/listas}"
-                th:classappend="${currentPage == 'listas' ? 'active' : ''}"
-                >Listas</a
-              >
-            </li>
+
+<body>
+  <header th:fragment="header">
+    <div class="header-container">
+      <a th:href="@{/}">
+        <h1>WATCHLIST</h1>
+      </a>
+      <nav class="header-nav">
+        <ul class="nav-list">
+          <li>
+            <a th:href="@{/peliculas}" th:classappend="${currentPage == 'peliculas' ? 'active' : ''}">Películas</a>
+          </li>
+          <li>
+            <a th:href="@{/series}" th:classappend="${currentPage == 'series' ? 'active' : ''}">Series</a>
+          </li>
+          <li>
+            <a th:href="@{/gente}" th:classappend="${currentPage == 'gente' ? 'active' : ''}">Gente</a>
+          </li>
+          <li>
+            <a th:href="@{/listas}" th:classappend="${currentPage == 'listas' ? 'active' : ''}">Listas</a>
+          </li>
+        </ul>
+        <form th:action="@{/buscar}" method="get" class="header-buscar-form">
+          <input type="search" placeholder="Buscar" aria-label="Buscar" name="q" />
+          <button type="submit" class="btn btn-small btn-yellow">Buscar</button>
+        </form>
+        <div class="usuario-dropdown" th:if="${session.usuarioId == null}">
+          <span class="dropdown-trigger">Usuario</span>
+          <ul class="dropdown-menu">
+            <li><a th:href="@{/registro}">Regístrate</a></li>
+            <li><a th:href="@{/login}">Inicia Sesión</a></li>
           </ul>
-          <form th:action="@{/buscar}" method="get" class="header-buscar-form">
-            <input
-              type="search"
-              placeholder="Buscar"
-              aria-label="Buscar"
-              name="q" />
-            <button type="submit" class="btn btn-small btn-yellow">Buscar</button>
-          </form>
-          <div class="usuario-dropdown" th:if="${session.usuarioId == null}">
-            <span class="dropdown-trigger">Usuario</span>
-            <ul class="dropdown-menu">
-              <li><a th:href="@{/registro}">Regístrate</a></li>
-              <li><a th:href="@{/login}">Inicia Sesión</a></li>
-            </ul>
-          </div>
-          <div class="usuario-dropdown" th:if="${session.usuarioId != null}">
-            <span class="dropdown-trigger" th:text="${session.usuarioNombre}"
-              >Usuario</span
-            >
-            <ul class="dropdown-menu">
-              <li><a th:href="@{/perfil}">Mi Perfil</a></li>
-              <li><a th:href="@{/mis-listas}">Mis Listas</a></li>
-              <li
-                th:if="${session.usuarioEsAdmin != null && session.usuarioEsAdmin == true}">
-                <a th:href="@{/admin}">Admin</a>
-              </li>
-              <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-    </header>
-  </body>
+        </div>
+        <div class="usuario-dropdown" th:if="${session.usuarioId != null}">
+          <span class="dropdown-trigger" th:text="${session.usuarioNombre}">Usuario</span>
+          <ul class="dropdown-menu">
+            <li><a th:href="@{/perfil}">Mi Perfil</a></li>
+            <li><a th:href="@{/listas(filtro='mis-listas')}">Mis Listas</a></li>
+            <li th:if="${session.usuarioEsAdmin != null && session.usuarioEsAdmin == true}">
+              <a th:href="@{/admin}">Admin</a>
+            </li>
+            <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+</body>
+
 </html>
