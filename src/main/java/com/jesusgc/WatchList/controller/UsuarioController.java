@@ -142,8 +142,42 @@ public class UsuarioController {
         if (usuarioLogueado == null) {
             return "redirect:/login";
         }
+        
+        try {
+            Usuario usuarioActual = usuarioService.findById(usuarioLogueado.getId());
+            if (!org.mindrot.jbcrypt.BCrypt.checkpw(contrasenaActual, usuarioActual.getContrasenia())) {
+                model.addAttribute("errorMessage", "La contraseña actual es incorrecta");
+                model.addAttribute("usuario", usuarioForm);
+                model.addAttribute("currentPage", "perfil");
+                model.addAttribute("hideSidebar", true);
+                return "usuario/editar-perfil";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error al verificar la contraseña");
+            model.addAttribute("usuario", usuarioForm);
+            model.addAttribute("currentPage", "perfil");
+            model.addAttribute("hideSidebar", true);
+            return "usuario/editar-perfil";
+        }
 
-        if (result.hasErrors()) {
+        if (nuevaContrasena != null && !nuevaContrasena.trim().isEmpty()) {
+            if (nuevaContrasena.length() < 6) {
+                model.addAttribute("errorMessage", "La nueva contraseña debe tener al menos 6 caracteres");
+                model.addAttribute("usuario", usuarioForm);
+                model.addAttribute("currentPage", "perfil");
+                model.addAttribute("hideSidebar", true);
+                return "usuario/editar-perfil";
+            }
+            if (!nuevaContrasena.equals(confirmarContrasena)) {
+                model.addAttribute("errorMessage", "Las contraseñas nuevas no coinciden");
+                model.addAttribute("usuario", usuarioForm);
+                model.addAttribute("currentPage", "perfil");
+                model.addAttribute("hideSidebar", true);
+                return "usuario/editar-perfil";
+            }
+        }
+
+        if (result.hasFieldErrors("nombre") || result.hasFieldErrors("email")) {
             model.addAttribute("usuario", usuarioForm);
             model.addAttribute("currentPage", "perfil");
             model.addAttribute("hideSidebar", true);
