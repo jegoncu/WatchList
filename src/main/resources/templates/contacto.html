@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section_content}, ~{}, ~{})}">
+
+<head>
+  <title th:text="${pageTitle} + ' - WatchList'">Contacto - WatchList</title>
+</head>
+  <body>
+    <th:block th:fragment="section_content">
+      <div class="container">
+        <section class="about-us-section">
+          <h1>Contacto</h1>
+            <p>
+              Si tienes alguna pregunta, sugerencia o simplemente quieres ponerte en contacto conmigo, puedes escribirme un email a jegoncu@gmail.com.
+            </p>
+        </section>
+      </div>
+    </th:block>
+  </body>
+</html>

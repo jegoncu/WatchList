@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <body>
-    <footer th:fragment="footer">
-      <div class="footer-container-1">
-        <div class="footer-container-2">
-          <div class="footer-links">
-            <a href="#">Sobre Nosotros</a>
-            <a href="#">Contacto</a>
-            <a href="#">Legal</a>
-          </div>
-          <div></div>
-          <div class="social-media-links">
-            <a href="#">X</a>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">YouTube</a>
-          </div>
+
+<body>
+  <footer th:fragment="footer">
+    <div class="footer-container-1">
+      <div class="footer-container-2">
+        <div class="footer-links">
+          <a th:href="@{/sobre-nosotros}" th:classappend="${currentPage == 'sobre-nosotros' ? 'active' : ''}">Sobre
+            Nosotros</a>
+          <a th:href="@{/contacto}" th:classappend="${currentPage == 'contacto' ? 'active' : ''}">Contacto</a>
+          <a th:href="@{/legal}" th:classappend="${currentPage == 'legal' ? 'active' : ''}">Legal</a>
+        </div>
+        <div></div>
+        <div class="social-media-links">
+          <a th:href="@{/redes-sociales}">X</a>
+          <a th:href="@{/redes-sociales}">Instagram</a>
+          <a th:href="@{/redes-sociales}">Facebook</a>
+          <a th:href="@{/redes-sociales}">YouTube</a>
         </div>
       </div>
-    </footer>
-  </body>
+    </div>
+  </footer>
+</body>
+
 </html>
