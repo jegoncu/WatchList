@@ -25,8 +25,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Servicio para la gestión de películas en el sistema.
+ * Maneja operaciones CRUD y consultas avanzadas con filtros dinámicos.
+ *
+ * @author Jesús González Cuenca
+ */
 @Service
 public class PeliculaService {
+
     private final PeliculaRepository peliculaRepository;
     private final GeneroRepository generoRepository;
     private final PlataformaRepository plataformaRepository;
@@ -34,6 +41,15 @@ public class PeliculaService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    /**
+     * Constructor del servicio con inyección de dependencias.
+     *
+     * @param peliculaRepository Repositorio de películas
+     * @param generoRepository Repositorio de géneros
+     * @param plataformaRepository Repositorio de plataformas
+     * @param personaRepository Repositorio de personas
+     */
     public PeliculaService(PeliculaRepository peliculaRepository,
                            GeneroRepository generoRepository,
                            PlataformaRepository plataformaRepository,
@@ -44,14 +60,36 @@ public class PeliculaService {
         this.personaRepository = personaRepository;
     }
 
+    /**
+     * Obtiene todas las películas del sistema.
+     *
+     * @return Lista de todas las películas
+     */
     public List<Pelicula> findAll() {
         return peliculaRepository.findAll();
     }
 
+    /**
+     * Obtiene todas las películas ordenadas según el criterio especificado.
+     *
+     * @param sort Criterio de ordenación
+     * @return Lista de películas ordenadas
+     */
     public List<Pelicula> findAll(Sort sort) {
         return peliculaRepository.findAll(sort);
     }
 
+    /**
+     * Busca películas aplicando filtros dinámicos y ordenación.
+     *
+     * @param generoIds Lista de IDs de géneros a filtrar
+     * @param plataformaIds Lista de IDs de plataformas a filtrar
+     * @param anioMin Año mínimo de estreno
+     * @param anioMax Año máximo de estreno
+     * @param puntuacionMin Puntuación mínima
+     * @param sort Criterio de ordenación
+     * @return Lista de películas que cumplen los criterios
+     */
     @Transactional(readOnly = true)
     public List<Pelicula> findPeliculasByCriteria(
             List<Long> generoIds,
@@ -61,17 +99,20 @@ public class PeliculaService {
             Float puntuacionMin,
             Sort sort) {
 
+        // Especificación dinámica para construir consultas con criterios variables
         Specification<Pelicula> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            // Filtro por géneros (OR entre géneros seleccionados)
             if (generoIds != null && !generoIds.isEmpty()) {
                 Join<Pelicula, Genero> generoJoin = root.join("generos");
                 predicates.add(generoJoin.get("id").in(generoIds));
                 if (query != null) {
-                    query.distinct(true);
+                    query.distinct(true); // Evitar duplicados por los joins
                 }
             }
 
+            // Filtro por plataformas (OR entre plataformas seleccionadas)
             if (plataformaIds != null && !plataformaIds.isEmpty()) {
                 Join<Pelicula, Plataforma> plataformaJoin = root.join("plataformas");
                 predicates.add(plataformaJoin.get("id").in(plataformaIds));
@@ -80,6 +121,7 @@ public class PeliculaService {
                 }
             }
 
+            // Filtro por rango de años de estreno
             if (anioMin != null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("anioEstreno"), anioMin));
             }
@@ -88,6 +130,7 @@ public class PeliculaService {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("anioEstreno"), anioMax));
             }
 
+            // Filtro por puntuación mínima
             if (puntuacionMin != null && puntuacionMin > 0) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("puntuacion"), puntuacionMin));
             }
@@ -99,6 +142,7 @@ public class PeliculaService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
 
+        // Si no hay filtros activos, devolver todas las películas ordenadas
         boolean hasActiveFilters = (generoIds != null && !generoIds.isEmpty()) ||
                                    (plataformaIds != null && !plataformaIds.isEmpty()) ||
                                    (anioMin != null) ||
@@ -112,10 +156,25 @@ public class PeliculaService {
         return peliculaRepository.findAll(spec, sort);
     }
 
+    /**
+     * Busca una película por su ID.
+     *
+     * @param id ID de la película
+     * @return Optional conteniendo la película si existe
+     */
     public Optional<Pelicula> findById(Long id) {
         return peliculaRepository.findById(id);
     }
 
+    /**
+     * Guarda una nueva película con sus relaciones (géneros, plataformas, créditos).
+     *
+     * @param pelicula Película a guardar
+     * @param generoIds Lista de IDs de géneros asociados
+     * @param plataformaIds Lista de IDs de plataformas asociadas
+     * @param personaRoles Mapa de persona ID -> rol para los créditos
+     * @return Película guardada con todas sus relaciones
+     */
     @Transactional
     public Pelicula savePeliculaWithRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
                                               Map<Long, String> personaRoles) {
@@ -123,28 +182,49 @@ public class PeliculaService {
         return peliculaRepository.save(pelicula);
     }
 
+    /**
+     * Actualiza una película existente con nuevos datos y relaciones.
+     *
+     * @param id ID de la película a actualizar
+     * @param peliculaForm Datos actualizados de la película
+     * @param generoIds Lista de IDs de géneros asociados
+     * @param plataformaIds Lista de IDs de plataformas asociadas
+     * @param personaRoles Mapa de persona ID -> rol para los créditos
+     * @return Película actualizada
+     * @throws IllegalArgumentException si la película no existe
+     */
     @Transactional
     public Pelicula updatePeliculaWithRelations(Long id, Pelicula peliculaForm, List<Long> generoIds,
                                         List<Long> plataformaIds, Map<Long, String> personaRoles) {
 
-    Pelicula peliculaExistente = peliculaRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
+        Pelicula peliculaExistente = peliculaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Película no encontrada con ID: " + id));
 
-    peliculaExistente.setTitulo(peliculaForm.getTitulo());
-    peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
-    peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
-    peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
-    peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
-    peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
-    peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
+        // Actualizar campos básicos
+        peliculaExistente.setTitulo(peliculaForm.getTitulo());
+        peliculaExistente.setSinopsis(peliculaForm.getSinopsis());
+        peliculaExistente.setAnioEstreno(peliculaForm.getAnioEstreno());
+        peliculaExistente.setPuntuacion(peliculaForm.getPuntuacion());
+        peliculaExistente.setUrlTrailer(peliculaForm.getUrlTrailer());
+        peliculaExistente.setUrlImagen(peliculaForm.getUrlImagen());
+        peliculaExistente.setDuracionMin(peliculaForm.getDuracionMin());
 
-    updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles);
+        updateRelations(peliculaExistente, generoIds, plataformaIds, personaRoles);
 
-    return peliculaRepository.save(peliculaExistente);
-}
+        return peliculaRepository.save(peliculaExistente);
+    }
 
+    /**
+     * Actualiza las relaciones de una película con géneros, plataformas y créditos.
+     *
+     * @param pelicula Película a actualizar
+     * @param generoIds Lista de IDs de géneros
+     * @param plataformaIds Lista de IDs de plataformas
+     * @param personaRoles Mapa de persona ID -> rol
+     */
     private void updateRelations(Pelicula pelicula, List<Long> generoIds, List<Long> plataformaIds,
                                  Map<Long, String> personaRoles) {
+        // Actualizar géneros
         if (generoIds != null) {
             Set<Genero> generos = new HashSet<>(generoRepository.findAllById(generoIds));
             pelicula.setGeneros(generos);
@@ -152,6 +232,7 @@ public class PeliculaService {
             pelicula.setGeneros(new HashSet<>());
         }
 
+        // Actualizar plataformas
         if (plataformaIds != null) {
             Set<Plataforma> plataformas = new HashSet<>(plataformaRepository.findAllById(plataformaIds));
             pelicula.setPlataformas(plataformas);
@@ -159,6 +240,7 @@ public class PeliculaService {
             pelicula.setPlataformas(new HashSet<>());
         }
 
+        // Limpiar créditos existentes y añadir los nuevos
         pelicula.getCreditos().clear();
 
         if (personaRoles != null) {
@@ -175,11 +257,22 @@ public class PeliculaService {
         }
     }
 
+    /**
+     * Elimina una película por su ID.
+     *
+     * @param id ID de la película a eliminar
+     */
     @Transactional
     public void deleteById(Long id) {
         peliculaRepository.deleteById(id);
     }
 
+    /**
+     * Busca películas por título que contenga el texto especificado.
+     *
+     * @param titulo Texto a buscar en el título
+     * @return Lista de películas que coinciden con la búsqueda
+     */
     @Transactional(readOnly = true)
     public List<Pelicula> buscarPorTitulo(String titulo) {
         if (titulo == null || titulo.trim().isEmpty()) {
