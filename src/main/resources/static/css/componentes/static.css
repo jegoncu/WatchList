@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 .about-us-section h1 {
@@ -22,4 +21,26 @@
   text-align: justify;
   font-size: 20px;
 }
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
 
+.center-container>* {
+  max-width: 500px;
+  width: 100%;
+}
+.center-container .form-container {
+  max-width: 600px;
+  width: 100%;
+}
+.center-container .wide-content {
+  max-width: 800px;
+  width: 100%;
+}

@@ -115,7 +115,7 @@ public class UsuarioController {
       if (usuario.getEsAdmin() != null && usuario.getEsAdmin()) {
         return "redirect:/admin/peliculas";
       }
-      return "redirect:/inicio";
+      return "redirect:/peliculas";
     } catch (IllegalArgumentException e) {
       model.addAttribute("error", e.getMessage());
       model.addAttribute("hideSidebar", true);

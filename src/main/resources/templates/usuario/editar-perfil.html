@@ -17,89 +17,77 @@
 <body>
   <!-- contenido principal -->
   <section th:fragment="section">
-    <div class="form-container">
-      <!-- cabecera del formulario -->
-      <div class="form-header">
-        <h1>Editar Mi Perfil</h1>
-        <a th:href="@{/perfil}" class="btn btn-small btn-grey">
-          Volver al Perfil
-        </a>
+    <div class="center-container">
+      <div class="form-container">
+        <!-- cabecera del formulario -->
+        <div class="form-header">
+          <h1>Editar Mi Perfil</h1>
+          <a th:href="@{/perfil}" class="btn btn-small btn-grey">
+            Volver al Perfil
+          </a>
+        </div>
+        <!-- mensajes de éxito/error -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+        <!-- formulario de edición -->
+        <form th:action="@{/perfil/editar}" method="post" th:object="${usuario}" class="admin-form">
+          <div class="form-group">
+            <label for="nombre">Nombre Completo *</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo"
+              required />
+            <div th:if="${#fields.hasErrors('nombre')}" class="error-message">
+              <span th:errors="*{nombre}"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="tu@email.com"
+              required />
+            <div th:if="${#fields.hasErrors('email')}" class="error-message">
+              <span th:errors="*{email}"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contrasenaActual">Contraseña Actual (para confirmar cambios) *</label>
+            <input type="password" id="contrasenaActual" name="contrasenaActual" class="form-control"
+              placeholder="Tu contraseña actual" required />
+          </div>
+          <div class="form-group">
+            <label for="nuevaContrasena">Nueva Contraseña (opcional)</label>
+            <input type="password" id="nuevaContrasena" name="nuevaContrasena" class="form-control"
+              placeholder="Dejar vacío para mantener la actual" minlength="6" />
+            <small style="color: var(--color-grey-4);">
+              Mínimo 6 caracteres. Dejar vacío para no cambiar.
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="confirmarContrasena">Confirmar Nueva Contraseña</label>
+            <input type="password" id="confirmarContrasena" name="confirmarContrasena" class="form-control"
+              placeholder="Repetir nueva contraseña" />
+          </div>
+          <div class="form-group">
+            <label>Visibilidad del Perfil *</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" th:field="*{esPublico}" value="true" />
+                <span>Público</span>
+                <small>Otros usuarios pueden ver tu perfil</small>
+              </label>
+              <label class="radio-label">
+                <input type="radio" th:field="*{esPublico}" value="false" />
+                <span>Privado</span>
+                <small>Solo tú puedes ver tu perfil</small>
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-small btn-green">
+              Guardar Cambios
+            </button>
+            <a th:href="@{/perfil}" class="btn btn-small btn-red">Cancelar</a>
+          </div>
+        </form>
       </div>
-
-      <!-- mensajes de éxito/error -->
-      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-      <!-- formulario de edición -->
-      <form th:action="@{/perfil/editar}" method="post" th:object="${usuario}" class="admin-form">
-        <!-- campo nombre -->
-        <div class="form-group">
-          <label for="nombre">Nombre Completo *</label>
-          <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo"
-            required />
-          <div th:if="${#fields.hasErrors('nombre')}" class="error-message">
-            <span th:errors="*{nombre}"></span>
-          </div>
-        </div>
-
-        <!-- campo email -->
-        <div class="form-group">
-          <label for="email">Email *</label>
-          <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="tu@email.com" required />
-          <div th:if="${#fields.hasErrors('email')}" class="error-message">
-            <span th:errors="*{email}"></span>
-          </div>
-        </div>
-
-        <!-- campo contraseña actual (verificación) -->
-        <div class="form-group">
-          <label for="contrasenaActual">Contraseña Actual (para confirmar cambios) *</label>
-          <input type="password" id="contrasenaActual" name="contrasenaActual" class="form-control"
-            placeholder="Tu contraseña actual" required />
-        </div>
-
-        <!-- campo nueva contraseña (opcional) -->
-        <div class="form-group">
-          <label for="nuevaContrasena">Nueva Contraseña (opcional)</label>
-          <input type="password" id="nuevaContrasena" name="nuevaContrasena" class="form-control"
-            placeholder="Dejar vacío para mantener la actual" minlength="6" />
-          <small style="color: var(--color-grey-4);">
-            Mínimo 6 caracteres. Dejar vacío para no cambiar.
-          </small>
-        </div>
-
-        <!-- confirmar nueva contraseña -->
-        <div class="form-group">
-          <label for="confirmarContrasena">Confirmar Nueva Contraseña</label>
-          <input type="password" id="confirmarContrasena" name="confirmarContrasena" class="form-control"
-            placeholder="Repetir nueva contraseña" />
-        </div>
-
-        <!-- visibilidad del perfil -->
-        <div class="form-group">
-          <label>Visibilidad del Perfil *</label>
-          <div class="radio-group">
-            <label class="radio-label">
-              <input type="radio" th:field="*{esPublico}" value="true" />
-              <span>Público</span>
-              <small>Otros usuarios pueden ver tu perfil</small>
-            </label>
-            <label class="radio-label">
-              <input type="radio" th:field="*{esPublico}" value="false" />
-              <span>Privado</span>
-              <small>Solo tú puedes ver tu perfil</small>
-            </label>
-          </div>
-        </div>
-
-        <!-- botones de acción -->
-        <div class="form-actions">
-          <button type="submit" class="btn btn-small btn-green">
-            Guardar Cambios
-          </button>
-          <a th:href="@{/perfil}" class="btn btn-small btn-red">Cancelar</a>
-        </div>
-      </form>
     </div>
   </section>
 
