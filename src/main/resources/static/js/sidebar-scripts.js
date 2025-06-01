@@ -175,7 +175,7 @@ function initSidebarToggle() {
             if (sidebar.classList.contains('collapsed')) {
                 icon.textContent = '▶';
             } else {
-                icon.textContent = '☰';
+                icon.textContent = '◀';
             }
         });
     }

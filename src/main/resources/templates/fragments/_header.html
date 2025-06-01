@@ -10,11 +10,17 @@
   <header th:fragment="header">
     <div class="header-container">
       <!-- logo y enlace a inicio -->
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <a th:href="@{/}" style="display: flex; align-items: center; gap: 20px;">
+          <img th:src="@{/img/WatchList.png}" alt="Logo" style="width: 32px; height: 32px; object-fit: contain;" />
+          <h1>WATCHLIST</h1>
+        </a>
 
-      <a th:href="@{/}" style="display: flex; align-items: center; gap: 20px;">
-        <img th:src="@{/img/WatchList.png}" alt="Logo" style="width: 40px; height:40px; object-fit: contain;" />
-        <h1>WATCHLIST</h1>
-      </a>
+        <!-- botón para mostrar/ocultar sidebar -->
+        <button id="sidebar-toggle" class="sidebar-toggle-btn" th:if="${hideSidebar == null or hideSidebar == false}">
+          <span class="sidebar-toggle-icon">◀</span>
+        </button>
+      </div>
 
       <nav class="header-nav">
         <!-- menú principal de navegación -->
