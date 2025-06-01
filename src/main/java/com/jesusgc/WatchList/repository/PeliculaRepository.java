@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public interface PeliculaRepository extends JpaRepository<Pelicula, Long>, JpaSpecificationExecutor<Pelicula> {
 
-    /**
-     * Busca películas por título que contenga el texto especificado.
-     *
-     * @param titulo Texto a buscar en el título (ignora mayúsculas/minúsculas)
-     * @return Lista de películas que coinciden con la búsqueda
-     */
-    List<Pelicula> findByTituloContainingIgnoreCase(String titulo);
+  /**
+   * Busca películas por título que contenga el texto especificado.
+   *
+   * @param titulo Texto a buscar en el título (ignora mayúsculas/minúsculas)
+   * @return Lista de películas que coinciden con la búsqueda
+   */
+  List<Pelicula> findByTituloContainingIgnoreCase(String titulo);
 }

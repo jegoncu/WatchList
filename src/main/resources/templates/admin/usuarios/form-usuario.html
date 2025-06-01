@@ -1,150 +1,125 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<!--
+    formulario de gestión de usuarios
+    permite crear nuevos usuarios o editar usuarios existentes desde el panel de administración
+-->
 
 <head>
-    <title th:text="${pageTitle ?: 'Gestionar Usuario'}">
-        Gestionar Usuario - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
+  <!-- título dinámico según acción -->
+  <title th:text="${pageTitle ?: 'Gestionar Usuario'}">
+    Gestionar Usuario - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
 </head>
 
 <body>
-    <section th:fragment="section">
-        <div class="form-header">
-            <h2 th:text="${pageTitle ?: 'Gestionar Usuario'}" style="margin: 0">
-                Gestionar Usuario
-            </h2>
-            <a th:href="@{/admin/usuarios}" class="btn btn-small btn-grey">
-                Volver a Usuarios
-            </a>
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <!-- cabecera del formulario -->
+    <div class="form-header">
+      <h2 th:text="${pageTitle ?: 'Gestionar Usuario'}" style="margin: 0">
+        Gestionar Usuario
+      </h2>
+      <a th:href="@{/admin/usuarios}" class="btn btn-small btn-grey">
+        Volver a Usuarios
+      </a>
+    </div>
+
+    <!-- mensajes de estado -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- formulario de usuario -->
+    <form th:action="${formAction}" method="post" th:object="${usuario}" class="admin-form">
+
+      <div class="form-group">
+        <label for="nombre">Nombre Completo *</label>
+        <input type="text" id="nombre" th:field="*{nombre}" class="form-control"
+          placeholder="Ingresa el nombre completo del usuario" required />
+        <div th:if="${#fields.hasErrors('nombre')}" class="error-message">
+          <span th:errors="*{nombre}"></span>
         </div>
+      </div>
 
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-        <form th:action="${formAction}" method="post" th:object="${usuario}" class="admin-form">
-
-            <!-- Nombre del Usuario -->
-            <div class="form-group">
-                <label for="nombre">Nombre Completo *</label>
-                <input type="text" id="nombre" th:field="*{nombre}" class="form-control"
-                    placeholder="Ingresa el nombre completo del usuario" required />
-                <div th:if="${#fields.hasErrors('nombre')}" class="error-message">
-            <span th:errors="*{nombre}"></span>
-          </div>
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="usuario@ejemplo.com"
+          required />
+        <div th:if="${#fields.hasErrors('email')}" class="error-message">
+          <span th:errors="*{email}"></span>
         </div>
+      </div>
 
-        <!-- Email del Usuario -->
-        <div class="form-group">
-          <label for="email">Email *</label>
-          <input
-            type="email"
-            id="email"
-            th:field="*{email}"
-            class="form-control"
-            placeholder="usuario@ejemplo.com"
-            required />
-          <div th:if="${#fields.hasErrors('email')}" class="error-message">
-            <span th:errors="*{email}"></span>
-          </div>
+      <div class="form-group" th:if="${usuario.id == null}">
+        <label for="contrasenia">Contraseña *</label>
+        <input type="password" id="contrasenia" th:field="*{contrasenia}" class="form-control"
+          placeholder="Mínimo 6 caracteres" th:required="${usuario.id == null}" />
+        <div th:if="${#fields.hasErrors('contrasenia')}" class="error-message">
+          <span th:errors="*{contrasenia}"></span>
         </div>
+      </div>
 
-        <!-- Contraseña (solo para nuevo usuario) -->
-        <div class="form-group" th:if="${usuario.id == null}">
-          <label for="contrasenia">Contraseña *</label>
-          <input
-            type="password"
-            id="contrasenia"
-            th:field="*{contrasenia}"
-            class="form-control"
-            placeholder="Mínimo 6 caracteres"
-            th:required="${usuario.id == null}" />
-          <div th:if="${#fields.hasErrors('contrasenia')}" class="error-message">
-            <span th:errors="*{contrasenia}"></span>
-          </div>
-        </div>
+      <div class="form-group" th:if="${usuario.id != null}">
+        <label for="nuevaContrasenia">Nueva Contraseña (opcional)</label>
+        <input type="password" id="nuevaContrasenia" name="nuevaContrasenia" class="form-control"
+          placeholder="Dejar vacío para mantener la actual" />
+        <small style="color: var(--color-grey-4);">
+          Solo completar si deseas cambiar la contraseña
+        </small>
+      </div>
 
-        <!-- Nueva contraseña (solo para editar) -->
-        <div class="form-group" th:if="${usuario.id != null}">
-          <label for="nuevaContrasenia">Nueva Contraseña (opcional)</label>
-          <input
-            type="password"
-            id="nuevaContrasenia"
-            name="nuevaContrasenia"
-            class="form-control"
-            placeholder="Dejar vacío para mantener la actual" />
-          <small style="color: var(--color-grey-4);">
-            Solo completar si deseas cambiar la contraseña
-          </small>
+      <div class="form-group">
+        <label>Visibilidad del Perfil *</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" th:field="*{esPublico}" value="true" th:checked="${usuario.esPublico == true}" />
+            <span>Público</span>
+            <small>El perfil será visible para otros usuarios</small>
+          </label>
+          <label class="radio-label">
+            <input type="radio" th:field="*{esPublico}" value="false" th:checked="${usuario.esPublico == false}" />
+            <span>Privado</span>
+            <small>Solo el usuario podrá ver su perfil</small>
+          </label>
         </div>
+        <div th:if="${#fields.hasErrors('esPublico')}" class="error-message">
+          <span th:errors="*{esPublico}"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Permisos de Administrador</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" th:field="*{esAdmin}" value="false" th:checked="${usuario.esAdmin == false}" />
+            <span>Usuario Normal</span>
+            <small>Solo puede gestionar su propio contenido</small>
+          </label>
+          <label class="radio-label">
+            <input type="radio" th:field="*{esAdmin}" value="true" th:checked="${usuario.esAdmin == true}" />
+            <span>Administrador</span>
+            <small>Puede gestionar todo el contenido del sitio</small>
+          </label>
+        </div>
+        <div th:if="${#fields.hasErrors('esAdmin')}" class="error-message">
+          <span th:errors="*{esAdmin}"></span>
+        </div>
+      </div>
 
-        <!-- Visibilidad del perfil -->
-        <div class="form-group">
-          <label>Visibilidad del Perfil *</label>
-          <div class="radio-group">
-            <label class="radio-label">
-              <input
-                type="radio"
-                th:field="*{esPublico}"
-                value="true"
-                th:checked="${usuario.esPublico == true}" />
-              <span>Público</span>
-              <small>El perfil será visible para otros usuarios</small>
-            </label>
-            <label class="radio-label">
-              <input
-                type="radio"
-                th:field="*{esPublico}"
-                value="false"
-                th:checked="${usuario.esPublico == false}" />
-              <span>Privado</span>
-              <small>Solo el usuario podrá ver su perfil</small>
-            </label>
-          </div>
-          <div th:if="${#fields.hasErrors('esPublico')}" class="error-message">
-            <span th:errors="*{esPublico}"></span>
-          </div>
-        </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-small btn-blue">
+          <span th:if="${usuario.id == null}">Crear Usuario</span>
+          <span th:if="${usuario.id != null}">Actualizar Usuario</span>
+        </button>
+        <a th:href="@{/admin/usuarios}" class="btn btn-small btn-red">Cancelar</a>
+      </div>
+    </form>
+  </section>
 
-        <!-- Permisos de administrador -->
-        <div class="form-group">
-          <label>Permisos de Administrador *</label>
-          <div class="radio-group">
-            <label class="radio-label">
-              <input
-                type="radio"
-                th:field="*{esAdmin}"
-                value="false"
-                th:checked="${usuario.esAdmin == false}" />
-              <span>Usuario Normal</span>
-              <small>Solo puede gestionar su propio contenido</small>
-            </label>
-            <label class="radio-label">
-              <input
-                type="radio"
-                th:field="*{esAdmin}"
-                value="true"
-                th:checked="${usuario.esAdmin == true}" />
-              <span>Administrador</span>
-              <small>Puede gestionar todo el contenido del sitio</small>
-            </label>
-          </div>
-          <div th:if="${#fields.hasErrors('esAdmin')}" class="error-message">
-            <span th:errors="*{esAdmin}"></span>
-          </div>
-        </div>
+  <!-- scripts específicos de la página -->
+  <th:block th:fragment="pageScript"></th:block>
+</body>
 
-        <!-- Botones de Acción -->
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">
-            <span th:if="${usuario.id == null}">Crear Usuario</span>
-            <span th:if="${usuario.id != null}">Actualizar Usuario</span>
-          </button>
-          <a th:href="@{/admin/usuarios}" class="btn btn-secondary">Cancelar</a>
-        </div>
-      </form>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
 </html>

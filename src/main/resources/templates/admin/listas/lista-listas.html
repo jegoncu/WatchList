@@ -1,87 +1,95 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<!--
+    listado de listas del panel de administración
+    permite gestionar listas: crear, editar y eliminar desde el panel administrativo
+-->
 
 <head>
-    <title th:text="${pageTitle ?: 'Gestionar Listas'}">
-        Gestionar Listas - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
+  <!-- título dinámico de la página -->
+  <title th:text="${pageTitle ?: 'Gestionar Listas'}">
+    Gestionar Listas - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
 </head>
 
 <body>
-    <section th:fragment="section">
-        <div style="
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <div style="
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
         ">
-            <h2 th:text="${pageTitle ?: 'Gestionar Listas'}" style="margin: 0">
-                Gestionar Listas
-            </h2>
-            <div>
-                <a th:href="@{/admin/listas/nueva}" class="btn btn-small btn-yellow">Crear Nueva Lista</a>
-            </div>
-        </div>
+      <h2 th:text="${pageTitle ?: 'Gestionar Listas'}" style="margin: 0">
+        Gestionar Listas
+      </h2>
+      <div>
+        <a th:href="@{/admin/listas/nueva}" class="btn btn-small btn-yellow">Crear Nueva Lista</a>
+      </div>
+    </div>
 
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-        <div th:if="${not #lists.isEmpty(listas)}">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th class="col-usuario">Creador</th>
-                        <th class="col-visibilidad">Visibilidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="lista : ${listas}">
-                        <td>
-                            <strong th:text="${lista.titulo}">Título de Lista</strong>
-                        </td>
-                        <td class="col-usuario">
-                            <span th:text="${lista.usuario.nombre}">Usuario</span>
-                            <div style="font-size: 0.8em; color: var(--color-grey-4);" th:text="${lista.usuario.email}">
-                                email@ejemplo.com</div>
-                        </td>
-                        <td class="col-visibilidad">
-                            <span th:class="${lista.esPublica ? 'badge badge-success' : 'badge badge-warning'}"
-                                th:text="${lista.esPublica ? 'Pública' : 'Privada'}">
-                                Estado
-                            </span>
-                        </td>
-                        <td class="acciones-cell">
-                            <a th:href="@{/listas/{id}(id=${lista.id})}" class="btn btn-small btn-blue" target="_blank"
-                                title="Ver lista">
-                                Ver
-                            </a>
-                            <a th:href="@{/admin/listas/editar/{id}(id=${lista.id})}" class="btn btn-small btn-green"
-                                title="Editar lista">
-                                Editar
-                            </a>
-                            <form th:action="@{/admin/listas/eliminar/{id}(id=${lista.id})}" method="post"
-                                style="display: inline;"
-                                onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta lista? Esta acción no se puede deshacer.');">
-                                <button type="submit" class="btn btn-small btn-red" title="Eliminar lista">
-                                    Eliminar
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div th:if="${not #lists.isEmpty(listas)}">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th class="col-usuario">Creador</th>
+            <th class="col-visibilidad">Visibilidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="lista : ${listas}">
+            <td>
+              <strong th:text="${lista.titulo}">Título de Lista</strong>
+            </td>
+            <td class="col-usuario">
+              <span th:text="${lista.usuario.nombre}">Usuario</span>
+              <div style="font-size: 0.8em; color: var(--color-grey-4);" th:text="${lista.usuario.email}">
+                email@ejemplo.com</div>
+            </td>
+            <td class="col-visibilidad">
+              <span th:class="${lista.esPublica ? 'badge badge-success' : 'badge badge-warning'}"
+                th:text="${lista.esPublica ? 'Pública' : 'Privada'}">
+                Estado
+              </span>
+            </td>
+            <td class="acciones-cell">
+              <a th:href="@{/listas/{id}(id=${lista.id})}" class="btn btn-small btn-blue" target="_blank"
+                title="Ver lista">
+                Ver
+              </a>
+              <a th:href="@{/admin/listas/editar/{id}(id=${lista.id})}" class="btn btn-small btn-green"
+                title="Editar lista">
+                Editar
+              </a>
+              <form th:action="@{/admin/listas/eliminar/{id}(id=${lista.id})}" method="post" style="display: inline;"
+                onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta lista? Esta acción no se puede deshacer.');">
+                <button type="submit" class="btn btn-small btn-red" title="Eliminar lista">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <div th:if="${#lists.isEmpty(listas)}">
-            <p style="text-align: center; color: var(--color-grey-4); margin: 2rem 0;">
-              No hay listas para mostrar.
-            </p>
-        </div>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+    <div th:if="${#lists.isEmpty(listas)}">
+      <p style="text-align: center; color: var(--color-grey-4); margin: 2rem 0;">
+        No hay listas para mostrar.
+      </p>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

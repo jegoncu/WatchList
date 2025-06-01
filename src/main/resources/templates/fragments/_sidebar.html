@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<!--
+    fragmento de sidebar
+    barra lateral con filtros y opciones de ordenación específicos por página
+-->
+
 <head>
   <meta charset="UTF-8" />
   <title>Fragmento Sidebar</title>
@@ -8,9 +13,12 @@
 
 <body>
   <div th:fragment="sidebar" class="sidebar">
-    <!-- Contenidos para series -->
+
+    <!-- sidebar para página de series -->
     <div th:if="${currentPage == 'series'}">
       <form id="filter-sort-form-series" class="sidebar-form">
+
+        <!-- sección de ordenación -->
         <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
           data-target="sidebar-dropdown-1-child">
           <h4>Ordenar por:</h4>
@@ -18,7 +26,7 @@
         </div>
 
         <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
-          <!-- Criterios de ordenación -->
+          <!-- criterios de ordenación para series -->
           <label>
             <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
             <span>Título</span>
@@ -32,12 +40,13 @@
               th:checked="${currentSortBy == 'puntuacion' or currentSortBy == null}" />
             <span>Puntuación</span>
           </label>
-
           <label>
             <input type="radio" name="sortBy" value="nTemporadas" th:checked="${currentSortBy == 'nTemporadas'}" />
             <span>Temporadas</span>
           </label>
         </div>
+
+        <!-- dirección de ordenación -->
         <div class="form-group-sidebar sidebar-group sort-direction-container">
           <label>
             <input type="radio" name="sortDir" value="asc" th:checked="${currentSortDir == 'asc'}" />
@@ -50,6 +59,7 @@
           </label>
         </div>
 
+        <!-- sección de filtros -->
         <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
           data-target="sidebar-dropdown-2-child">
           <h4>Filtrar por:</h4>
@@ -57,6 +67,7 @@
         </div>
 
         <div class="sidebar-dropdown-2-child dropdown-content">
+          <!-- filtro por géneros -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Género(s):</div>
             <div class="checkbox-list genero-tag-list" th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
@@ -72,6 +83,8 @@
             </div>
             <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
           </div>
+
+          <!-- filtro por plataformas -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Plataforma(s):</div>
             <div class="checkbox-list plataforma-logo-list "
@@ -93,6 +106,8 @@
             <p th:if="${allPlataformas == null or #lists.isEmpty(allPlataformas)}">No hay plataformas
               disponibles.</p>
           </div>
+
+          <!-- filtro por año de estreno -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Año de Estreno:</div>
             <div class="slider-container">
@@ -118,6 +133,8 @@
               </div>
             </div>
           </div>
+
+          <!-- filtro por puntuación -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Puntuación Mínima:</div>
             <div class="slider-container slider-label">
@@ -128,6 +145,8 @@
                 th:text="${currentPuntuacionMin != null ? #numbers.formatDecimal(currentPuntuacionMin, 1, 1) : '0.0'}"></span>
             </div>
           </div>
+
+          <!-- filtro por número de temporadas -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Número de temporadas:</div>
             <div class="slider-container">
@@ -153,6 +172,8 @@
               </div>
             </div>
           </div>
+
+          <!-- filtro por estado de la serie -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Estado:</div>
             <label>
@@ -173,26 +194,28 @@
           </div>
         </div>
 
+        <!-- botones de acción -->
         <div class="form-actions-sidebar sidebar-group">
           <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/series}"
             hx-target="#series-list-container" hx-include="#filter-sort-form-series" hx-push-url="true"
             hx-indicator="#loading-indicator-series">
-
             Aplicar Filtros
           </button>
           <button type="button" class="btn btn-small btn-red" onclick="resetSeriesFiltersAndSort();">
-
             Limpiar Filtros
           </button>
         </div>
 
       </form>
+      <!-- indicador de carga para htmx -->
       <div id="loading-indicator-series" class="htmx-indicator">Cargando...</div>
     </div>
 
-    <!-- Contenidos para películas -->
+    <!-- sidebar para página de películas -->
     <div th:if="${currentPage == 'peliculas'}">
       <form id="filter-sort-form-peliculas" class="sidebar-form">
+
+        <!-- sección de ordenación -->
         <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
           data-target="sidebar-dropdown-1-child">
           <h4>Ordenar por:</h4>
@@ -200,7 +223,7 @@
         </div>
 
         <div class="form-group-sidebar sidebar-group sidebar-dropdown-1-child dropdown-content">
-          <!-- Criterios de ordenación -->
+          <!-- criterios de ordenación para películas -->
           <label>
             <input type="radio" name="sortBy" value="titulo" th:checked="${currentSortBy == 'titulo'}" />
             <span>Título</span>
@@ -219,6 +242,8 @@
             <span>Duración</span>
           </label>
         </div>
+
+        <!-- dirección de ordenación -->
         <div class="form-group-sidebar sidebar-group sort-direction-container">
           <label>
             <input type="radio" name="sortDir" value="asc"
@@ -231,6 +256,7 @@
           </label>
         </div>
 
+        <!-- sección de filtros -->
         <div class="sidebar-title sidebar-group sidebar-dropdown-2-father dropdown-toggle"
           data-target="sidebar-dropdown-2-child">
           <h4>Filtrar por:</h4>
@@ -238,6 +264,7 @@
         </div>
 
         <div class="sidebar-dropdown-2-child dropdown-content">
+          <!-- filtro por géneros -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Género(s):</div>
             <div class="checkbox-list genero-tag-list" th:if="${allGeneros != null and not #lists.isEmpty(allGeneros)}">
@@ -254,6 +281,7 @@
             <p th:if="${allGeneros == null or #lists.isEmpty(allGeneros)}">No hay géneros disponibles.</p>
           </div>
 
+          <!-- filtro por plataformas -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Plataforma(s):</div>
             <div class="checkbox-list plataforma-logo-list "
@@ -276,6 +304,7 @@
               disponibles.</p>
           </div>
 
+          <!-- filtro por año de estreno -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Año de Estreno:</div>
             <div class="slider-container">
@@ -298,6 +327,7 @@
             </div>
           </div>
 
+          <!-- filtro por puntuación -->
           <div class="form-group-sidebar filter-group sidebar-group">
             <div class="sidebar-group-title">Puntuación Mínima:</div>
             <div class="slider-container slider-label">
@@ -309,6 +339,7 @@
             </div>
           </div>
 
+          <!-- botones de acción -->
           <div class="form-actions-sidebar sidebar-group">
             <button type="button" class="btn btn-small btn-yellow" th:attr="hx-get=@{/peliculas}"
               hx-target="#peliculas-list-container" hx-include="#filter-sort-form-peliculas" hx-push-url="true"
@@ -321,11 +352,15 @@
           </div>
         </div>
       </form>
+      <!-- indicador de carga para htmx -->
       <div id="loading-indicator-peliculas" class="htmx-indicator">Cargando...</div>
     </div>
 
+    <!-- sidebar para página de gente -->
     <div th:if="${currentPage == 'gente'}">
       <form id="sort-form-gente" class="sidebar-form">
+
+        <!-- sección de ordenación -->
         <div class="sidebar-title sidebar-group sidebar-dropdown-1-father dropdown-toggle"
           data-target="sidebar-dropdown-1-child">
           <h4>Ordenar por:</h4>
@@ -349,6 +384,7 @@
           </label>
         </div>
 
+        <!-- dirección de ordenación -->
         <div class="form-group-sidebar sidebar-group sort-direction-container">
           <label>
             <input type="radio" name="sortDir" value="asc"
@@ -366,18 +402,20 @@
           </label>
         </div>
       </form>
+      <!-- indicador de carga para htmx -->
       <div id="loading-indicator-gente" class="htmx-indicator">Cargando...</div>
     </div>
 
-    <!-- Contenidos para listas -->
+    <!-- sidebar para página de listas -->
     <div th:if="${currentPage == 'listas'}">
     </div>
 
-    <!-- Contenidos para admin -->
+    <!-- sidebar para panel de administración -->
     <div th:if="${currentPage == 'admin'}">
       <div class="sidebar-group">
         <h4>Panel de Administración</h4>
       </div>
+      <!-- enlaces de gestión admin -->
       <div class="sidebar-group">
         <a th:href="@{/admin/peliculas}">
           <span>Películas</span>
@@ -405,11 +443,11 @@
       </div>
     </div>
 
-    <!-- Contenidos para perfil -->
+    <!-- sidebar para página de perfil -->
     <div th:if="${currentPage == 'perfil'}">
     </div>
 
-    <!-- Contenidos para mis listas -->
+    <!-- sidebar para página de mis listas -->
     <div th:if="${currentPage == 'mis-listas'}">
     </div>
   </div>

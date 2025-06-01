@@ -2,8 +2,15 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    página de perfil de usuario
+    muestra información personal del usuario y opciones de edición/eliminación de cuenta
+-->
+
 <head>
+  <!-- título de la página -->
   <title>Mi Perfil - WatchList</title>
+  <!-- estilos específicos de la página -->
   <th:block th:fragment="pageCss">
     <style>
       .profile-container {
@@ -54,14 +61,17 @@
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section th:fragment="section">
     <div class="profile-container">
+      <!-- título principal -->
       <h1>Mi Perfil</h1>
 
-      <!-- Mensajes de éxito/error -->
+      <!-- mensajes de éxito/error -->
       <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
       <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
+      <!-- información del usuario -->
       <div th:if="${usuario}" class="profile-details">
         <div class="profile-field">
           <strong>Nombre:</strong>
@@ -75,12 +85,14 @@
           <strong>Perfil Público:</strong>
           <span th:text="${usuario.esPublico ? 'Sí' : 'No'}">Sí/No</span>
         </div>
+        <!-- badge de administrador (condicional) -->
         <div class="profile-field" th:if="${usuario.esAdmin}">
           <strong>Administrador:</strong>
           <span class="badge badge-primary">Sí</span>
         </div>
       </div>
 
+      <!-- botones de acción -->
       <div class="profile-actions">
         <a th:href="@{/perfil/editar}" class="btn btn-small btn-blue">
           Actualizar Perfil
@@ -90,15 +102,18 @@
         </button>
       </div>
 
+      <!-- formulario oculto para eliminación -->
       <form id="formEliminarCuenta" th:action="@{/perfil/eliminar}" method="post" style="display: none;">
       </form>
 
+      <!-- mensaje de error de carga -->
       <div th:unless="${usuario}">
         <p>No se pudo cargar la información del perfil.</p>
       </div>
     </div>
   </section>
 
+  <!-- scripts específicos de la página -->
   <th:block th:fragment="pageScript">
     <script>
       function confirmarEliminacion() {

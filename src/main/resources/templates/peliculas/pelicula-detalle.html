@@ -317,7 +317,7 @@
   </section>
   <th:block th:fragment="pageScript">
     <script>
-      // Script para manejar la acción del formulario de añadir a lista
+      // TODO mover a js dedicado
       const addToListFormPelicula = document.getElementById('addToListFormPelicula');
       if (addToListFormPelicula) {
         const listaSeleccionadaPelicula = document.getElementById('listaSeleccionadaPelicula');
@@ -328,7 +328,7 @@
             actionUrl = actionUrl.replace('__LISTA_ID__', selectedListaId);
             addToListFormPelicula.setAttribute('action', actionUrl);
           } else {
-            event.preventDefault(); // Prevenir envío si no hay lista seleccionada (aunque 'required' debería manejarlo)
+            event.preventDefault(); // Prevenir envío si no hay lista seleccionada
             alert('Por favor, selecciona una lista.');
           }
         });

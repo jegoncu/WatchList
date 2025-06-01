@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title>Admin Panel - WatchList</title>
-    <th:block th:fragment="pageCss">
-      <style></style>
-    </th:block>
-  </head>
-  <body>
-    <section>
-      <h1>Admin Panel</h1>
-      <p>¡Bienvenido, Administrator!</p>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
-  </body>
+
+<!--
+    página principal del panel de administración
+    punto de entrada para funcionalidades administrativas de la plataforma
+-->
+
+<head>
+  <!-- título de la página -->
+  <title>Admin Panel - WatchList</title>
+  <th:block th:fragment="pageCss">
+    <style></style>
+  </th:block>
+</head>
+
+<body>
+  <!-- contenido principal -->
+  <section>
+    <h1>Admin Panel</h1>
+    <p>¡Bienvenido, Administrator!</p>
+    <!-- TODO no redireccionar a esta pagina -->
+  </section>
+  <th:block th:fragment="pageScript"> </th:block>
+</body>
+
 </html>

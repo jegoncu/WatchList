@@ -2,7 +2,13 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    formulario de lista
+    permite crear nuevas listas o editar listas existentes
+-->
+
 <head>
+  <!-- título dinámico según acción -->
   <title th:text="${lista.id == null ? 'Crear Nueva Lista' : 'Editar Lista'} + ' - WatchList'">Crear Nueva Lista -
     WatchList</title>
   <th:block th:fragment="pageCss">
@@ -11,42 +17,51 @@
 </head>
 
 <body>
-  <section>
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <!-- título del formulario -->
     <h1 th:text="${lista.id == null ? 'Crear Nueva Lista' : 'Editar Lista'}">Crear Nueva Lista</h1>
 
+    <!-- mensaje de error general -->
     <div th:if="${error}" class="alert alert-danger" role="alert">
       <p th:text="${error}"></p>
     </div>
 
+    <!-- formulario de lista -->
     <form th:action="${lista.id == null ? '/listas/crear' : '/listas/' + lista.id + '/editar'}" th:object="${lista}"
       method="post" class="watchlist-form">
+
+      <!-- campo oculto para ID (en edición) -->
       <input type="hidden" th:field="*{id}" />
 
+      <!-- campo título de la lista -->
       <div class="form-group">
         <label for="titulo">Título de la Lista:</label>
         <input type="text" id="titulo" th:field="*{titulo}" class="form-control" required />
-        <div th:if="${#fields.hasErrors('titulo')}"
-            th:errors="*{titulo}"
-            class="text-danger">Error en el título</div>
+        <!-- error de validación del título -->
+        <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="text-danger">
+          Error en el título
         </div>
+      </div>
 
-        <div class="form-group">
-          <input type="checkbox" id="esPublica" th:field="*{esPublica}" class="form-check-input"/>
-          <label for="esPublica" class="form-check-label">¿Hacer esta lista pública?</label>
-          <small class="form-text text-muted">
-            Si marcas esta opción, otros usuarios podrán ver esta lista.
-          </small>
-        </div>
+      <!-- opción de visibilidad pública -->
+      <div class="form-group" style="display: flex; gap: 10px;">
+        <label for="esPublica" class="form-check-label">¿Hacer esta lista pública? </label>
+        <input type="checkbox" id="esPublica" th:field="*{esPublica}" class="form-check-input" />
+      </div>
 
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">
-            <span th:text="${lista.id == null ? 'Crear Lista' : 'Guardar Cambios'}">Crear Lista</span>
-          </button>
-          <a th:href="@{/listas(filtro='mis-listas')}" class="btn btn-secondary">Cancelar</a>
-        </div>
-      </form>
-    </section>
+      <!-- botones de acción del formulario -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-small btn-green">
+          <span th:text="${lista.id == null ? 'Crear Lista' : 'Guardar Cambios'}">Crear Lista</span>
+        </button>
+        <a th:href="@{/listas(filtro='mis-listas')}" class="btn btn-small btn-red">Cancelar</a>
+      </div>
+    </form>
+  </section>
 
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+  <!-- scripts específicos de la página -->
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

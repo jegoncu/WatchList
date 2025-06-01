@@ -1,18 +1,29 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title>Inicio - WatchList</title>
-    <th:block th:fragment="pageCss">
-      <style></style>
-    </th:block>
-  </head>
-  <body>
-    <section>
-      <h1>Bienvenido/a <span th:text="${usuario.nombre}">Usuario</span>!</h1>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
-  </body>
+
+<!--
+    página de inicio
+    página principal de bienvenida para usuarios autenticados
+-->
+
+<head>
+  <!-- título dinámico de la página -->
+  <title>Inicio - WatchList</title>
+  <th:block th:fragment="pageCss">
+    <style></style>
+  </th:block>
+</head>
+
+<body>
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <h1>Bienvenido/a <span th:text="${usuario.nombre}">Usuario</span>!</h1>
+    <!-- TODO ampliar o eliminar esta vista -->
+  </section>
+
+  <!-- scripts específicos de la página -->
+  <th:block th:fragment="pageScript"> </th:block>
+</body>
+
 </html>

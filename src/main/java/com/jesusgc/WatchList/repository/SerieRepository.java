@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public interface SerieRepository extends JpaRepository<Serie, Long>, JpaSpecificationExecutor<Serie> {
 
-    /**
-     * Busca series por título que contenga el texto especificado.
-     *
-     * @param titulo Texto a buscar en el título (ignora mayúsculas/minúsculas)
-     * @return Lista de series que coinciden con la búsqueda
-     */
-    List<Serie> findByTituloContainingIgnoreCase(String titulo);
+  /**
+   * Busca series por título que contenga el texto especificado.
+   *
+   * @param titulo Texto a buscar en el título (ignora mayúsculas/minúsculas)
+   * @return Lista de series que coinciden con la búsqueda
+   */
+  List<Serie> findByTituloContainingIgnoreCase(String titulo);
 }

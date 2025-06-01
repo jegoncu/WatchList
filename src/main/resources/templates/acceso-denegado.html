@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<head>
+  <title>Acceso Denegado - WatchList</title>
+  <th:block th:fragment="pageCss"></th:block>
+</head>
+
+<body>
+  <section>
+    <div style="text-align: center; padding: 2rem;">
+      <h1 style="color: red;">Acceso Denegado</h1>
+      <p>No tienes permisos para acceder al panel de administración.</p>
+      <p>Solo los administradores pueden acceder a esta sección.</p>
+      <br>
+      <a th:href="@{/}" class="btn btn-blue btn-small">Volver al Inicio</a>
+      <a th:href="@{/login}" class="btn btn-green btn-small">Iniciar Sesión</a>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
+</html>

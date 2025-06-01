@@ -1,234 +1,189 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${pageTitle ?: 'Formulario de Serie'}">
-      Formulario de Serie - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
-  </head>
-  <body>
-    <section>
-      <div>
-        <h2 th:text="${pageTitle ?: 'Formulario de Serie'}">
-          Formulario de Serie
-        </h2>
 
-        <div th:if="${successMessage}" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+<!--
+    formulario de gestión de series
+    permite crear nuevas series o editar series existentes desde el panel de administración
+-->
 
-        <form th:action="${formAction}" th:object="${serie}" method="post">
-          <div>
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" th:field="*{titulo}" />
-            <div
-              th:if="${#fields.hasErrors('titulo')}"
-              th:errors="*{titulo}"></div>
+<head>
+  <!-- título dinámico según acción -->
+  <title th:text="${pageTitle ?: 'Formulario de Serie'}">
+    Formulario de Serie - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
+</head>
+
+<body>
+  <!-- contenido principal -->
+  <section>
+    <div>
+      <!-- título del formulario -->
+      <h2 th:text="${pageTitle ?: 'Formulario de Serie'}">
+        Formulario de Serie
+      </h2>
+
+      <!-- mensajes de estado -->
+      <div th:if="${successMessage}" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+      <!-- formulario de serie -->
+      <form th:action="${formAction}" th:object="${serie}" method="post">
+        <div>
+          <label for="titulo">Título:</label>
+          <input type="text" id="titulo" th:field="*{titulo}" />
+          <div th:if="${#fields.hasErrors('titulo')}"
+            th:errors=" *{titulo}"></div>
+        </div>
+
+        <div>
+          <label for="sinopsis">Sinopsis:</label>
+          <textarea id="sinopsis" th:field="*{sinopsis}"></textarea>
+          <div th:if="${#fields.hasErrors('sinopsis')}"
+            th:errors=" *{sinopsis}"></div>
+        </div>
+
+        <div>
+          <label for="anioEstreno">Año de Estreno:</label>
+          <input type="number" id="anioEstreno" th:field="*{anioEstreno}" />
+          <div th:if="${#fields.hasErrors('anioEstreno')}"
+            th:errors=" *{anioEstreno}"></div>
+        </div>
+
+        <div>
+          <label for="anioFin">Año de Finalización:</label>
+          <input type="number" id="anioFin" th:field="*{anioFin}" />
+          <div th:if="${#fields.hasErrors('anioFin')}"
+            th:errors=" *{anioFin}"></div>
+        </div>
+
+        <div>
+          <label for="nTemporadas">Número de Temporadas:</label>
+          <input type="number" id="nTemporadas" th:field="*{nTemporadas}" />
+          <div th:if="${#fields.hasErrors('nTemporadas')}"
+            th:errors=" *{nTemporadas}"></div>
+        </div>
+        <div>
+          <label for="puntuacion">Puntuación (0-10):</label>
+          <input type="number" step="0.1" id="puntuacion" th:field="*{puntuacion}" />
+          <div th:if="${#fields.hasErrors('puntuacion')}"
+            th:errors=" *{puntuacion}"></div>
+        </div>
+
+        <div>
+          <label for="urlImagen">URL de la Imagen/Póster:</label>
+          <input type="url" id="urlImagen" th:field="*{urlImagen}" placeholder="https://example.com/poster.jpg" />
+          <div th:if="${#fields.hasErrors('urlImagen')}"
+            th:errors=" *{urlImagen}"></div>
+        </div>
+
+        <div>
+          <label>Géneros:</label>
+          <div class="checkbox-list genero-tag-list">
+            <th:block th:each="genero : ${allGeneros}">
+              <div class="genero-tag-item">
+                <input type="checkbox" th:id="'genero-' + ${genero.id}" name="generoIds" th:value="${genero.id}"
+                  th:checked="${serie.generos != null && #lists.contains(serie.generos.![id], genero.id)}"
+                  class="visually-hidden-checkbox" />
+                <label th:for="'genero-' + ${genero.id}" class="genero-tag-label" th:text="${genero.nombre}"></label>
+              </div>
+            </th:block>
           </div>
+        </div>
 
-          <div>
-            <label for="sinopsis">Sinopsis:</label>
-            <textarea id="sinopsis" th:field="*{sinopsis}"></textarea>
-            <div
-              th:if="${#fields.hasErrors('sinopsis')}"
-              th:errors="*{sinopsis}"></div>
+        <div>
+          <label>Plataformas:</label>
+          <div class="checkbox-list plataforma-logo-list">
+            <th:block th:each="plataforma : ${allPlataformas}">
+              <div class="plataforma-logo-item">
+                <input type="checkbox" th:id="'plataforma-' + ${plataforma.id}" name="plataformaIds"
+                  th:value="${plataforma.id}"
+                  th:checked="${serie.plataformas != null && #lists.contains(serie.plataformas.![id], plataforma.id)}"
+                  class="visually-hidden-checkbox" />
+                <label th:for="'plataforma-' + ${plataforma.id}" class="plataforma-logo-label">
+                  <img th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}" th:src="@{${plataforma.logo}}"
+                    th:alt="${plataforma.nombre}" class="plataforma-logo-img" />
+                  <span th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}" th:text="${plataforma.nombre}"
+                    class="plataforma-logo-fallback-text"></span>
+                </label>
+              </div>
+            </th:block>
           </div>
+        </div>
 
-          <div>
-            <label for="anioEstreno">Año de Estreno:</label>
-            <input type="number" id="anioEstreno" th:field="*{anioEstreno}" />
-            <div
-              th:if="${#fields.hasErrors('anioEstreno')}"
-              th:errors="*{anioEstreno}"></div>
-          </div>
-
-          <div>
-            <label for="anioFin">Año de Finalización:</label>
-            <input type="number" id="anioFin" th:field="*{anioFin}" />
-            <div
-              th:if="${#fields.hasErrors('anioFin')}"
-              th:errors="*{anioFin}"></div>
-          </div>
-
-          <div>
-            <label for="nTemporadas">Número de Temporadas:</label>
-            <input type="number" id="nTemporadas" th:field="*{nTemporadas}" />
-            <div
-              th:if="${#fields.hasErrors('nTemporadas')}"
-              th:errors="*{nTemporadas}"></div>
-          </div>
-
-          <div>
-            <label for="puntuacion">Puntuación (0-10):</label>
-            <input
-              type="number"
-              step="0.1"
-              id="puntuacion"
-              th:field="*{puntuacion}" />
-            <div
-              th:if="${#fields.hasErrors('puntuacion')}"
-              th:errors="*{puntuacion}"></div>
-          </div>
-
-          <div>
-            <label for="urlImagen">URL de la Imagen/Póster:</label>
-            <input
-              type="url"
-              id="urlImagen"
-              th:field="*{urlImagen}"
-              placeholder="https://example.com/poster.jpg" />
-            <div
-              th:if="${#fields.hasErrors('urlImagen')}"
-              th:errors="*{urlImagen}"></div>
-          </div>
-
-          <div>
-            <label>Géneros:</label>
-            <div class="checkbox-list genero-tag-list">
-              <th:block th:each="genero : ${allGeneros}">
-                <div class="genero-tag-item">
-                  <input
-                    type="checkbox"
-                    th:id="'genero-' + ${genero.id}"
-                    name="generoIds"
-                    th:value="${genero.id}"
-                    th:checked="${serie.generos != null && #lists.contains(serie.generos.![id], genero.id)}"
-                    class="visually-hidden-checkbox" />
-                  <label
-                    th:for="'genero-' + ${genero.id}"
-                    class="genero-tag-label"
-                    th:text="${genero.nombre}"></label>
-                </div>
-              </th:block>
+        <div class="form-group">
+          <label>Personas y Roles:</label>
+          <div id="persona-roles-container">
+            <div id="persona-role-template" style="display: none" class="persona-rol-fila">
+              <div class="persona-selector-contenedor">
+                <select name="persona_ids" class="persona-select">
+                  <option value="">Seleccionar Persona...</option>
+                  <th:block th:each="persona : ${allPersonas}">
+                    <option th:value="${persona.id}" th:text="${persona.nombre}"></option>
+                  </th:block>
+                </select>
+              </div>
+              <div class="rol-selector-contenedor">
+                <select name="persona_roles" class="rol-select">
+                  <option value="">Seleccionar Rol...</option>
+                  <option th:each="possibleRole : ${possibleRoles}" th:value="${possibleRole}"
+                    th:text="${possibleRole}"></option>
+                </select>
+              </div>
+              <div class="eliminar-fila-contenedor">
+                <button type="button" class="btn btn-small btn-red remove-persona-role-btn"
+                  onclick="removePersonaRoleEntry(this)">
+                  Eliminar
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label>Plataformas:</label>
-            <div class="checkbox-list plataforma-logo-list">
-              <th:block th:each="plataforma : ${allPlataformas}">
-                <div class="plataforma-logo-item">
-                  <input
-                    type="checkbox"
-                    th:id="'plataforma-' + ${plataforma.id}"
-                    name="plataformaIds"
-                    th:value="${plataforma.id}"
-                    th:checked="${serie.plataformas != null && #lists.contains(serie.plataformas.![id], plataforma.id)}"
-                    class="visually-hidden-checkbox" />
-                  <label
-                    th:for="'plataforma-' + ${plataforma.id}"
-                    class="plataforma-logo-label">
-                    <img
-                      th:if="${plataforma.logo != null && !plataforma.logo.isEmpty()}"
-                      th:src="@{${plataforma.logo}}"
-                      th:alt="${plataforma.nombre}"
-                      class="plataforma-logo-img" />
-                    <span
-                      th:if="${plataforma.logo == null || plataforma.logo.isEmpty()}"
-                      th:text="${plataforma.nombre}"
-                      class="plataforma-logo-fallback-text"></span>
-                  </label>
-                </div>
-              </th:block>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Personas y Roles:</label>
-            <div id="persona-roles-container">
-              <div
-                id="persona-role-template"
-                style="display: none"
-                class="persona-rol-fila">
+            <th:block th:if="${serie.id != null and serie.creditos != null}">
+              <div th:each="credito, iterStat : ${serie.creditos}" class="persona-rol-fila">
                 <div class="persona-selector-contenedor">
                   <select name="persona_ids" class="persona-select">
                     <option value="">Seleccionar Persona...</option>
-                    <th:block th:each="persona : ${allPersonas}">
-                      <option
-                        th:value="${persona.id}"
-                        th:text="${persona.nombre}"></option>
+                    <th:block th:each="personaOpt : ${allPersonas}">
+                      <option th:value="${personaOpt.id}" th:text="${personaOpt.nombre}"
+                        th:selected="${personaOpt.id == credito.persona.id}"></option>
                     </th:block>
                   </select>
                 </div>
                 <div class="rol-selector-contenedor">
                   <select name="persona_roles" class="rol-select">
                     <option value="">Seleccionar Rol...</option>
-                    <option
-                      th:each="possibleRole : ${possibleRoles}"
-                      th:value="${possibleRole}"
-                      th:text="${possibleRole}"></option>
+                    <option th:each="possibleRole : ${possibleRoles}" th:value="${possibleRole}"
+                      th:text="${possibleRole}" th:selected="${possibleRole == credito.rol}"></option>
                   </select>
                 </div>
                 <div class="eliminar-fila-contenedor">
-                  <button
-                    type="button"
-                    class="btn btn-small btn-red remove-persona-role-btn"
+                  <button type="button" class="btn btn-small btn-red remove-persona-role-btn"
                     onclick="removePersonaRoleEntry(this)">
                     Eliminar
                   </button>
                 </div>
               </div>
-
-              <th:block
-                th:if="${serie.id != null and serie.creditos != null}">
-                <div
-                  th:each="credito, iterStat : ${serie.creditos}"
-                  class="persona-rol-fila">
-                  <div class="persona-selector-contenedor">
-                    <select name="persona_ids" class="persona-select">
-                      <option value="">Seleccionar Persona...</option>
-                      <th:block th:each="personaOpt : ${allPersonas}">
-                        <option
-                          th:value="${personaOpt.id}"
-                          th:text="${personaOpt.nombre}"
-                          th:selected="${personaOpt.id == credito.persona.id}"></option>
-                      </th:block>
-                    </select>
-                  </div>
-                  <div class="rol-selector-contenedor">
-                    <select name="persona_roles" class="rol-select">
-                      <option value="">Seleccionar Rol...</option>
-                      <option
-                        th:each="possibleRole : ${possibleRoles}"
-                        th:value="${possibleRole}"
-                        th:text="${possibleRole}"
-                        th:selected="${possibleRole == credito.rol}"></option>
-                    </select>
-                  </div>
-                  <div class="eliminar-fila-contenedor">
-                    <button
-                      type="button"
-                      class="btn btn-small btn-red remove-persona-role-btn"
-                      onclick="removePersonaRoleEntry(this)">
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-              </th:block>
-            </div>
-            <button
-              type="button"
-              id="add-persona-role-button"
-              class="btn btn-small btn-green">
-              Añadir Persona y Rol
-            </button>
+            </th:block>
           </div>
+          <button type="button" id="add-persona-role-button" class="btn btn-small btn-green">
+            Añadir Persona y Rol
+          </button>
+        </div>
 
-          <div>
-            <button type="submit" class="btn btn-small btn-yellow">
-              Guardar Serie
-            </button>
-            <a th:href="@{/admin/series}" class="btn btn-small btn-red"
-              >Cancelar</a
-            >
-          </div>
-        </form>
-      </div>
-    </section>
-    <th:block th:fragment="pageScript">
-      <script th:src="@{/js/admin-form-serie.js}"></script>
-    </th:block>
-  </body>
+        <div>
+          <button type="submit" class="btn btn-small btn-yellow">
+            Guardar Serie
+          </button>
+          <a th:href="@{/admin/series}" class="btn btn-small btn-red">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript">
+    <script th:src="@{/js/admin-form-serie.js}"></script>
+  </th:block>
+</body>
+
 </html>

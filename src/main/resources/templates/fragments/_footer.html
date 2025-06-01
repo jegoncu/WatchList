@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<!--
+    fragmento de footer
+    pie de página común con enlaces institucionales y redes sociales
+-->
+
 <body>
   <footer th:fragment="footer">
     <div class="footer-container-1">
       <div class="footer-container-2">
+        <!-- enlaces institucionales -->
         <div class="footer-links">
           <a th:href="@{/sobre-nosotros}" th:classappend="${currentPage == 'sobre-nosotros' ? 'active' : ''}">Sobre
             Nosotros</a>
@@ -12,6 +18,7 @@
           <a th:href="@{/legal}" th:classappend="${currentPage == 'legal' ? 'active' : ''}">Legal</a>
         </div>
         <div></div>
+        <!-- enlaces a redes sociales -->
         <div class="social-media-links">
           <a th:href="@{/redes-sociales}">X</a>
           <a th:href="@{/redes-sociales}">Instagram</a>

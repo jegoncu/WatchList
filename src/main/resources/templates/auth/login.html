@@ -1,52 +1,64 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title>Iniciar Sesión - WatchList</title>
-    <th:block th:fragment="pageCss">
-      <style></style>
-    </th:block>
-  </head>
-  <body>
-    <section>
-      <div>
-        <h2>Iniciar Sesión</h2>
-        <div th:if="${error}" th:text="${error}"></div>
-        <div th:if="${mensaje}" th:text="${mensaje}"></div>
-        <form th:action="@{/login}" method="post">
-          <div>
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="nombre@ejemplo.com"
-              required
-              th:value="${email}" />
-          </div>
-          <div>
-            <label for="contrasenia">Contraseña</label>
-            <input
-              type="password"
-              id="contrasenia"
-              name="contrasenia"
-              placeholder="Contraseña"
-              required />
-          </div>
-          <div>
-            <button type="submit" class="btn btn-small btn-yellow">
-              Iniciar Sesión
-            </button>
-          </div>
-          <div>
-            <a th:href="@{/registro}">¿No tienes cuenta?</a>
-          </div>
-        </form>
-      </div>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
-  </body>
-</html>
 
+<!--
+    página de inicio de sesión
+    formulario de autenticación para acceder a la plataforma
+-->
+
+<head>
+  <!-- título de la página -->
+  <title>Iniciar Sesión - WatchList</title>
+  <th:block th:fragment="pageCss">
+    <style>
+    </style>
+  </th:block>
+</head>
+
+<body>
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <div class="auth-container">
+      <h2>Iniciar Sesión</h2>
+
+      <!-- mensaje de error -->
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+        Error de autenticación
+      </div>
+
+      <!-- mensaje informativo -->
+      <div th:if="${mensaje}" class="alert alert-info" th:text="${mensaje}">
+        Mensaje informativo
+      </div>
+
+      <!-- formulario de login -->
+      <form th:action="@{/login}" method="post" class="auth-form">
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="nombre@ejemplo.com" required th:value="${email}" />
+        </div>
+
+        <div class="form-group">
+          <label for="contrasenia">Contraseña</label>
+          <input type="password" id="contrasenia" name="contrasenia" placeholder="Contraseña" required />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-small btn-yellow">
+            Iniciar Sesión
+          </button>
+        </div>
+
+        <div class="form-group">
+          <a th:href="@{/registro}">¿No tienes cuenta?</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"> </th:block>
+</body>
+
+</html>

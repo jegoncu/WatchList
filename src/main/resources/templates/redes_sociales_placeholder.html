@@ -2,11 +2,18 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section_content}, ~{}, ~{})}">
 
+<!--
+    página placeholder para redes sociales
+    página temporal que informa que aún no hay cuentas en redes sociales
+-->
+
 <head>
+  <!-- título dinámico de la página -->
   <title th:text="${pageTitle} + ' - WatchList'">Redes Sociales - WatchList</title>
 </head>
 
 <body>
+  <!-- contenido principal de la página -->
   <th:block th:fragment="section_content">
     <div class="container">
       <section class="about-us-section" style="text-align: center;">

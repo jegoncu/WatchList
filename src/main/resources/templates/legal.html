@@ -2,42 +2,58 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section_content}, ~{}, ~{})}">
 
+<!--
+    página legal
+    aviso legal y política de privacidad de la aplicación
+-->
+
 <head>
+  <!-- título dinámico de la página -->
   <title th:text="${pageTitle} + ' - WatchList'">Aviso Legal - WatchList</title>
 </head>
-  <body>
-    <th:block th:fragment="section_content">
-      <div class="container">
-        <section class="about-us-section">
-          <h1>Aviso Legal y Política de Privacidad</h1>
-            <p>
-              <strong>Titularidad del Sitio Web:</strong><br/><br/>
-              Este sitio web, WatchList, es un proyecto personal desarrollado por Jesús González Cuenca con fines educativos y demostrativos en el marco del Grado Superior en Desarrollo de Aplicaciones Web.
-              No tiene ánimo de lucro ni representa a ninguna entidad comercial.
-            </p>
-            <p>
-              <strong>Propiedad Intelectual del Contenido del Sitio:</strong><br/><br/>
-              El diseño, código fuente, y la estructura de la aplicación WatchList son propiedad intelectual de Jesús González Cuenca.
-            </p>
-            <p>
-              <strong>Contenido de Terceros (Películas, Series, Imágenes):</strong><br/><br/>
-              Toda la información relativa a películas, series, sinopsis, pósters, y datos de profesionales (directores, actores) que se muestra en WatchList
-              es obtenida de fuentes públicas con el único propósito de catalogación y consulta.
-              WatchList no aloja ningún contenido multimedia protegido por derechos de autor para su reproducción o descarga ilegal.
-              Los derechos de propiedad intelectual sobre dichos contenidos pertenecen a sus respectivos autores y productoras.
-            </p>
-            <p>
-              <strong>Uso de la Información y Cuentas de Usuario:</strong><br/><br/>
-              Los usuarios pueden registrarse para crear listas personalizadas, comentar y valorar títulos. La información proporcionada durante el registro (nombre de usuario, email)
-              se utilizará únicamente para la gestión de la cuenta dentro de la aplicación y no será compartida con terceros sin consentimiento explícito, salvo obligación legal.
-              Las contraseñas se almacenan de forma cifrada.
-            </p>
-            <p>
-              <strong>Contacto:</strong><br/><br/>
-              Para cualquier cuestión relativa a este aviso legal, puedes contactar en: jegoncu@gmail.com.
-            </p>
-        </section>
-      </div>
-    </th:block>
-  </body>
+
+<body>
+  <!-- contenido principal de la página -->
+  <th:block th:fragment="section_content">
+    <div class="container">
+      <section class="about-us-section">
+        <h1>Aviso Legal y Política de Privacidad</h1>
+        <p>
+          <strong>Titularidad del Sitio Web:</strong><br /><br />
+          Este sitio web, WatchList, es un proyecto personal desarrollado por Jesús González Cuenca con fines educativos
+          y demostrativos en el marco del Grado Superior en Desarrollo de Aplicaciones Web.
+          No tiene ánimo de lucro ni representa a ninguna entidad comercial.
+        </p>
+        <p>
+          <strong>Propiedad Intelectual del Contenido del Sitio:</strong><br /><br />
+          El diseño, código fuente, y la estructura de la aplicación WatchList son propiedad intelectual de Jesús
+          González Cuenca.
+        </p>
+        <p>
+          <strong>Contenido de Terceros (Películas, Series, Imágenes):</strong><br /><br />
+          Toda la información relativa a películas, series, sinopsis, pósters, y datos de profesionales (directores,
+          actores) que se muestra en WatchList
+          es obtenida de fuentes públicas con el único propósito de catalogación y consulta.
+          WatchList no aloja ningún contenido multimedia protegido por derechos de autor para su reproducción o descarga
+          ilegal.
+          Los derechos de propiedad intelectual sobre dichos contenidos pertenecen a sus respectivos autores y
+          productoras.
+        </p>
+        <p>
+          <strong>Uso de la Información y Cuentas de Usuario:</strong><br /><br />
+          Los usuarios pueden registrarse para crear listas personalizadas, comentar y valorar títulos. La información
+          proporcionada durante el registro (nombre de usuario, email)
+          se utilizará únicamente para la gestión de la cuenta dentro de la aplicación y no será compartida con terceros
+          sin consentimiento explícito, salvo obligación legal.
+          Las contraseñas se almacenan de forma cifrada.
+        </p>
+        <p>
+          <strong>Contacto:</strong><br /><br />
+          Para cualquier cuestión relativa a este aviso legal, puedes contactar en: jegoncu@gmail.com.
+        </p>
+      </section>
+    </div>
+  </th:block>
+</body>
+
 </html>

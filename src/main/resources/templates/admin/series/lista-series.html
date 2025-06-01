@@ -1,115 +1,103 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${pageTitle ?: 'Gestionar Series'}">
-      Gestionar Series - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
-  </head>
-  <body>
-    <section>
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-        ">
-        <h2 th:text="${pageTitle ?: 'Gestionar Series'}" style="margin: 0">
-          Gestionar Series
-        </h2>
-        <div>
-          <a
-            th:href="@{/admin/series/nuevo}"
-            class="btn btn-small btn-yellow"
-            >Añadir Nueva Serie</a
-          >
-        </div>
-      </div>
 
-      <div
-        th:if="${successMessage}"
-        class="alert alert-success"
-        th:text="${successMessage}"></div>
-      <div
-        th:if="${errorMessage}"
-        class="alert alert-danger"
-        th:text="${errorMessage}"></div>
+<!--
+    listado de series del panel de administración
+    permite gestionar series: crear, editar y eliminar desde el panel administrativo
+-->
 
-      <div th:if="${not #lists.isEmpty(series)}">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th class="col-poster">Póster</th>
-              <th>Título</th>
-              <th class="col-director">Showrunner</th>
-              <th class="col-generos">Géneros</th>
-              <th class="col-anio">Año</th>
-              <th class="col-duracion">Temporadas</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="serie : ${series}">
-              <td class="col-poster">
-                <img
-                  th:if="${serie.urlImagen}"
-                  th:src="${serie.urlImagen}"
-                  th:alt="${serie.titulo}"
-                  class="tabla-poster-img" />
-                <div
-                  th:unless="${serie.urlImagen}"
-                  class="tabla-poster-sin-imagen">
-                  <span>Sin Póster</span>
-                </div>
-              </td>
-              <td th:text="${serie.titulo}"></td>
-              <td class="col-director">
-                <th:block
-                  th:with="showrunners=${serie.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'showrunner')]}">
-                  <span th:each="credito, iterStat : ${showrunners}">
-                    <span th:text="${credito.persona.nombre}"></span
-                    ><th:block th:if="${!iterStat.last}">, </th:block>
-                  </span>
-                  <span th:if="${#lists.isEmpty(showrunners)}">-</span>
-                </th:block>
-              </td>
-              <td class="col-generos">
-                <span
-                  th:if="${not #lists.isEmpty(serie.generos)}"
-                  th:text="${#strings.listJoin(serie.generos.![nombre], ', ')}"></span>
-                <span th:if="${#lists.isEmpty(serie.generos)}">-</span>
-              </td>
-              <td th:text="${serie.anioEstreno}"></td>
-              <td
-                th:text="${serie.nTemporadas != null ? serie.nTemporadas : '-'}"></td>
-              <td class="acciones-cell">
-                <a
-                  th:href="@{/admin/series/editar/{id}(id=${serie.id})}"
-                  class="btn btn-small btn-blue"
-                  >Editar</a
-                >
-                <form
-                  th:action="@{/admin/series/eliminar/{id}(id=${serie.id})}"
-                  method="post"
-                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta serie?');">
-                  <button type="submit" class="btn btn-small btn-red">
-                    Eliminar
-                  </button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<head>
+  <!-- título dinámico de la página -->
+  <title th:text="${pageTitle ?: 'Gestionar Series'}">
+    Gestionar Series - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
+</head>
 
-      <div th:if="${#lists.isEmpty(series)}">
-        <p>No hay series para mostrar.</p>
+<body>
+  <!-- contenido principal -->
+  <section>
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      ">
+      <h2 th:text="${pageTitle ?: 'Gestionar Series'}" style="margin: 0">
+        Gestionar Series
+      </h2>
+      <div>
+        <a th:href="@{/admin/series/nuevo}" class="btn btn-small btn-yellow">Añadir Nueva Serie</a>
       </div>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+    </div>
+
+    <!-- mensajes de estado -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- tabla de series (cuando hay datos) -->
+    <div th:if="${not #lists.isEmpty(series)}">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th class="col-poster">Póster</th>
+            <th>Título</th>
+            <th class="col-director">Showrunner</th>
+            <th class="col-generos">Géneros</th>
+            <th class="col-anio">Año</th>
+            <th class="col-duracion">Temporadas</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="serie : ${series}">
+            <td class="col-poster">
+              <img th:if="${serie.urlImagen}" th:src="${serie.urlImagen}" th:alt="${serie.titulo}"
+                class="tabla-poster-img" />
+              <div th:unless="${serie.urlImagen}" class="tabla-poster-sin-imagen">
+                <span>Sin Póster</span>
+              </div>
+            </td>
+            <td th:text="${serie.titulo}"></td>
+            <td class="col-director">
+              <th:block
+                th:with="showrunners=${serie.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'showrunner')]}">
+                <span th:each="credito, iterStat : ${showrunners}">
+                  <span th:text="${credito.persona.nombre}"></span>
+                  <th:block th:if="${!iterStat.last}">, </th:block>
+                </span>
+                <span th:if="${#lists.isEmpty(showrunners)}">-</span>
+              </th:block>
+            </td>
+            <td class="col-generos">
+              <span th:if="${not #lists.isEmpty(serie.generos)}"
+                th:text="${#strings.listJoin(serie.generos.![nombre], ', ')}"></span>
+              <span th:if="${#lists.isEmpty(serie.generos)}">-</span>
+            </td>
+            <td th:text="${serie.anioEstreno}"></td>
+            <td th:text="${serie.nTemporadas != null ? serie.nTemporadas : '-'}"></td>
+            <td class="acciones-cell">
+              <a th:href="@{/admin/series/editar/{id}(id=${serie.id})}" class="btn btn-small btn-blue">Editar</a>
+              <form th:action="@{/admin/series/eliminar/{id}(id=${serie.id})}" method="post"
+                onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta serie?');">
+                <button type="submit" class="btn btn-small btn-red">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- mensaje cuando no hay series -->
+    <div th:if="${#lists.isEmpty(series)}">
+      <p>No hay series para mostrar.</p>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

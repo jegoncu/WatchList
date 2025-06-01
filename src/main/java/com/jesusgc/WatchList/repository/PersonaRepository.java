@@ -15,11 +15,11 @@ import java.util.List;
 @Repository
 public interface PersonaRepository extends JpaRepository<Persona, Long> {
 
-    /**
-     * Busca personas por nombre que contenga el texto especificado.
-     *
-     * @param nombre Texto a buscar en el nombre (ignora mayúsculas/minúsculas)
-     * @return Lista de personas que coinciden con la búsqueda
-     */
-    List<Persona> findByNombreContainingIgnoreCase(String nombre);
+  /**
+   * Busca personas por nombre que contenga el texto especificado.
+   *
+   * @param nombre Texto a buscar en el nombre (ignora mayúsculas/minúsculas)
+   * @return Lista de personas que coinciden con la búsqueda
+   */
+  List<Persona> findByNombreContainingIgnoreCase(String nombre);
 }

@@ -2,10 +2,17 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    página de detalle de serie
+    muestra información completa de una serie específica con comentarios y opciones de listas
+-->
+
 <head>
+  <!-- título dinámico de la página -->
   <title th:text="${pageTitle ?: 'Detalle de Serie - WatchList'}">
     Detalle de Serie
   </title>
+  <!-- estilos específicos de la página -->
   <th:block th:fragment="pageCss">
     <link rel="stylesheet" th:href="@{/css/componentes/serie-detalle.css}" />
     <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
@@ -14,7 +21,9 @@
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section th:fragment="section">
+    <!-- información de la serie (si existe) -->
     <div class="content-container serie-detalle-container" th:if="${serie != null}">
       <div class="fila" id="fila-1">
         <div>
@@ -24,8 +33,11 @@
         </div>
         <button type="button" class="btn btn-red btn-small" onclick="history.back();">Atrás</button>
       </div>
+      <!-- información principal de la serie -->
       <div class="fila" id="fila-2">
+        <!-- columna izquierda: póster e información básica -->
         <div class="columna" id="columna-2-1">
+          <!-- póster de la serie -->
           <div class="columna" id="columna-2-1-1">
             <img class="poster" th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
               th:src="${serie.urlImagen}" th:alt="${serie.titulo}" />
@@ -33,9 +45,11 @@
               <span>Sin Póster</span>
             </div>
           </div>
+          <!-- información básica -->
           <div class="columna" id="columna-2-1-2">
             <div class="serie-info">
 
+              <!-- años de emisión -->
               <div class="info-item" th:if="${serie.anioEstreno != null}">
                 <h2>Emisión:</h2>
                 <div class="emision-info">
@@ -44,11 +58,13 @@
                   <span th:if="${serie.anioFin == null}" th:text="'  - Presente'"></span>
                 </div>
               </div>
+              <!-- número de temporadas -->
               <div class="info-item" th:if="${serie.nTemporadas != null}">
                 <h2>Temporadas:</h2>
                 <span
                   th:text="${serie.nTemporadas} + (${serie.nTemporadas == 1 ? ' Temporada' : ' Temporadas'})">Temporadas</span>
               </div>
+              <!-- showrunner/creador -->
               <div class="info-item"
                 th:if="${not #lists.isEmpty(serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'creador') or #strings.equalsIgnoreCase(rol, 'showrunner') or #strings.equalsIgnoreCase(rol, 'dirección'))])}">
                 <h2>Showrunner:</h2>
@@ -61,10 +77,12 @@
                   </span>
                 </p>
               </div>
+              <!-- puntuación -->
               <div class="info-item" th:if="${serie.puntuacion != null}">
                 <h2>Puntuación:</h2>
                 <span th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}">Puntuación</span>
               </div>
+              <!-- géneros -->
               <div class="info-item" th:if="${not #lists.isEmpty(serie.generos)}">
                 <h2>Género/s:</h2>
                 <span>
@@ -74,14 +92,17 @@
             </div>
           </div>
         </div>
+        <!-- columna derecha: sinopsis, plataformas y listas -->
         <div class="columna" id="columna-2-2">
           <div class="serie-info">
 
+            <!-- sinopsis -->
             <div class="info-item" th:if="${serie.sinopsis != null and not #strings.isEmpty(serie.sinopsis)}">
               <h2>Sinopsis</h2>
               <p th:text="${serie.sinopsis}">Descripción de la serie...</p>
             </div>
 
+            <!-- plataformas disponibles -->
             <div class="info-item" th:if="${not #lists.isEmpty(serie.plataformas)}">
               <h2>Disponible en</h2>
               <div class="plataformas">
@@ -94,17 +115,20 @@
               </div>
             </div>
 
+            <!-- añadir a listas (usuarios autenticados) -->
             <div th:if="${session.usuarioId != null and misListas != null}" class="add-to-list-section info-section">
               <h2>Añadir a Mis Listas</h2>
 
+              <!-- mensaje si no tiene listas -->
               <div th:if="${misListas.isEmpty()}" class="mt-2">
                 <p>
                   No tienes listas creadas.
                   <a th:href="@{/listas/nueva}" class="btn btn-small btn-blue">Crea una lista primero</a>
                 </p>
               </div>
+              <!-- formulario para añadir a lista -->
               <form th:unless="${misListas.isEmpty()}"
-                th:action="@{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${serie.id}, listaId='LISTA_ID')}"
+                th:action=" @{/listas/{listaId}/media/{mediaId}/agregar(mediaId=${serie.id}, listaId='LISTA_ID' )}"
                 method="post" id="addToListFormSerie">
                 <div class="form-group">
                   <select id="listaSeleccionadaSerie" name="listaId" required>
@@ -122,6 +146,7 @@
                 </div>
               </form>
             </div>
+            <!-- script inline para manejo de formulario -->
             <!-- TODO mover a js dedicado -->
             <script th:inline="javascript" class="dynamic-script">
               const formSerie = document.getElementById(
@@ -180,11 +205,13 @@
         </div>
 
       </div>
+      <!-- reparto principal -->
       <div class="fila" id="fila-3">
         <div class="reparto"
           th:if="${not #lists.isEmpty(serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto'))])}">
           <h2>Reparto Principal</h2>
           <div class="card-grid-small">
+            <!-- tarjetas de actores -->
             <div class="content-card"
               th:each="credito : ${serie.creditos.?[rol != null and (#strings.equalsIgnoreCase(rol, 'actor') or #strings.equalsIgnoreCase(rol, 'actriz') or #strings.equalsIgnoreCase(rol, 'reparto')) and persona != null]}">
               <a th:href="@{/gente/{id}(id=${credito.persona.id})}" class="content-card-link"
@@ -213,17 +240,21 @@
           </div>
         </div>
       </div>
+      <!-- sección de comentarios -->
       <div class="fila" id="fila-4">
         <div class="columna" id="columna-4-1">
           <div>
+            <!-- cabecera de comentarios -->
             <div class="comentarios-header">
               <h2>Comentarios</h2>
+              <!-- mensajes de éxito/error -->
               <div th:if="${exitoComentario}" class="comentario-mensaje comentario-mensaje-exito">
                 <span th:text="${exitoComentario}"></span>
               </div>
               <div th:if="${errorComentario}" class="comentario-mensaje comentario-mensaje-error">
                 <span th:text="${errorComentario}"></span>
               </div>
+              <!-- botón para añadir comentario -->
               <div th:if="${session.usuarioId != null}">
                 <button type="button" class="btn btn-yellow btn-small"
                   onclick="document.getElementById('nuevoComentarioWrapper').style.display='block'; this.style.display='none';">Añadir
@@ -231,6 +262,7 @@
               </div>
             </div>
 
+            <!-- lista de comentarios existentes -->
             <div th:if="${#lists.isEmpty(comentarios)}" class="comentarios-vacio-mensaje">
               <p>Aún no hay comentarios para esta serie. ¡Sé el primero!</p>
             </div>
@@ -248,6 +280,7 @@
                         th:classappend="${i <= comentario.puntuacion ? 'filled' : ''}">&#9733;</span>
                     </div>
                   </div>
+                  <!-- botón eliminar (solo propietario) -->
                   <div class="comentario-acciones"
                     th:if="${session.usuarioId != null and session.usuarioId == comentario.usuario.id}">
                     <form
@@ -269,10 +302,12 @@
               </li>
             </ul>
           </div>
+          <!-- formulario para nuevo comentario -->
           <div id="nuevoComentarioWrapper" th:if="${session.usuarioId != null}" style="display:none;">
             <h2>Deja tu Comentario</h2>
             <form th:action="@{/series/{serieId}/comentar(serieId=${serie.id})}" method="post"
               th:object="${nuevoComentario}">
+              <!-- textarea para el comentario -->
               <div>
                 <label for="comentarioTextoSerie">Tu opinión:</label>
                 <textarea id="comentarioTextoSerie" th:field="*{texto}" rows="4" required="required"
@@ -281,6 +316,7 @@
                   <p th:each="err : ${#fields.errors('texto')}" th:text="${err}"></p>
                 </div>
               </div>
+              <!-- sistema de puntuación con estrellas -->
               <div class="form-field">
                 <label for="starSerie1">Puntuación (1-5):</label>
                 <div class="rating-stars">
@@ -304,6 +340,7 @@
               <button type="submit" class="btn btn-small btn-green">Enviar Comentario</button>
             </form>
           </div>
+          <!-- mensaje para usuarios no autenticados -->
           <div th:unless="${session.usuarioId != null}">
             <p>Debes <a
                 th:href="@{/login(redirectUrl=${#httpServletRequest != null ? #httpServletRequest.requestURI : '/series'})}">iniciar
@@ -314,6 +351,7 @@
 
     </div>
 
+    <!-- mensaje de serie no encontrada -->
     <div th:if="${serie == null}" class="content-container">
       <p class="mensaje-no-encontrado">
         Serie no encontrada.
@@ -321,6 +359,7 @@
     </div>
   </section>
 
+  <!-- scripts específicos de la página -->
   <th:block th:fragment="pageScript">
     <script>
       const addToListFormSerie = document.getElementById('addToListFormSerie');
@@ -338,6 +377,7 @@
           }
         });
       }
+      // TODO extraer script a js dedicado
     </script>
   </th:block>
 </body>

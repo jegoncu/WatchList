@@ -1,39 +1,75 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<!--
+    página de bienvenida (landing)
+    página inicial para usuarios no autenticados con presentación de la aplicación
+-->
 
 <head>
-    <title>Bienvenido a WatchList</title>
-    <th:block th:fragment="pageCss">
-        <style></style>
-    </th:block>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- título de la página -->
+  <title>Bienvenido a WatchList</title>
+
+  <!-- estilos base del sistema -->
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+
+  <!-- estilos específicos de la página -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-background, #1a1a1a);
+    }
+
+    p {
+      font-size: 30px;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 
 <body>
-    <section style="margin-top: 30px ; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh;">
-        <h1 style="margin: 15px; font-size: 30px; color: var(--color-yellow-2)">¡Bienvenido/a a WatchList!</h1>
-        <div style="margin: 15px; text-align: center;">
-            <p>
-                Explora nuestro catálogo de películas, series y artistas de la industria.
-            </p>
-            <p>
-                Crea tus listas personalizadas y comparte tus opiniones.
-            </p>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top:20px">
-            <a th:href="@{/login}" class="btn btn-big btn-blue">Iniciar Seión</a>
-            <a th:href="@{/registro}" class="btn btn-big btn-green">Regístrate Gratis</a>
-            <a th:href="@{/peliculas}" class="btn btn-big btn-yellow">Explorar Catálogo</a>
-            <a th:href="@{/listas}" class="btn btn-big btn-red">Ver Listas Públicas</a>
-        </div>
-        <div style="margin: 30px; text-align: center;">
-            <p style="font-size: 12px; color:darkgrey;">
-               Esta página se encuentra en desarrollo y puede que encuentras algunas cosas (o muchas)
-               que no funcionan o sin implementar
-            </p>
-        </div>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
+  <!-- contenido principal sin layout -->
+  <section
+    style="margin-top: 30px ; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh;">
+    <!-- título principal -->
+    <img th:src="@{/img/WatchList.png}" alt="Logo" style="width: 200px; height:200px; object-fit: contain;" />
+
+    <h1 style="margin: 15px; font-size: 40px; color: var(--color-yellow-2)">¡Bienvenido/a a WatchList!</h1>
+
+    <!-- contenido de bienvenida -->
+    <div style="margin: 15px; text-align: center;">
+      <!-- TODO extraer css -->
+      <p>
+        Explora nuestro catálogo de
+        <a th:href="@{/peliculas}" style="color: var(--color-red-2)">peliculas</a>,
+        <a th:href="@{/series}" style="color: var(--color-blue-2)">series</a> y
+        <a th:href="@{/gente}" style="color: var(--color-green-2)">profesionales</a> de la industria.
+      </p>
+      <p>
+        Si quieres crear tus
+        <a th:href="@{/listas}" style="color: var(--color-red-2)">listas</a>
+        personalizadas y compartir tus opiniones, puedes <br />
+        <a th:href="@{/login}" style="color: var(--color-blue-2)">Iniciar Sesión</a> o
+        <a th:href="@{/registro}" style="color: var(--color-green-2)">Regístrate Gratis</a>
+      </p>
+    </div>
+
+    <!-- aviso de desarrollo -->
+    <div style="margin: 30px; text-align: center;">
+      <p style="font-size: 12px; color:darkgrey;">
+        Esta página se encuentra en desarrollo y puede que encuentres algunas cosas
+        que no funcionan o aún sin implementar.
+      </p>
+    </div>
+  </section>
 </body>
 
 </html>

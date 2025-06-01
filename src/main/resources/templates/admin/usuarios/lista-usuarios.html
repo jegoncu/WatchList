@@ -1,88 +1,100 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+  th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
+
+<!--
+    listado de usuarios del panel de administración
+    permite gestionar usuarios: crear, editar y eliminar desde el panel administrativo
+-->
 
 <head>
-    <title th:text="${pageTitle ?: 'Gestionar Usuarios'}">
-        Gestionar Usuarios - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
+  <!-- título dinámico de la página -->
+  <title th:text="${pageTitle ?: 'Gestionar Usuarios'}">
+    Gestionar Usuarios - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
 </head>
 
 <body>
-    <section th:fragment="section">
-        <div style="
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <div style="
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
         ">
-            <h2 th:text="${pageTitle ?: 'Gestionar Usuarios'}" style="margin: 0">
-                Gestionar Usuarios
-            </h2>
-            <div>
-                <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-small btn-yellow">Crear Nuevo Usuario</a>
-            </div>
-        </div>
-
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-        <div th:if="${not #lists.isEmpty(usuarios)}">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th class="col-email">Email</th>
-                        <th class="col-visibilidad">Visibilidad</th>
-                        <th class="col-admin">Administrador</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="usuario : ${usuarios}">
-                        <td>
-                            <strong th:text="${usuario.nombre}">Nombre Usuario</strong>
-                        </td>
-                        <td class="col-email">
-                            <span th:text="${usuario.email}">email@ejemplo.com</span>
-                        </td>
-                        <td class="col-visibilidad">
-                            <span th:class="${usuario.esPublico ? 'badge badge-success' : 'badge badge-warning'}"
-                                th:text="${usuario.esPublico ? 'Público' : 'Privado'}">
-                                Estado
-                            </span>
-                        </td>
-                        <td class="col-admin">
-                            <span th:class="${usuario.esAdmin ? 'badge badge-primary' : 'badge badge-secondary'}"
-                                th:text="${usuario.esAdmin ? 'Sí' : 'No'}">
-                                Admin
-                            </span>
-                        </td>
-                        <td class="acciones-cell">
-                            <a th:href="@{/admin/usuarios/editar/{id}(id=${usuario.id})}"
-                                class="btn btn-small btn-green" title="Editar usuario">
-                                Editar
-                            </a>
-                            <form th:action="@{/admin/usuarios/eliminar/{id}(id=${usuario.id})}" method="post"
-                                style="display: inline;"
-                                onsubmit="return confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.');">
-                                <button type="submit" class="btn btn-small btn-red" title="Eliminar usuario">
-                                    Eliminar
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div th:if="${#lists.isEmpty(usuarios)}">
-        <p style="text-align: center; color: var(--color-grey-4); margin: 2rem 0;">
-          No hay usuarios para mostrar.
-        </p>
+      <h2 th:text="${pageTitle ?: 'Gestionar Usuarios'}" style="margin: 0">
+        Gestionar Usuarios
+      </h2>
+      <div>
+        <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-small btn-yellow">Crear Nuevo Usuario</a>
       </div>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+    </div>
+
+    <!-- mensajes de estado -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- tabla de usuarios (cuando hay datos) -->
+    <div th:if="${not #lists.isEmpty(usuarios)}">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th class="col-email">Email</th>
+            <th class="col-visibilidad">Visibilidad</th>
+            <th class="col-admin">Administrador</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="usuario : ${usuarios}">
+            <td>
+              <strong th:text="${usuario.nombre}">Nombre Usuario</strong>
+            </td>
+            <td class="col-email">
+              <span th:text="${usuario.email}">email@ejemplo.com</span>
+            </td>
+            <td class="col-visibilidad">
+              <span th:class="${usuario.esPublico ? 'badge badge-success' : 'badge badge-warning'}"
+                th:text="${usuario.esPublico ? 'Público' : 'Privado'}">
+                Estado
+              </span>
+            </td>
+            <td class="col-admin">
+              <span th:class="${usuario.esAdmin ? 'badge badge-primary' : 'badge badge-secondary'}"
+                th:text="${usuario.esAdmin ? 'Sí' : 'No'}">
+                Admin
+              </span>
+            </td>
+            <td class="acciones-cell">
+              <a th:href="@{/admin/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-small btn-green"
+                title="Editar usuario">
+                Editar
+              </a>
+              <form th:action="@{/admin/usuarios/eliminar/{id}(id=${usuario.id})}" method="post"
+                style="display: inline;"
+                onsubmit="return confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.');">
+                <button type="submit" class="btn btn-small btn-red" title="Eliminar usuario">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- mensaje cuando no hay usuarios -->
+    <div th:if="${#lists.isEmpty(usuarios)}">
+      <p style="text-align: center; color: var(--color-grey-4); margin: 2rem 0;">
+        No hay usuarios para mostrar.
+      </p>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

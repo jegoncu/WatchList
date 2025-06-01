@@ -2,7 +2,13 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    formulario de gestión de películas
+    permite crear nuevas películas o editar películas existentes desde el panel de administración
+-->
+
 <head>
+  <!-- título dinámico según acción -->
   <title th:text="${pageTitle ?: 'Formulario de Película'}">
     Formulario de Película - WatchList
   </title>
@@ -10,6 +16,7 @@
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section>
     <div>
       <h2 th:text="${pageTitle ?: 'Formulario de Película'}">
@@ -20,7 +27,6 @@
       <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
       <form th:action="${formAction}" th:object="${pelicula}" method="post">
-        <!-- Campo oculto para el ID en edición -->
         <input type="hidden" th:field="*{id}" th:if="${pelicula.id != null}" />
 
         <div class="form-group">
@@ -169,6 +175,7 @@
       </form>
     </div>
   </section>
+
   <th:block th:fragment="pageScript">
     <script th:src="@{/js/admin-form-pelicula.js}"></script>
   </th:block>

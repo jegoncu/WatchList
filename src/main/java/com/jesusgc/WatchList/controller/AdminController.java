@@ -30,6 +30,13 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * Controlador para el panel de administración del sistema.
+ * Gestiona operaciones CRUD para todas las entidades: películas, series,
+ * personas, listas y usuarios.
+ *
+ * @author Jesús González Cuenca
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -42,6 +49,24 @@ public class AdminController {
   private final ListaService listaService;
   private final UsuarioService usuarioService;
 
+  /**
+   * Roles posibles para asignar a personas en créditos de películas y series.
+   */
+  private static final List<String> POSSIBLE_ROLES = Arrays.asList(
+      "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje",
+      "Showrunner");
+
+  /**
+   * Constructor del controlador con inyección de dependencias.
+   *
+   * @param peliculaService   Servicio de películas
+   * @param generoService     Servicio de géneros
+   * @param plataformaService Servicio de plataformas
+   * @param personaService    Servicio de personas
+   * @param serieService      Servicio de series
+   * @param listaService      Servicio de listas
+   * @param usuarioService    Servicio de usuarios
+   */
   public AdminController(
       PeliculaService peliculaService,
       GeneroService generoService,
@@ -59,18 +84,27 @@ public class AdminController {
     this.usuarioService = usuarioService;
   }
 
+  /**
+   * Muestra el panel principal de administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del panel de administración
+   */
   @GetMapping
   public String mostrarAdminPanel(Model model) {
-
     model.addAttribute("currentPage", "admin");
     model.addAttribute("pageTitle", "Panel de Administración");
     return "admin/admin";
   }
 
-  private static final List<String> POSSIBLE_ROLES = Arrays.asList(
-      "Dirección", "Producción", "Guión", "Reparto", "Fotografía", "Edición", "Composión", "Montaje",
-      "Showrunner");
+  // GESTIÓN DE PELÍCULAS
 
+  /**
+   * Muestra el formulario para crear una nueva película.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del formulario de nueva película
+   */
   @GetMapping("/peliculas/nuevo")
   public String mostrarFormularioNuevaPelicula(Model model) {
     model.addAttribute("pelicula", new Pelicula());
@@ -84,6 +118,20 @@ public class AdminController {
     return "admin/peliculas/form-pelicula";
   }
 
+  /**
+   * Procesa la creación de una nueva película con sus relaciones.
+   *
+   * @param pelicula           Datos de la película
+   * @param result             Resultado de validación
+   * @param generoIds          Lista de IDs de géneros asociados
+   * @param plataformaIds      Lista de IDs de plataformas asociadas
+   * @param persona_ids        Lista de IDs de personas para créditos
+   * @param persona_roles      Lista de roles correspondientes a las personas
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de películas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/peliculas/nuevo")
   public String procesarNuevaPelicula(@Valid @ModelAttribute("pelicula") Pelicula pelicula,
       BindingResult result,
@@ -94,6 +142,7 @@ public class AdminController {
       Model model,
       RedirectAttributes redirectAttributes) {
 
+    // Construir mapa de persona-rol para créditos
     Map<Long, String> personaRolesMap = new HashMap<>();
     if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
       for (int i = 0; i < persona_ids.size(); i++) {
@@ -108,7 +157,7 @@ public class AdminController {
       model.addAttribute("allGeneros", generoService.findAll());
       model.addAttribute("allPlataformas", plataformaService.findAll());
       model.addAttribute("allPersonas", personaService.findAll());
-      model.addAttribute("possibleRoles", POSSIBLE_ROLES); // ADD THIS LINE
+      model.addAttribute("possibleRoles", POSSIBLE_ROLES);
       model.addAttribute("currentPage", "admin");
       model.addAttribute("pageTitle", "Añadir Nueva Película");
       model.addAttribute("formAction", "/admin/peliculas/nuevo");
@@ -120,6 +169,12 @@ public class AdminController {
     return "redirect:/admin/peliculas";
   }
 
+  /**
+   * Lista todas las películas del sistema para administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista de lista de películas administrativas
+   */
   @GetMapping("/peliculas")
   public String listarPeliculasAdmin(Model model) {
     model.addAttribute("peliculas", peliculaService.findAll());
@@ -128,6 +183,14 @@ public class AdminController {
     return "admin/peliculas/lista-peliculas";
   }
 
+  /**
+   * Muestra el formulario para editar una película existente.
+   *
+   * @param id                 ID de la película a editar
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Vista del formulario de edición o redirección si no existe
+   */
   @GetMapping("/peliculas/editar/{id}")
   public String mostrarFormularioEditarPelicula(@PathVariable("id") Long id, Model model,
       RedirectAttributes redirectAttributes) {
@@ -152,6 +215,21 @@ public class AdminController {
     return "admin/peliculas/form-pelicula";
   }
 
+  /**
+   * Procesa la actualización de una película existente.
+   *
+   * @param id                 ID de la película a actualizar
+   * @param peliculaForm       Datos actualizados de la película
+   * @param result             Resultado de validación
+   * @param generoIds          Lista de IDs de géneros asociados
+   * @param plataformaIds      Lista de IDs de plataformas asociadas
+   * @param persona_ids        Lista de IDs de personas para créditos
+   * @param persona_roles      Lista de roles correspondientes a las personas
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de películas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/peliculas/editar/{id}")
   public String procesarEditarPelicula(@PathVariable("id") Long id,
       @Valid @ModelAttribute("pelicula") Pelicula peliculaForm,
@@ -174,6 +252,7 @@ public class AdminController {
       return "admin/peliculas/form-pelicula";
     }
 
+    // Construir mapa de persona-rol validando longitudes
     Map<Long, String> personaRolesMap = new HashMap<>();
     if (persona_ids != null && persona_roles != null) {
       int minSize = Math.min(persona_ids.size(), persona_roles.size());
@@ -198,6 +277,13 @@ public class AdminController {
     }
   }
 
+  /**
+   * Elimina una película del sistema.
+   *
+   * @param id                 ID de la película a eliminar
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de películas con mensaje de estado
+   */
   @PostMapping("/peliculas/eliminar/{id}")
   public String eliminarPelicula(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
     try {
@@ -209,6 +295,14 @@ public class AdminController {
     return "redirect:/admin/peliculas";
   }
 
+  // GESTIÓN DE PERSONAS
+
+  /**
+   * Lista todas las personas del sistema para administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista de lista de personas administrativas
+   */
   @GetMapping("/gente")
   public String listarGenteAdmin(Model model) {
     model.addAttribute("personas", personaService.findAll());
@@ -217,6 +311,12 @@ public class AdminController {
     return "admin/gente/lista-gente";
   }
 
+  /**
+   * Muestra el formulario para crear una nueva persona.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del formulario de nueva persona
+   */
   @GetMapping("/gente/nuevo")
   public String mostrarFormularioNuevaPersona(Model model) {
     model.addAttribute("persona", new Persona());
@@ -226,6 +326,16 @@ public class AdminController {
     return "admin/gente/form-persona";
   }
 
+  /**
+   * Procesa la creación de una nueva persona.
+   *
+   * @param persona            Datos de la persona
+   * @param result             Resultado de validación
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de personas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/gente/nuevo")
   public String procesarNuevaPersona(@Valid @ModelAttribute("persona") Persona persona,
       BindingResult result,
@@ -242,6 +352,14 @@ public class AdminController {
     return "redirect:/admin/gente";
   }
 
+  /**
+   * Muestra el formulario para editar una persona existente.
+   *
+   * @param id                 ID de la persona a editar
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Vista del formulario de edición o redirección si no existe
+   */
   @GetMapping("/gente/editar/{id}")
   public String mostrarFormularioEditarPersona(@PathVariable("id") Long id, Model model,
       RedirectAttributes redirectAttributes) {
@@ -257,6 +375,17 @@ public class AdminController {
     return "admin/gente/form-persona";
   }
 
+  /**
+   * Procesa la actualización de una persona existente.
+   *
+   * @param id                 ID de la persona a actualizar
+   * @param personaForm        Datos actualizados de la persona
+   * @param result             Resultado de validación
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de personas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/gente/editar/{id}")
   public String procesarEditarPersona(@PathVariable("id") Long id,
       @Valid @ModelAttribute("persona") Persona personaForm,
@@ -280,6 +409,13 @@ public class AdminController {
     return "redirect:/admin/gente";
   }
 
+  /**
+   * Elimina una persona del sistema.
+   *
+   * @param id                 ID de la persona a eliminar
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de personas con mensaje de estado
+   */
   @PostMapping("/gente/eliminar/{id}")
   public String eliminarPersona(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
     try {
@@ -291,6 +427,14 @@ public class AdminController {
     return "redirect:/admin/gente";
   }
 
+  // GESTIÓN DE LISTAS
+
+  /**
+   * Lista todas las listas del sistema para administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista de lista de listas administrativas
+   */
   @GetMapping("/listas")
   public String listarListasAdmin(Model model) {
     List<Lista> todasLasListas = listaService.findAll();
@@ -300,6 +444,12 @@ public class AdminController {
     return "admin/listas/lista-listas";
   }
 
+  /**
+   * Muestra el formulario para crear una nueva lista.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del formulario de nueva lista
+   */
   @GetMapping("/listas/nueva")
   public String mostrarFormularioNuevaLista(Model model) {
     model.addAttribute("lista", new Lista());
@@ -310,6 +460,17 @@ public class AdminController {
     return "admin/listas/form-lista";
   }
 
+  /**
+   * Procesa la creación de una nueva lista asignándola a un usuario.
+   *
+   * @param lista              Datos de la lista
+   * @param result             Resultado de validación
+   * @param usuarioId          ID del usuario propietario de la lista
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de listas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/listas/nueva")
   public String procesarNuevaLista(@Valid @ModelAttribute("lista") Lista lista,
       BindingResult result,
@@ -353,6 +514,14 @@ public class AdminController {
     }
   }
 
+  /**
+   * Muestra el formulario para editar una lista existente.
+   *
+   * @param id                 ID de la lista a editar
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Vista del formulario de edición o redirección si no existe
+   */
   @GetMapping("/listas/editar/{id}")
   public String mostrarFormularioEditarLista(@PathVariable("id") Long id, Model model,
       RedirectAttributes redirectAttributes) {
@@ -370,6 +539,18 @@ public class AdminController {
     return "admin/listas/form-lista";
   }
 
+  /**
+   * Procesa la actualización de una lista existente.
+   *
+   * @param id                 ID de la lista a actualizar
+   * @param listaForm          Datos actualizados de la lista
+   * @param result             Resultado de validación
+   * @param usuarioId          ID del usuario propietario de la lista
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de listas si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/listas/editar/{id}")
   public String procesarEditarLista(@PathVariable("id") Long id,
       @Valid @ModelAttribute("lista") Lista listaForm,
@@ -414,6 +595,13 @@ public class AdminController {
     }
   }
 
+  /**
+   * Elimina una lista del sistema.
+   *
+   * @param id                 ID de la lista a eliminar
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de listas con mensaje de estado
+   */
   @PostMapping("/listas/eliminar/{id}")
   public String eliminarLista(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
     try {
@@ -425,6 +613,14 @@ public class AdminController {
     return "redirect:/admin/listas";
   }
 
+  // GESTIÓN DE USUARIOS
+
+  /**
+   * Lista todos los usuarios del sistema para administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista de lista de usuarios administrativos
+   */
   @GetMapping("/usuarios")
   public String listarUsuariosAdmin(Model model) {
     List<Usuario> todosLosUsuarios = usuarioService.findAll();
@@ -434,6 +630,12 @@ public class AdminController {
     return "admin/usuarios/lista-usuarios";
   }
 
+  /**
+   * Muestra el formulario para crear un nuevo usuario.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del formulario de nuevo usuario
+   */
   @GetMapping("/usuarios/nuevo")
   public String mostrarFormularioNuevoUsuario(Model model) {
     model.addAttribute("usuario", new Usuario());
@@ -443,6 +645,17 @@ public class AdminController {
     return "admin/usuarios/form-usuario";
   }
 
+  /**
+   * Procesa la creación de un nuevo usuario con permisos administrativos
+   * opcionales.
+   *
+   * @param usuario            Datos del usuario
+   * @param result             Resultado de validación
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de usuarios si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/usuarios/nuevo")
   public String procesarNuevoUsuario(@Valid @ModelAttribute("usuario") Usuario usuario,
       BindingResult result,
@@ -467,6 +680,14 @@ public class AdminController {
     return "redirect:/admin/usuarios";
   }
 
+  /**
+   * Muestra el formulario para editar un usuario existente.
+   *
+   * @param id                 ID del usuario a editar
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Vista del formulario de edición o redirección si no existe
+   */
   @GetMapping("/usuarios/editar/{id}")
   public String mostrarFormularioEditarUsuario(@PathVariable("id") Long id, Model model,
       RedirectAttributes redirectAttributes) {
@@ -483,6 +704,18 @@ public class AdminController {
     return "admin/usuarios/form-usuario";
   }
 
+  /**
+   * Procesa la actualización de un usuario existente.
+   *
+   * @param id                 ID del usuario a actualizar
+   * @param usuarioForm        Datos actualizados del usuario
+   * @param result             Resultado de validación
+   * @param nuevaContrasenia   Nueva contraseña opcional
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de usuarios si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/usuarios/editar/{id}")
   public String procesarEditarUsuario(@PathVariable("id") Long id,
       @Valid @ModelAttribute("usuario") Usuario usuarioForm,
@@ -509,6 +742,13 @@ public class AdminController {
     return "redirect:/admin/usuarios";
   }
 
+  /**
+   * Elimina un usuario del sistema.
+   *
+   * @param id                 ID del usuario a eliminar
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de usuarios con mensaje de estado
+   */
   @PostMapping("/usuarios/eliminar/{id}")
   public String eliminarUsuario(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
     try {
@@ -520,6 +760,14 @@ public class AdminController {
     return "redirect:/admin/usuarios";
   }
 
+  // GESTIÓN DE SERIES
+
+  /**
+   * Lista todas las series del sistema para administración.
+   *
+   * @param model Modelo para la vista
+   * @return Vista de lista de series administrativas
+   */
   @GetMapping("/series")
   public String listarSeriesAdmin(Model model) {
     model.addAttribute("series", serieService.findAll());
@@ -528,6 +776,12 @@ public class AdminController {
     return "admin/series/lista-series";
   }
 
+  /**
+   * Muestra el formulario para crear una nueva serie.
+   *
+   * @param model Modelo para la vista
+   * @return Vista del formulario de nueva serie
+   */
   @GetMapping("/series/nuevo")
   public String mostrarFormularioNuevaSerie(Model model) {
     model.addAttribute("serie", new Serie());
@@ -541,6 +795,20 @@ public class AdminController {
     return "admin/series/form-serie";
   }
 
+  /**
+   * Procesa la creación de una nueva serie con sus relaciones.
+   *
+   * @param serie              Datos de la serie
+   * @param result             Resultado de validación
+   * @param generoIds          Lista de IDs de géneros asociados
+   * @param plataformaIds      Lista de IDs de plataformas asociadas
+   * @param persona_ids        Lista de IDs de personas para créditos
+   * @param persona_roles      Lista de roles correspondientes a las personas
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de series si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/series/nuevo")
   public String procesarNuevaSerie(@Valid @ModelAttribute("serie") Serie serie,
       BindingResult result,
@@ -551,6 +819,7 @@ public class AdminController {
       Model model,
       RedirectAttributes redirectAttributes) {
 
+    // Construir mapa de persona-rol para créditos
     Map<Long, String> personaRolesMap = new HashMap<>();
     if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
       for (int i = 0; i < persona_ids.size(); i++) {
@@ -577,6 +846,14 @@ public class AdminController {
     return "redirect:/admin/series";
   }
 
+  /**
+   * Muestra el formulario para editar una serie existente.
+   *
+   * @param id                 ID de la serie a editar
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Vista del formulario de edición o redirección si no existe
+   */
   @GetMapping("/series/editar/{id}")
   public String mostrarFormularioEditarSerie(@PathVariable("id") Long id, Model model,
       RedirectAttributes redirectAttributes) {
@@ -599,6 +876,21 @@ public class AdminController {
     return "admin/series/form-serie";
   }
 
+  /**
+   * Procesa la actualización de una serie existente.
+   *
+   * @param id                 ID de la serie a actualizar
+   * @param serieForm          Datos actualizados de la serie
+   * @param result             Resultado de validación
+   * @param generoIds          Lista de IDs de géneros asociados
+   * @param plataformaIds      Lista de IDs de plataformas asociadas
+   * @param persona_ids        Lista de IDs de personas para créditos
+   * @param persona_roles      Lista de roles correspondientes a las personas
+   * @param model              Modelo para la vista
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de series si es exitoso, formulario con
+   *         errores si no
+   */
   @PostMapping("/series/editar/{id}")
   public String procesarEditarSerie(@PathVariable("id") Long id,
       @Valid @ModelAttribute("serie") Serie serieForm,
@@ -610,6 +902,7 @@ public class AdminController {
       Model model,
       RedirectAttributes redirectAttributes) {
 
+    // Construir mapa de persona-rol para créditos
     Map<Long, String> personaRolesMap = new HashMap<>();
     if (persona_ids != null && persona_roles != null && persona_ids.size() == persona_roles.size()) {
       for (int i = 0; i < persona_ids.size(); i++) {
@@ -636,6 +929,13 @@ public class AdminController {
     return "redirect:/admin/series";
   }
 
+  /**
+   * Elimina una serie del sistema.
+   *
+   * @param id                 ID de la serie a eliminar
+   * @param redirectAttributes Atributos para redirección
+   * @return Redirección a la lista de series con mensaje de estado
+   */
   @PostMapping("/series/eliminar/{id}")
   public String eliminarSerie(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
     try {

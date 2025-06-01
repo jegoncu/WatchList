@@ -28,53 +28,53 @@ import java.util.Set;
 @ToString(exclude = { "medias" })
 public class Plataforma {
 
-    /**
-     * Identificador único de la plataforma.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_plataforma")
-    private Long id;
+  /**
+   * Identificador único de la plataforma.
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_plataforma")
+  private Long id;
 
-    /**
-     * Nombre de la plataforma.
-     * Debe ser único en el sistema.
-     */
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Column(name = "nombre", nullable = false, unique = true)
-    private String nombre;
+  /**
+   * Nombre de la plataforma.
+   * Debe ser único en el sistema.
+   */
+  @NotBlank(message = "El nombre no puede estar vacío")
+  @Column(name = "nombre", nullable = false, unique = true)
+  private String nombre;
 
-    /**
-     * URL del logo de la plataforma.
-     * Campo opcional.
-     */
-    @Column(name = "logo")
-    private String logo;
+  /**
+   * URL del logo de la plataforma.
+   * Campo opcional.
+   */
+  @Column(name = "logo")
+  private String logo;
 
-    /**
-     * Colección de elementos multimedia disponibles en esta plataforma.
-     */
-    @ManyToMany(mappedBy = "plataformas")
-    @Builder.Default
-    private Set<Media> medias = new HashSet<>();
+  /**
+   * Colección de elementos multimedia disponibles en esta plataforma.
+   */
+  @ManyToMany(mappedBy = "plataformas")
+  @Builder.Default
+  private Set<Media> medias = new HashSet<>();
 
-    /**
-     * Añade un elemento multimedia a esta plataforma.
-     *
-     * @param media El elemento multimedia a añadir
-     */
-    public void addMedia(Media media) {
-        medias.add(media);
-        media.getPlataformas().add(this);
-    }
+  /**
+   * Añade un elemento multimedia a esta plataforma.
+   *
+   * @param media El elemento multimedia a añadir
+   */
+  public void addMedia(Media media) {
+    medias.add(media);
+    media.getPlataformas().add(this);
+  }
 
-    /**
-     * Remueve un elemento multimedia de esta plataforma.
-     *
-     * @param media El elemento multimedia a remover
-     */
-    public void removeMedia(Media media) {
-        medias.remove(media);
-        media.getPlataformas().remove(this);
-    }
+  /**
+   * Remueve un elemento multimedia de esta plataforma.
+   *
+   * @param media El elemento multimedia a remover
+   */
+  public void removeMedia(Media media) {
+    medias.remove(media);
+    media.getPlataformas().remove(this);
+  }
 }

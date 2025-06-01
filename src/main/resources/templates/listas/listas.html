@@ -2,25 +2,36 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    página de listado de listas
+    muestra listas públicas o personales del usuario con navegación entre ambas
+-->
+
 <head>
+  <!-- título dinámico de la página -->
   <title th:text="${tituloPagina ?: 'Listas Públicas'} + ' - WatchList'">Listas Públicas - WatchList</title>
   <th:block th:fragment="pageCss">
   </th:block>
 </head>
 
 <body>
-  <section>
+  <!-- contenido principal -->
+  <section th:fragment="section">
+    <!-- cabecera con título y botones de navegación -->
     <div class="listas-titulo">
       <h1 th:text="${tituloPagina ?: 'Listas Públicas'}">Listas Públicas</h1>
       <div>
+        <!-- botón para ver mis listas (usuarios autenticados) -->
         <button type="button" class="btn btn-small btn-green" id="btn-mis-listas"
           th:if="${session.usuarioId != null and filtroActual != 'mis-listas'}">
           Mis listas
         </button>
+        <!-- botón para volver a todas las listas -->
         <button type="button" class="btn btn-small btn-blue" id="btn-todas-listas"
           th:if="${filtroActual == 'mis-listas'}">
           Todas las listas
         </button>
+        <!-- botón para crear nueva lista (solo en vista personal) -->
         <button type="button" class="btn btn-small btn-yellow" id="btn-crear-lista"
           th:if="${session.usuarioId != null and filtroActual == 'mis-listas'}">
           Crear lista
@@ -28,6 +39,7 @@
       </div>
     </div>
 
+    <!-- mensaje cuando no hay listas -->
     <div th:if="${listas == null or listas.isEmpty()}">
       <p
         th:text="${filtroActual == 'mis-listas' ? 'No tienes listas creadas.' : 'Actualmente no hay listas públicas disponibles.'}">
@@ -35,15 +47,18 @@
       </p>
     </div>
 
+    <!-- grid de tarjetas de listas -->
     <div class="card-grid" th:if="${listas != null and not listas.isEmpty()}">
       <div class="content-card" th:each="lista : ${listas}">
         <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
+          <!-- contenedor del póster/imagen de portada -->
           <div class="content-card-poster-container">
+            <!-- imagen del primer elemento de la lista como portada -->
             <img
               th:if="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
               th:src="${lista.medias[0].urlImagen}" th:alt="${lista.titulo}" class="content-card-poster"
               loading="lazy" />
-
+            <!-- placeholder cuando no hay elementos con imagen -->
             <div
               th:unless="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
               class="content-card-poster-placeholder lista-placeholder">
@@ -51,12 +66,15 @@
               <p th:text="${lista.titulo}">Título Lista</p>
             </div>
           </div>
+          <!-- información de la lista -->
           <div class="content-card-info">
             <h3 class="content-card-title" th:text="${lista.titulo}">Título de la Lista</h3>
             <div class="content-card-details">
+              <!-- creador de la lista -->
               <p th:if="${lista.usuario != null}">
                 Por: <span th:text="${lista.usuario.nombre}">Usuario</span>
               </p>
+              <!-- número de elementos -->
               <p>
                 <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
               </p>
@@ -66,25 +84,31 @@
       </div>
     </div>
   </section>
+
+  <!-- scripts específicos de la página -->
   <th:block th:fragment="pageScript">
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        // Referencias a los botones de navegación
         const btnTodasListas = document.getElementById('btn-todas-listas');
         const btnMisListas = document.getElementById('btn-mis-listas');
         const btnCrearLista = document.getElementById('btn-crear-lista');
 
+        // Navegación a todas las listas públicas
         if (btnTodasListas) {
           btnTodasListas.addEventListener('click', function () {
             window.location.href = '/listas';
           });
         }
 
+        // Navegación a mis listas personales
         if (btnMisListas) {
           btnMisListas.addEventListener('click', function () {
             window.location.href = '/listas?filtro=mis-listas';
           });
         }
 
+        // Navegación para crear nueva lista
         if (btnCrearLista) {
           btnCrearLista.addEventListener('click', function () {
             window.location.href = '/listas/nueva';

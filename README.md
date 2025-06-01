@@ -30,3 +30,8 @@ Los usuarios contarán con una **vista de perfil** (configurable como pública o
 
 Las películas, series y personas se introducirán manualmente mediante un formulario solo accesible para la administración. <!-- Como objetivo secundario, este formulario se podrá rellenar automáticamente volcando los datos desde una API externa como TMDb o IMDb (futuro). -->
 
+<!-- TODO: estilar: -->
+<!-- -[] login -->
+<!-- -[] registro -->
+<!-- -[] crear-lista -->
+<!-- -[] actualizar-perfil -->

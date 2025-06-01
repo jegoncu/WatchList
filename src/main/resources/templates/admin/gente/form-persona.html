@@ -1,92 +1,70 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${pageTitle ?: 'Formulario de Persona'}">
-      Formulario de Persona - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
-  </head>
-  <body>
-    <section>
-      <div>
-        <h2 th:text="${pageTitle ?: 'Formulario de Persona'}">
-          Formulario de Persona
-        </h2>
 
-        <div
-          th:if="${successMessage}"
-          class="alert alert-success"
-          th:text="${successMessage}"></div>
-        <div
-          th:if="${errorMessage}"
-          class="alert alert-danger"
-          th:text="${errorMessage}"></div>
+<!--
+    formulario de gestión de personas
+    permite crear nuevas personas o editar personas existentes desde el panel de administración
+-->
 
-        <form th:action="${formAction}" th:object="${persona}" method="post">
-          <input type="hidden" th:if="${persona.id != null}" th:field="*{id}" />
+<head>
+  <!-- título dinámico según acción -->
+  <title th:text="${pageTitle ?: 'Formulario de Persona'}">
+    Formulario de Persona - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
+</head>
 
-          <div>
-            <label for="nombre">Nombre:</label>
-            <input
-              type="text"
-              id="nombre"
-              th:field="*{nombre}"
-              placeholder="Nombre completo" />
-            <div
-              class="field-error"
-              th:if="${#fields.hasErrors('nombre')}"
-              th:errors="*{nombre}"></div>
-          </div>
+<body>
+  <!-- contenido principal -->
+  <section>
+    <div>
+      <h2 th:text="${pageTitle ?: 'Formulario de Persona'}">
+        Formulario de Persona
+      </h2>
 
-          <div>
-            <label for="fechaNac">Fecha de Nacimiento:</label>
-            <input type="date" id="fechaNac" name="fechaNac" th:value="*{fechaNac != null ? #temporals.format(fechaNac, 'yyyy-MM-dd') : ''}" />
-            <div
-              class="field-error"
-              th:if="${#fields.hasErrors('fechaNac')}"
-              th:errors="*{fechaNac}"></div>
-          </div>
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-          <div>
-            <label for="fotoUrl">URL de la Foto:</label>
-            <input
-              type="url"
-              id="fotoUrl"
-              th:field="*{fotoUrl}"
-              placeholder="https://example.com/foto.jpg" />
-            <div
-              class="field-error"
-              th:if="${#fields.hasErrors('fotoUrl')}"
-              th:errors="*{fotoUrl}"></div>
-          </div>
+      <form th:action="${formAction}" th:object="${persona}" method="post">
+        <input type="hidden" th:if="${persona.id != null}" th:field="*{id}" />
 
-          <div>
-            <label for="biografia">Biografía:</label>
-            <textarea
-              id="biografia"
-              th:field="*{biografia}"
-              rows="5"
-              placeholder="Breve biografía..."></textarea>
-            <div
-              class="field-error"
-              th:if="${#fields.hasErrors('biografia')}"
-              th:errors="*{biografia}"></div>
-          </div>
+        <div>
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre completo" />
+          <div class="field-error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
 
-          <div style="margin-top: 20px">
-            <button type="submit" class="btn btn-small btn-yellow">
-              Guardar Persona
-            </button>
-            <a th:href="@{/admin/gente}" class="btn btn-small btn-red"
-              >Cancelar</a
-            >
-          </div>
-        </form>
-      </div>
-    </section>
-    <th:block th:fragment="pageScript"> </th:block>
-  </body>
+        <div>
+          <label for="fechaNac">Fecha de Nacimiento:</label>
+          <input type="date" id="fechaNac" name="fechaNac"
+            th:value="*{fechaNac != null ? #temporals.format(fechaNac, 'yyyy-MM-dd') : ''}" />
+          <div class="field-error" th:if="${#fields.hasErrors('fechaNac')}" th:errors="*{fechaNac}"></div>
+        </div>
+
+        <div>
+          <label for="fotoUrl">URL de la Foto:</label>
+          <input type="url" id="fotoUrl" th:field="*{fotoUrl}" placeholder="https://example.com/foto.jpg" />
+          <div class="field-error" th:if="${#fields.hasErrors('fotoUrl')}" th:errors="*{fotoUrl}"></div>
+        </div>
+
+        <div>
+          <label for="biografia">Biografía:</label>
+          <textarea id="biografia" th:field="*{biografia}" rows="5" placeholder="Breve biografía..."></textarea>
+          <div class="field-error" th:if="${#fields.hasErrors('biografia')}" th:errors="*{biografia}"></div>
+        </div>
+
+        <div style="margin-top: 20px">
+          <button type="submit" class="btn btn-small btn-yellow">
+            Guardar Persona
+          </button>
+          <a th:href="@{/admin/gente}" class="btn btn-small btn-red">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"> </th:block>
+</body>
+
 </html>

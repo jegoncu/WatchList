@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${pageTitle ?: 'En Construcción'}">
-      En Construcción - WatchList
-    </title>
-    <th:block th:fragment="pageCss"></th:block>
-  </head>
-  <body>
-    <section>
-      <h1 th:text="${pageTitle ?: 'Página en Construcción'}">
-        Página en Construcción
-      </h1>
-      <p
-        th:text="${message ?: 'Esta sección del panel de administración aún está en desarrollo.'}">
-        Contenido próximamente.
-      </p>
-      <p>
-        <a th:href="@{/admin}" class="btn btn-small btn-yellow"
-          >Volver al Panel Principal</a
-        >
-      </p>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+
+<!--
+    página placeholder para secciones en desarrollo
+    muestra mensaje temporal para funcionalidades del panel de administración en construcción
+-->
+
+<head>
+  <!-- título dinámico de la página -->
+  <title th:text="${pageTitle ?: 'En Construcción'}">
+    En Construcción - WatchList
+  </title>
+  <th:block th:fragment="pageCss"></th:block>
+</head>
+
+<body>
+  <!-- contenido principal -->
+  <section>
+    <h1 th:text="${pageTitle ?: 'Página en Construcción'}">
+      Página en Construcción
+    </h1>
+    <p th:text="${message ?: 'Esta sección del panel de administración aún está en desarrollo.'}">
+      Contenido próximamente.
+    </p>
+    <p>
+      <a th:href="@{/admin}" class="btn btn-small btn-yellow">Volver al Panel Principal</a>
+    </p>
+  </section>
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

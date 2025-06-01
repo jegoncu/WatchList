@@ -2,26 +2,38 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section_content}, ~{}, ~{})}">
 
+<!--
+    página sobre nosotros
+    información del proyecto y el desarrollador
+-->
+
 <head>
+  <!-- título dinámico de la página -->
   <title th:text="${pageTitle} + ' - WatchList'">Sobre Nosotros - WatchList</title>
 </head>
 
 <body>
+  <!-- contenido principal de la página -->
   <th:block th:fragment="section_content">
     <div class="container">
       <section class="about-us-section">
-        <h1>Sobre Nosotors</h1>
+        <h1>Sobre Nosotros</h1>
         <p>
-          Watchlist es una base de datos interactiva creada para que los amantes del cine y las series descubran, organicen y compartan sus títulos favoritos.
+          Watchlist es una base de datos interactiva creada para que los amantes del cine y las series descubran,
+          organicen y compartan sus títulos favoritos.
         </p>
         <p>
-          En Watchlist puedes encontrar información actualizada sobre películas, series, actores y directores. Los usuarios pueden valorar títulos, dejar comentarios y crear listas personalizadas como “Favoritas”, “Vistas” o “Por ver”.
+          En Watchlist puedes encontrar información actualizada sobre películas, series, actores y directores. Los
+          usuarios pueden valorar títulos, dejar comentarios y crear listas personalizadas como "Favoritas", "Vistas" o
+          "Por ver".
         </p>
         <p>
-          Este proyecto ha sido desarrollado por Jesús González Cuenca como trabajo final del Grado Superior en Desarrollo de Aplicaciones Web.
+          Este proyecto ha sido desarrollado por Jesús González Cuenca como trabajo final del Grado Superior en
+          Desarrollo de Aplicaciones Web.
         </p>
         <p>
-          Te invito a explorar la plataforma, descubrir nuevos títulos y compartir tu opinión con la comunidad. ¡Tu próxima serie favorita podría estar a un clic!
+          Te invito a explorar la plataforma, descubrir nuevos títulos y compartir tu opinión con la comunidad. ¡Tu
+          próxima serie favorita podría estar a un clic!
         </p>
       </section>
     </div>

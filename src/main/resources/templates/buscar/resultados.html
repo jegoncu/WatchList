@@ -2,8 +2,15 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    página de resultados de búsqueda
+    muestra resultados categorizados por tipo: películas, series, personas y listas
+-->
+
 <head>
+  <!-- título dinámico con término de búsqueda -->
   <title th:text="'Resultados de búsqueda: ' + ${query}">Resultados de búsqueda - WatchList</title>
+  <!-- estilos específicos de la página -->
   <th:block th:fragment="pageCss">
     <link rel="stylesheet" th:href="@{/css/componentes/tarjetas.css}" />
     <style>
@@ -45,12 +52,15 @@
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section th:fragment="section">
     <div class="search-results-container">
+      <!-- cabecera con término de búsqueda -->
       <div class="search-query">
         <h1>Resultados de búsqueda para: "<span th:text="${query}">término</span>"</h1>
       </div>
 
+      <!-- sección de resultados: películas -->
       <div class="results-section" th:if="${peliculas != null and not #lists.isEmpty(peliculas)}">
         <h2>
           Películas
@@ -63,13 +73,16 @@
                 <div class="poster-rating-badge" th:if="${pelicula.puntuacion != null}">
                   <span class="rating-number" th:text="${#numbers.formatDecimal(pelicula.puntuacion, 1, 1)}">0.0</span>
                 </div>
+                <!-- póster de la película -->
                 <img loading="lazy" th:if="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
                   th:src="${pelicula.urlImagen}" th:alt="${pelicula.titulo}" class="content-card-poster" />
+                <!-- placeholder sin póster -->
                 <div th:unless="${pelicula.urlImagen != null and not #strings.isEmpty(pelicula.urlImagen)}"
                   class="content-card-poster-placeholder">
                   <span>Sin Imagen</span>
                 </div>
               </div>
+              <!-- información de la película -->
               <div class="content-card-info">
                 <h3 class="content-card-title" th:text="${pelicula.titulo}">Título</h3>
                 <p class="content-card-year" th:if="${pelicula.anioEstreno != null}" th:text="${pelicula.anioEstreno}">
@@ -80,6 +93,7 @@
         </div>
       </div>
 
+      <!-- sección de resultados: series -->
       <div class="results-section" th:if="${series != null and not #lists.isEmpty(series)}">
         <h2>
           Series
@@ -92,13 +106,16 @@
                 <div class="poster-rating-badge" th:if="${serie.puntuacion != null}">
                   <span class="rating-number" th:text="${#numbers.formatDecimal(serie.puntuacion, 1, 1)}">0.0</span>
                 </div>
+                <!-- póster de la serie -->
                 <img loading="lazy" th:if="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
                   th:src="${serie.urlImagen}" th:alt="${serie.titulo}" class="content-card-poster" />
+                <!-- placeholder sin póster -->
                 <div th:unless="${serie.urlImagen != null and not #strings.isEmpty(serie.urlImagen)}"
                   class="content-card-poster-placeholder">
                   <span>Sin Imagen</span>
                 </div>
               </div>
+              <!-- información de la serie -->
               <div class="content-card-info">
                 <h3 class="content-card-title" th:text="${serie.titulo}">Título</h3>
                 <p class="content-card-year" th:if="${serie.anioEstreno != null}" th:text="${serie.anioEstreno}">Año</p>
@@ -108,6 +125,7 @@
         </div>
       </div>
 
+      <!-- sección de resultados: personas -->
       <div class="results-section" th:if="${personas != null and not #lists.isEmpty(personas)}">
         <h2>
           Personas
@@ -117,14 +135,17 @@
           <div class="content-card" th:each="persona : ${personas}">
             <a th:href="@{/gente/{id}(id=${persona.id})}" class="content-card-link" th:title="${persona.nombre}">
               <div class="content-card-poster-container">
+                <!-- foto de la persona -->
                 <img th:if="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
                   th:src="${persona.fotoUrl}" th:alt="${persona.nombre}" class="content-card-poster persona-card-poster"
                   loading="lazy" />
+                <!-- placeholder sin foto -->
                 <div th:unless="${persona.fotoUrl != null and not #strings.isEmpty(persona.fotoUrl)}"
                   class="content-card-poster-placeholder">
                   <span>Sin Foto</span>
                 </div>
               </div>
+              <!-- información de la persona -->
               <div class="content-card-info persona-card-info">
                 <h3 class="content-card-title persona-card-name" th:text="${persona.nombre}">Nombre</h3>
               </div>
@@ -133,6 +154,7 @@
         </div>
       </div>
 
+      <!-- sección de resultados: listas públicas -->
       <div class="results-section" th:if="${listas != null and not #lists.isEmpty(listas)}">
         <h2>
           Listas Públicas
@@ -142,11 +164,12 @@
           <div class="content-card" th:each="lista : ${listas}">
             <a th:href="@{/listas/{id}(id=${lista.id})}" class="content-card-link" th:title="${lista.titulo}">
               <div class="content-card-poster-container">
+                <!-- imagen del primer elemento como portada -->
                 <img
                   th:if="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
                   th:src="${lista.medias[0].urlImagen}" th:alt="${lista.titulo}" class="content-card-poster"
                   loading="lazy" />
-
+                <!-- placeholder para lista vacía -->
                 <div
                   th:unless="${lista.medias != null and not #lists.isEmpty(lista.medias) and lista.medias[0].urlImagen != null and not #strings.isEmpty(lista.medias[0].urlImagen)}"
                   class="content-card-poster-placeholder lista-placeholder">
@@ -154,10 +177,13 @@
                   <p th:text="${lista.titulo}">Título Lista</p>
                 </div>
               </div>
+              <!-- información de la lista -->
               <div class="content-card-info">
                 <h3 class="content-card-title" th:text="${lista.titulo}">Título de Lista</h3>
                 <div class="content-card-details">
+                  <!-- creador de la lista -->
                   <p th:text="'Por: ' + ${lista.usuario.nombre}">Usuario</p>
+                  <!-- número de elementos -->
                   <p>
                     <span th:text="${lista.medias != null ? #lists.size(lista.medias) : 0}">0</span> ítems
                   </p>
@@ -168,6 +194,7 @@
         </div>
       </div>
 
+      <!-- mensaje cuando no hay resultados -->
       <div th:if="${(peliculas == null or #lists.isEmpty(peliculas)) and
                       (series == null or #lists.isEmpty(series)) and
                       (personas == null or #lists.isEmpty(personas)) and
@@ -177,6 +204,8 @@
       </div>
     </div>
   </section>
+
+  <!-- scripts específicos de la página -->
   <th:block th:fragment="pageScript"></th:block>
 </body>
 

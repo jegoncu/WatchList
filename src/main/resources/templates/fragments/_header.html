@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<!--
+    fragmento de header
+    barra de navegación principal con logo, menú y opciones de usuario
+-->
+
 <body>
   <header th:fragment="header">
     <div class="header-container">
-      <a th:href="@{/}">
+      <!-- logo y enlace a inicio -->
+
+      <a th:href="@{/}" style="display: flex; align-items: center; gap: 20px;">
+        <img th:src="@{/img/WatchList.png}" alt="Logo" style="width: 40px; height:40px; object-fit: contain;" />
         <h1>WATCHLIST</h1>
       </a>
+
       <nav class="header-nav">
+        <!-- menú principal de navegación -->
         <ul class="nav-list">
           <li>
             <a th:href="@{/peliculas}" th:classappend="${currentPage == 'peliculas' ? 'active' : ''}">Películas</a>
@@ -22,10 +32,14 @@
             <a th:href="@{/listas}" th:classappend="${currentPage == 'listas' ? 'active' : ''}">Listas</a>
           </li>
         </ul>
+
+        <!-- formulario de búsqueda global -->
         <form th:action="@{/buscar}" method="get" class="header-buscar-form">
           <input type="search" placeholder="Buscar" aria-label="Buscar" name="q" />
           <button type="submit" class="btn btn-small btn-yellow">Buscar</button>
         </form>
+
+        <!-- dropdown para usuarios no autenticados -->
         <div class="usuario-dropdown" th:if="${session.usuarioId == null}">
           <span class="dropdown-trigger">Usuario</span>
           <ul class="dropdown-menu">
@@ -33,11 +47,14 @@
             <li><a th:href="@{/login}">Inicia Sesión</a></li>
           </ul>
         </div>
+
+        <!-- dropdown para usuarios autenticados -->
         <div class="usuario-dropdown" th:if="${session.usuarioId != null}">
           <span class="dropdown-trigger" th:text="${session.usuarioNombre}">Usuario</span>
           <ul class="dropdown-menu">
             <li><a th:href="@{/perfil}">Mi Perfil</a></li>
             <li><a th:href="@{/listas(filtro='mis-listas')}">Mis Listas</a></li>
+            <!-- opción de admin solo para administradores -->
             <li th:if="${session.usuarioEsAdmin != null && session.usuarioEsAdmin == true}">
               <a th:href="@{/admin}">Admin</a>
             </li>

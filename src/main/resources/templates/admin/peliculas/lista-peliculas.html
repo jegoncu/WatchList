@@ -1,115 +1,102 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
-  <head>
-    <title th:text="${pageTitle ?: 'Gestionar Películas'}">
-      Gestionar Películas - WatchList
-    </title>
-    <th:block th:fragment="pageCss"> </th:block>
-  </head>
-  <body>
-    <section>
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-        ">
-        <h2 th:text="${pageTitle ?: 'Gestionar Películas'}" style="margin: 0">
-          Gestionar Películas
-        </h2>
-        <div>
-          <a
-            th:href="@{/admin/peliculas/nuevo}"
-            class="btn btn-small btn-yellow"
-            >Añadir Nueva Película</a
-          >
-        </div>
-      </div>
 
-      <div
-        th:if="${successMessage}"
-        class="alert alert-success"
-        th:text="${successMessage}"></div>
-      <div
-        th:if="${errorMessage}"
-        class="alert alert-danger"
-        th:text="${errorMessage}"></div>
+<!--
+    listado de películas del panel de administración
+    permite gestionar películas: crear, editar y eliminar desde el panel administrativo
+-->
 
-      <div th:if="${not #lists.isEmpty(peliculas)}">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th class="col-poster">Póster</th>
-              <th>Título</th>
-              <th class="col-director">Dirección</th>
-              <th class="col-generos">Géneros</th>
-              <th class="col-anio">Año</th>
-              <th class="col-duracion">Duración</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="pelicula : ${peliculas}">
-              <td class="col-poster">
-                <img
-                  th:if="${pelicula.urlImagen}"
-                  th:src="${pelicula.urlImagen}"
-                  th:alt="${pelicula.titulo}"
-                  class="tabla-poster-img" />
-                <div
-                  th:unless="${pelicula.urlImagen}"
-                  class="tabla-poster-sin-imagen">
-                  <span>Sin Póster</span>
-                </div>
-              </td>
-              <td th:text="${pelicula.titulo}"></td>
-              <td class="col-director">
-                <th:block
-                  th:with="directores=${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
-                  <span th:each="credito, iterStat : ${directores}">
-                    <span th:text="${credito.persona.nombre}"></span
-                    ><th:block th:if="${!iterStat.last}">, </th:block>
-                  </span>
-                  <span th:if="${#lists.isEmpty(directores)}">-</span>
-                </th:block>
-              </td>
-              <td class="col-generos">
-                <span
-                  th:if="${not #lists.isEmpty(pelicula.generos)}"
-                  th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}"></span>
-                <span th:if="${#lists.isEmpty(pelicula.generos)}">-</span>
-              </td>
-              <td th:text="${pelicula.anioEstreno}"></td>
-              <td
-                th:text="${pelicula.duracionMin != null ? pelicula.duracionMin + ' min' : '-'}"></td>
-              <td class="acciones-cell">
-                <a
-                  th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}"
-                  class="btn btn-small btn-blue"
-                  >Editar</a
-                >
-                <form
-                  th:action="@{/admin/peliculas/eliminar/{id}(id=${pelicula.id})}"
-                  method="post"
-                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta película?');">
-                  <button type="submit" class="btn btn-small btn-red">
-                    Eliminar
-                  </button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<head>
+  <!-- título dinámico de la página -->
+  <title th:text="${pageTitle ?: 'Gestionar Películas'}">
+    Gestionar Películas - WatchList
+  </title>
+  <th:block th:fragment="pageCss"> </th:block>
+</head>
 
-      <div th:if="${#lists.isEmpty(peliculas)}">
-        <p>No hay películas para mostrar.</p>
+<body>
+  <!-- contenido principal -->
+  <section>
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      ">
+      <h2 th:text="${pageTitle ?: 'Gestionar Películas'}" style="margin: 0">
+        Gestionar Películas
+      </h2>
+      <div>
+        <a th:href="@{/admin/peliculas/nuevo}" class="btn btn-small btn-yellow">Añadir Nueva Película</a>
       </div>
-    </section>
-    <th:block th:fragment="pageScript"></th:block>
-  </body>
+    </div>
+
+    <!-- mensajes de estado -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- tabla de películas (cuando hay datos) -->
+    <div th:if="${not #lists.isEmpty(peliculas)}">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th class="col-poster">Póster</th>
+            <th>Título</th>
+            <th class="col-director">Dirección</th>
+            <th class="col-generos">Géneros</th>
+            <th class="col-anio">Año</th>
+            <th class="col-duracion">Duración</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="pelicula : ${peliculas}">
+            <td class="col-poster">
+              <img th:if="${pelicula.urlImagen}" th:src="${pelicula.urlImagen}" th:alt="${pelicula.titulo}"
+                class="tabla-poster-img" />
+              <div th:unless="${pelicula.urlImagen}" class="tabla-poster-sin-imagen">
+                <span>Sin Póster</span>
+              </div>
+            </td>
+            <td th:text="${pelicula.titulo}"></td>
+            <td class="col-director">
+              <th:block
+                th:with="directores=${pelicula.creditos.?[rol != null and #strings.equalsIgnoreCase(rol, 'dirección')]}">
+                <span th:each="credito, iterStat : ${directores}">
+                  <span th:text="${credito.persona.nombre}"></span>
+                  <th:block th:if="${!iterStat.last}">, </th:block>
+                </span>
+                <span th:if="${#lists.isEmpty(directores)}">-</span>
+              </th:block>
+            </td>
+            <td class="col-generos">
+              <span th:if="${not #lists.isEmpty(pelicula.generos)}"
+                th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}"></span>
+              <span th:if="${#lists.isEmpty(pelicula.generos)}">-</span>
+            </td>
+            <td th:text="${pelicula.anioEstreno}"></td>
+            <td th:text="${pelicula.duracionMin != null ? pelicula.duracionMin + ' min' : '-'}"></td>
+            <td class="acciones-cell">
+              <a th:href="@{/admin/peliculas/editar/{id}(id=${pelicula.id})}" class="btn btn-small btn-blue">Editar</a>
+              <form th:action="@{/admin/peliculas/eliminar/{id}(id=${pelicula.id})}" method="post"
+                onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta película?');">
+                <button type="submit" class="btn btn-small btn-red">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(peliculas)}">
+      <p>No hay películas para mostrar.</p>
+    </div>
+  </section>
+
+  <th:block th:fragment="pageScript"></th:block>
+</body>
+
 </html>

@@ -2,14 +2,23 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    página de edición de perfil
+    formulario para actualizar datos personales del usuario
+-->
+
 <head>
+  <!-- título de la página -->
   <title>Editar Perfil - WatchList</title>
+  <!-- estilos específicos de la página -->
   <th:block th:fragment="pageCss"> </th:block>
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section th:fragment="section">
     <div class="form-container">
+      <!-- cabecera del formulario -->
       <div class="form-header">
         <h1>Editar Mi Perfil</h1>
         <a th:href="@{/perfil}" class="btn btn-small btn-grey">
@@ -17,10 +26,13 @@
         </a>
       </div>
 
+      <!-- mensajes de éxito/error -->
       <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
       <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
+      <!-- formulario de edición -->
       <form th:action="@{/perfil/editar}" method="post" th:object="${usuario}" class="admin-form">
+        <!-- campo nombre -->
         <div class="form-group">
           <label for="nombre">Nombre Completo *</label>
           <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Tu nombre completo"
@@ -29,6 +41,8 @@
             <span th:errors="*{nombre}"></span>
           </div>
         </div>
+
+        <!-- campo email -->
         <div class="form-group">
           <label for="email">Email *</label>
           <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="tu@email.com" required />
@@ -36,11 +50,15 @@
             <span th:errors="*{email}"></span>
           </div>
         </div>
+
+        <!-- campo contraseña actual (verificación) -->
         <div class="form-group">
           <label for="contrasenaActual">Contraseña Actual (para confirmar cambios) *</label>
           <input type="password" id="contrasenaActual" name="contrasenaActual" class="form-control"
             placeholder="Tu contraseña actual" required />
         </div>
+
+        <!-- campo nueva contraseña (opcional) -->
         <div class="form-group">
           <label for="nuevaContrasena">Nueva Contraseña (opcional)</label>
           <input type="password" id="nuevaContrasena" name="nuevaContrasena" class="form-control"
@@ -49,11 +67,15 @@
             Mínimo 6 caracteres. Dejar vacío para no cambiar.
           </small>
         </div>
+
+        <!-- confirmar nueva contraseña -->
         <div class="form-group">
           <label for="confirmarContrasena">Confirmar Nueva Contraseña</label>
           <input type="password" id="confirmarContrasena" name="confirmarContrasena" class="form-control"
             placeholder="Repetir nueva contraseña" />
         </div>
+
+        <!-- visibilidad del perfil -->
         <div class="form-group">
           <label>Visibilidad del Perfil *</label>
           <div class="radio-group">
@@ -69,6 +91,8 @@
             </label>
           </div>
         </div>
+
+        <!-- botones de acción -->
         <div class="form-actions">
           <button type="submit" class="btn btn-small btn-green">
             Guardar Cambios
@@ -78,6 +102,8 @@
       </form>
     </div>
   </section>
+
+  <!-- scripts específicos de la página -->
   <th:block th:fragment="pageScript">
   </th:block>
 </body>

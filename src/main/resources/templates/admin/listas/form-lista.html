@@ -2,7 +2,13 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
   th:replace="~{_layout :: html(~{::title}, ~{::section}, ~{::pageCss}, ~{::pageScript})}">
 
+<!--
+    formulario de gestión de listas
+    permite crear nuevas listas o editar listas existentes desde el panel de administración
+-->
+
 <head>
+  <!-- título dinámico según acción -->
   <title th:text="${pageTitle ?: 'Gestionar Lista'}">
     Gestionar Lista - WatchList
   </title>
@@ -10,6 +16,7 @@
 </head>
 
 <body>
+  <!-- contenido principal -->
   <section th:fragment="section">
     <div class="form-header">
       <h2 th:text="${pageTitle ?: 'Gestionar Lista'}" style="margin: 0">
@@ -30,7 +37,8 @@
         <label for="titulo">Título de la Lista *</label>
         <input type="text" id="titulo" th:field="*{titulo}" class="form-control"
           placeholder="Ingresa el título de la lista" required />
-        <div th:if="${#fields.hasErrors('titulo')}" class="error-message">
+        <div th:if="${#fields.hasErrors('titulo')}"
+          class=" error-message">
           <span th:errors="*{titulo}"></span>
         </div>
       </div>
@@ -61,7 +69,8 @@
             <small>Solo el propietario podrá ver la lista</small>
           </label>
         </div>
-        <div th:if="${#fields.hasErrors('esPublica')}" class="error-message">
+        <div th:if="${#fields.hasErrors('esPublica')}"
+          class=" error-message">
           <span th:errors="*{esPublica}"></span>
         </div>
       </div>
@@ -75,6 +84,7 @@
       </div>
     </form>
   </section>
+
   <th:block th:fragment="pageScript"></th:block>
 </body>
 

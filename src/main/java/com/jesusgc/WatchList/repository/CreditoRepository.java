@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Repositorio para la gestión de créditos en la base de datos.
- * Proporciona operaciones CRUD para las participaciones de personas en elementos multimedia.
+ * Proporciona operaciones CRUD para las participaciones de personas en
+ * elementos multimedia.
  *
  * @author Jesús González Cuenca
  */
