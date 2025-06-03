@@ -61,9 +61,7 @@
               </div>
               <div class="info-item" th:if="${not #lists.isEmpty(pelicula.generos)}">
                 <h2>Género/s:</h2>
-                <span>
-                  <span th:each="genero : ${pelicula.generos}" th:text="${genero.nombre}">Género</span>
-                </span>
+                <span th:text="${#strings.listJoin(pelicula.generos.![nombre], ', ')}">Géneros</span>
               </div>
             </div>
           </div>

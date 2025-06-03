@@ -85,9 +85,7 @@
               <!-- géneros -->
               <div class="info-item" th:if="${not #lists.isEmpty(serie.generos)}">
                 <h2>Género/s:</h2>
-                <span>
-                  <span th:each="genero : ${serie.generos}" th:text="${genero.nombre}">Género</span>
-                </span>
+                <span th:text="${#strings.listJoin(serie.generos.![nombre], ', ')}">Géneros</span>
               </div>
             </div>
           </div>
